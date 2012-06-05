@@ -8,7 +8,9 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = ['CherryPy>=3.2',
             'Mako>=0.7',
-            'storm>=0.19']
+            'sqlalchemy',
+            'zope.sqlalchemy',
+            'psycopg2']
 
 setup(name='Maki',
       version='0.0.0',
