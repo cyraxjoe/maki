@@ -14,6 +14,17 @@ tag_post_table = Table('tag_post', Base.metadata,
                        Column('tag_id', Integer, ForeignKey('tags.id')),
                        Column('user_id', Integer, ForeignKey('users.id')))
 
+class User(Base):
+    __tablename__ = 'users'
+    
+    id     = Column(Integer, primary_key=True)
+    name   = Column(String(32), unique=True, nullable=False)
+    vname  = Column(String(64))
+    email  = Column(String(64), nullable=False)
+    passwd = Column(String(64), nullable=False)
+    active = Column(Boolean, server_default='True')
+
+
 class Category(Base):
     __tablename__ = 'categories'
 
@@ -30,8 +41,6 @@ class File(Base):
     note   = Column(String(128))
     format = Column(String(8))
     
-
-
 class Tag(Base):
     __tablename__ = 'tags'
 
@@ -59,23 +68,49 @@ class Post(Base):
     category    = relationship('Category')
     author      = relationship('User')
     
-   
-class User(Base):
-    __tablename__ = 'users'
+    comments    = relationship('CommentThread')
     
-    id     = Column(Integer, primary_key=True)
-    name   = Column(String(32), unique=True, nullable=False)
-    vname  = Column(String(64))
-    email  = Column(String(64), nullable=False)
-    passwd = Column(String(64), nullable=False)
-    active = Column(Boolean, server_default='True')
+    
+   
+
+# Comments models
+
+
+class CommentThread(Base):
+    __tablename__ = 'cthreads'
+
+    id         = Column(Integer, primary_key=True)
+    post_id    = Column(Integer, ForeignKey('posts.id'))
+    parent_id  = Column(Integer, ForeignKey('cthreads.id'))
+    comment_id = Column(Integer, ForeignKey('comments.id'))
+
+    comment    = relationship('Comment')
+    children   = relationship('CommentThread')
+
+
+class Comment(Base):
+    __tablename__ = 'comments'
+    
+    id        = Column(Integer, primary_key=True)
+    name      = Column(String(64))
+    email     = Column(String(64))
+    content   = Column(Text)
+    created   = Column(DateTime, server_default=text('NOW()'))
+    visible = Column(Boolean, server_default='True')
+
+
+    
+    
+    
+
+
+
     
 
 if __name__ == '__main__':
     import sys
     import cherrypy
     config = cherrypy.lib.reprconf.Config(sys.argv[1])
-    print(config)
     engine = engine_from_config(config['global'])
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
