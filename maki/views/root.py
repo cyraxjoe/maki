@@ -1,10 +1,12 @@
 import cherrypy
+
 from cherrypy import tools
 
-class Index(object):
+
+class Root(object):
 
     @cherrypy.expose
-    @tools.mako(filename='index.mako')
+    @tools.mako(filename='root.mako')
     def index(self):
         return {}
         

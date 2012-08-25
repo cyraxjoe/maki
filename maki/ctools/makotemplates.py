@@ -1,13 +1,9 @@
-import os
-
-
 import cherrypy
 
 from mako import exceptions
 from mako.lookup import TemplateLookup
 
-import maki
-
+from maki.bindutils import bind_tool
 
 
 class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
@@ -24,8 +20,6 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
             return exceptions.html_error_template().render()
     
     def __call__(self):
-        #env = globals().copy()
-        #env.update(self.next_handler())
         env = self.next_handler()
         if cherrypy.config.get('environment') == 'production':
             return self.template.render(**env).decode()
@@ -33,6 +27,7 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
             return self._debug_render(env).decode()
 
 
+@bind_tool(name='mako', point='on_start_resource')
 class MakoLoader(object):
     
     def __init__(self):

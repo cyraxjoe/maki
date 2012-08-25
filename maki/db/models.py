@@ -1,13 +1,10 @@
-from sqlalchemy import (engine_from_config, ForeignKey, Table,
+from sqlalchemy import (ForeignKey, Table,
                         Column, Integer, String, Text, Boolean,
                         Enum, DateTime, text)
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import (scoped_session, sessionmaker, relationship)
-from zope.sqlalchemy import ZopeTransactionExtension
+from sqlalchemy.orm import  relationship
 
-
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
 tag_post_table = Table('tag_post', Base.metadata,
@@ -107,10 +104,3 @@ class Comment(Base):
 
     
 
-if __name__ == '__main__':
-    import sys
-    import cherrypy
-    config = cherrypy.lib.reprconf.Config(sys.argv[1])
-    engine = engine_from_config(config['global'])
-    DBSession.configure(bind=engine)
-    Base.metadata.create_all(engine)
