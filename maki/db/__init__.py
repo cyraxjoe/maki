@@ -12,13 +12,10 @@ def load_engine(config):
 
 
 def with_dbs(cls):
-    """Class decorator to add the self.dbs attribute
-    to the class and facilitate the access to the
-    scoped_session.
+    """Class decorator to add the self.dbs attribute to the class and
+    facilitate the access to the scoped_session.
     """
-
     def set_dbs(self, value):
         raise RuntimeError('Unable to set reserved dbs property.')
-        
     cls.dbs = property(lambda self: session, set_dbs)
     return cls

@@ -11,7 +11,6 @@ from maki.db import with_dbs
 @with_dbs
 class Post(object):
 
-
     @cherrypy.expose
     @tools.mako(filename='post/index.mako')
     def default(self, postid=None):
