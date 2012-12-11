@@ -4,6 +4,7 @@ from mako import exceptions
 from mako.lookup import TemplateLookup
 
 from maki.bindutils import bind_tool
+from maki import middleware
 
 
 class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
@@ -21,6 +22,7 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
     
     def __call__(self):
         env = self.next_handler()
+        middleware.set_defaults(env)
         if cherrypy.config.get('environment') == 'production':
             return self.template.render(**env).decode()
         else:

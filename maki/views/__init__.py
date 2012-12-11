@@ -1,4 +1,5 @@
 import cherrypy
+from cherrypy import tools
 
 from . import (
     post,
@@ -7,6 +8,7 @@ from . import (
 
 
 @cherrypy.expose
+@tools.mako(filename="index.mako")
 def index():
-    return "ok"
+    return {}
 
