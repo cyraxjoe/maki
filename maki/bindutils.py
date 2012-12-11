@@ -16,5 +16,4 @@ def bind_plugin(name):
         setattr(cherrypy.engine, name, plugin)
         plugin.subscribe()
         return cls
-
     return set_plugin

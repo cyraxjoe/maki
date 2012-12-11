@@ -1,17 +1,12 @@
-from maki.views.root import Root
-root = Root()
+import cherrypy
+
+from . import (
+    post,
+    login,
+)
 
 
-def bind(cls, name=None, parent=root):
-    if name is None:
-        name = cls.__name__.lower()
+@cherrypy.expose
+def index():
+    return "ok"
 
-
-    view_inst = cls()
-    setattr(parent, name, view_inst)
-    return view_inst
-    
-    return cls
-
-def setup():
-    from maki.views.post import Post
