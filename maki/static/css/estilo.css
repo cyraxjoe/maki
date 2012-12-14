@@ -20,15 +20,6 @@ a{
     clear: left;
 }
 
-.firstletter{
-    font-size: 140%;
-    font-family: Times new roman;
-}
-
-.orange{
-    color: #E5AC26;
-}
-
 
 #container{
     margin: 0px auto;
@@ -42,7 +33,6 @@ a{
 #head{
     width : 100%;
     height: 60px;
-    //border-bottom: 1px double  #E8BF5E;
     margin-bottom: 10px;
     overflow:hidden;
     text-alignt: center;
@@ -70,6 +60,98 @@ a{
     margin-top: 20px;
 }
 
+
+#c1{
+    width: 80%;
+    min-height: 300px;
+    float: left;
+}
+
+#c2{
+    width: 15%;
+    float: left;
+    padding-left: 15px;
+}
+
+#info{
+    text-align: left;
+    padding-left: 10px;
+
+}
+
+#breadcrumb{
+    font-size: 95%;
+    padding: 7px;
+    color: black;
+    margin: 5px 0;
+    float:left;
+    width: 100%;
+}
+
+
+#breadcrumb a{
+    color: white;
+    text-decoration: none;
+    padding-left: 3px;
+}
+
+#breadcrumb b{
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+
+#barrow{
+    font-size: 100%;
+    color: white;
+    padding: 5px;   
+}
+
+
+
+#ccount{
+    font-size: 80%;
+    float:left;
+}
+
+#ctag{
+    float: right;
+    margin: -5px -5px 0px 0px;
+    padding: 3px;
+    -webkit-border-bottom-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+#shortpdate{
+    float:right;
+    margin-right: 20px;
+    font-size: 90%;
+}
+
+#rssicon{
+    float:right;
+    margin: 5px 5px 2px 0px;
+    border: 0px;
+}
+
+#twitter{
+     margin-top: 30px;
+}
+
+
+
+.firstletter{
+    font-size: 140%;
+    font-family: Times new roman;
+}
+
+.orange{
+    color: #E5AC26;
+}
+
+
 .refers{
     text-align:center;
 }
@@ -77,21 +159,6 @@ a{
 .refers a{
     text-decoration: none;
     margin-left: 6px;
-}
-#c1{
-    width: 75%;
-    min-height: 300px;
-    float: left;
-}
-
-#c2{
-    width: 25%;
-    float: left;
-}
-
-#info{
-    text-align: center;
-
 }
 
 
@@ -122,14 +189,6 @@ a{
     font-size: 90%;
 }
 
-#breadcrumb{
-    font-size: 95%;
-    padding: 7px;
-    color: black;
-    margin: 5px 0;
-    float:left;
-    width: 100%;
-}
 
 .bparent{
     background-color: #222;
@@ -140,17 +199,7 @@ a{
     
 }
 
-#breadcrumb a{
-    color: white;
-    text-decoration: none;
-    padding-left: 3px;
-}
 
-#breadcrumb b{
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
 
 .inverted{
     background-color: #E5AC26;
@@ -167,41 +216,8 @@ a{
     color: #222;
 }
 
-#barrow{
-    font-size: 100%;
-    color: white;
-    padding: 5px;   
-}
-
 .pagination{
     float:right;
-}
-
-
-#ccount{
-    font-size: 80%;
-    float:left;
-}
-
-#ctag{
-    float: right;
-    margin: -5px -5px 0px 0px;
-    padding: 3px;
-    -webkit-border-bottom-left-radius: 4px;
-    -moz-border-radius-bottomleft: 4px;
-    border-bottom-left-radius: 4px;
-}
-
-#shortpdate{
-    float:right;
-    margin-right: 20px;
-    font-size: 90%;
-}
-
-#rssicon{
-    float:right;
-    margin: 5px 5px 2px 0px;
-    border: 0px;
 }
 
 .taglist{
@@ -248,13 +264,8 @@ a{
     font-size: 120%;
 }
 
-
-#twitter{
-     margin-top: 30px;
-}
 .networks{
-    text-align:center;
-    margin-top:15px;
+    margin-top: 15px;
 }
 .networks img{
     border: 0;

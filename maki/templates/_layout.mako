@@ -2,13 +2,13 @@
 
 <div id="container">
 
-  <div class="head">
+  <div id="head">
     <%block name="header">
       <%include file="_header.mako" />
     </%block>
   </div>
   
-  <div class="ibody">
+  <div id="ibody">
     ${next.body()}
   </div>
 
@@ -17,4 +17,5 @@
        <%include file="_footer.mako" />
     </%block>
   </div>
+
 </div>

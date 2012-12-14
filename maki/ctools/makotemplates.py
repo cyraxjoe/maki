@@ -1,4 +1,5 @@
 import cherrypy
+from bs4 import BeautifulSoup
 
 from mako import exceptions
 from mako.lookup import TemplateLookup
@@ -10,9 +11,10 @@ from maki import middleware
 class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
     """Callable which sets response.body."""
     
-    def __init__(self, template, next_handler):
+    def __init__(self, template, next_handler, prettify):
         self.template = template
         self.next_handler = next_handler
+        self.prettify = prettify
 
     def _debug_render(self, env):
         try:
@@ -24,9 +26,14 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
         env = self.next_handler()
         middleware.set_defaults(env)
         if cherrypy.config.get('environment') == 'production':
-            return self.template.render(**env).decode()
+            output = self.template.render(**env).decode()
         else:
-            return self._debug_render(env).decode()
+            output = self._debug_render(env).decode()
+            
+        if self.prettify:
+            return BeautifulSoup(output).prettify(formatter='minimal')
+        else:
+            return output
 
 
 @bind_tool(name='mako', point='on_start_resource')
@@ -36,7 +43,7 @@ class MakoLoader(object):
         self.lookups = {}
     
     def __call__(self, filename, directories, module_directory=None,
-                 collection_size=-1):
+                 collection_size=-1, prettify=True):
 
         # Find the appropriate template lookup.
         key = (tuple(directories), module_directory)
@@ -55,5 +62,6 @@ class MakoLoader(object):
         
         # Replace the current handler.
         cherrypy.request.template = t = lookup.get_template(filename)
-        cherrypy.request.handler = MakoHandler(t, cherrypy.request.handler)
+        cherrypy.request.handler = MakoHandler(t, cherrypy.request.handler,
+                                               prettify)
 

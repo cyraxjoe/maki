@@ -7,7 +7,11 @@ README = open(os.path.join(here, 'README.rst')).read()
 requires = ['CherryPy>=3.2',
             'Mako>=0.7',
             'sqlalchemy',
-            'psycopg2']
+            'psycopg2',
+            'beautifuls',
+            'py3k-bcrypt',
+            'beautifulsoup4',
+            ]
 
 setup(name='maki',
       version='0.0.0',

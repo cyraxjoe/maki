@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="shortcut icon" href="${STATIC_URL}/images/favicon/instrospeccion.ico" />
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>${title or ''}</title>
 <!--  <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
       <link rel="stylesheet" href="${STATIC_URL}/css/estilo.css" type="text/css"/>
