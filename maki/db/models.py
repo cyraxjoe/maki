@@ -9,10 +9,17 @@ from sqlalchemy import (
     DateTime,
     text
 )
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import  relationship
 
-Base = declarative_base()
+
+class Base(object):
+    @declared_attr
+    def __tablename__(cls):
+        raise NotImplementedError()
+    id = Column(Integer, primary_key=True)
+
+Base = declarative_base(cls=Base)
 
 tag_post_table = Table('tag_post', Base.metadata,
                        Column('tag_id', Integer, ForeignKey('tags.id')),
@@ -21,7 +28,6 @@ tag_post_table = Table('tag_post', Base.metadata,
 class Category(Base):
     __tablename__ = 'categories'
 
-    id   = Column(Integer, primary_key=True)
     name = Column(String(32), nullable=False)
     slug = Column(String(32))
 
@@ -29,7 +35,6 @@ class Category(Base):
 class Comment(Base):
     __tablename__ = 'comments'
     
-    id      = Column(Integer, primary_key=True)
     name    = Column(String(64))
     email   = Column(String(64))
     content = Column(Text)
@@ -40,7 +45,6 @@ class Comment(Base):
 class CommentThread(Base):
     __tablename__ = 'cthreads'
 
-    id         = Column(Integer, primary_key=True)
     post_id    = Column(Integer, ForeignKey('posts.id'))
     parent_id  = Column(Integer, ForeignKey('cthreads.id'))
     comment_id = Column(Integer, ForeignKey('comments.id'))
@@ -51,7 +55,6 @@ class CommentThread(Base):
 class File(Base):
     __tablename__ = 'files'
 
-    id     = Column(Integer, primary_key=True)
     name   = Column(String(255), nullable=False)
     note   = Column(String(128))
     format = Column(String(8))
@@ -60,7 +63,6 @@ class File(Base):
 class Tag(Base):
     __tablename__ = 'tags'
 
-    id   = Column(Integer, primary_key=True)
     name = Column(String(32), nullable=False)
     slug = Column(String(32), nullable=False)
 
@@ -68,7 +70,6 @@ class Tag(Base):
 class Post(Base):
     __tablename__ = 'posts'
 
-    id          = Column(Integer, primary_key=True)
     title       = Column(String(64))
     abstract    = Column(String(400))
     content     = Column(Text)
@@ -89,7 +90,6 @@ class Post(Base):
 class PostFormat(Base):
     __tablename__ = 'post_formats'
     
-    id   = Column(Integer, primary_key=True)
     name = Column(String(20), nullable=False)
 
 
@@ -97,7 +97,6 @@ class PostFormat(Base):
 class User(Base):
     __tablename__ = 'users'
     
-    id     = Column(Integer, primary_key=True)
     name   = Column(String(32), unique=True, nullable=False)
     vname  = Column(String(64))
     email  = Column(String(64), nullable=False)
