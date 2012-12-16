@@ -12,7 +12,7 @@ class JSONnHTML(object):
         cherrypy.log.error(str(vpath))
         if vpath:
             id_ = vpath.pop()
-            if id_.endswith('.json'):
+            if is_a_json_request(id_):
                 id_ = id_[-5]
                 return self.jsonrs(id_)
             else:
@@ -20,4 +20,21 @@ class JSONnHTML(object):
         else:
             return False
 
+        
+    def POST(self, **params):
+        if is_a_json_request():
+            return self.jsonrs().POST(**params)
+        else:
+            return self.htmlrs().POST(**params)
 
+
+def is_a_json_request(vpath=None):
+    if vpath is None:
+        accept = cherrypy.request.headers['Accept'].split(',')
+        if len(accept) == 1  and accept[0] == 'application/json':
+            return True
+        else:
+            return False
+    else:
+        return vpath.endswith('.json')
+        

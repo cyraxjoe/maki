@@ -3,7 +3,7 @@ from . import post, login
 
 exposed = True
 
-@tools.mako(filename="index.mako")
+@tools.mako(filename="frontpage.mako")
 def GET():
     return {}
 
