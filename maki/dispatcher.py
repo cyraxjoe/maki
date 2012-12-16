@@ -2,11 +2,10 @@ import cherrypy
 
 class JSONnHTML(object):
 
-    def __init__(self, jsonrs, htmlrs):
-        jsonrs.exposed = True
-        htmlrs.exposed = True
+    def __init__(self, controller, jsonrs, htmlrs):
         self.jsonrs = jsonrs
         self.htmlrs = htmlrs
+        self.ctrlr = controller
 
     def __call__(self, vpath):
         cherrypy.log.error(str(vpath))
@@ -14,9 +13,9 @@ class JSONnHTML(object):
             id_ = vpath.pop()
             if is_a_json_request(id_):
                 id_ = id_[-5]
-                return self.jsonrs(id_)
+                return self.jsonrs(self.ctrlr, id_)
             else:
-                return self.htmlrs(id_)
+                return self.htmlrs(self.ctrlr, id_)
         else:
             return False
 

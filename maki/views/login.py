@@ -1,14 +1,13 @@
-from maki import dispatcher
+from maki.views import BaseView
 
-
-class JSONLogin(object):
-    pass
-
-
-class HTMLLogin(object):
-    pass
-
-_cp_dispatch = dispatcher.JSONnHTML(JSONLogin, HTMLLogin)
-exposed = True
 def GET():
-    return "Index login"
+    return ""
+
+class JSONLogin(BaseView):
+    pass
+
+
+class HTMLLogin(BaseView):
+    pass
+
+

@@ -1,5 +1,4 @@
 from cherrypy import tools
-from . import post, login
 
 exposed = True
 
@@ -7,3 +6,9 @@ exposed = True
 def GET():
     return {}
 
+class BaseView(object):
+    exposed = True
+    
+    def __init__(self, ctrlr, id=None):
+        self.ctrl = ctrlr
+        self.id = id

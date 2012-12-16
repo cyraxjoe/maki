@@ -1,12 +1,15 @@
 import cherrypy
 from cherrypy import tools
 
-from maki import dispatcher
+from maki.views import BaseView
+
+@tools.mako(filename="post/list.mako")
+def GET():
+    return {}
 
 
-class HTMLPost(object):
-    def __init__(self, id=None):
-        self.id = id
+
+class HTMLPost(BaseView):
 
     @tools.mako(filename="post/get.mako")
     def GET(self):
@@ -19,11 +22,7 @@ class HTMLPost(object):
         
 
     
-class JSONPost(object):
-
-    def __init__(self, id=None):
-        self.id = id
-
+class JSONPost(BaseView):
 
     @tools.json_out()
     def GET(self):
@@ -44,17 +43,4 @@ class JSONPost(object):
 
     def DELETE(self):
         pass
-
-
-
-exposed = True
-disp = _cp_dispatch = dispatcher.JSONnHTML(JSONPost, HTMLPost)
-POST = disp.POST
-
-@tools.mako(filename="post/list.mako")
-def GET():
-    return {}
-
-
-
 

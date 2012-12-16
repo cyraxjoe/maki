@@ -8,7 +8,6 @@ requires = ['CherryPy>=3.2',
             'Mako>=0.7',
             'sqlalchemy',
             'psycopg2',
-            'beautifuls',
             'py3k-bcrypt',
             'beautifulsoup4',
             ]
