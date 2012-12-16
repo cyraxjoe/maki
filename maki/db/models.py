@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import (
     ForeignKey,
     Table,
@@ -74,7 +76,7 @@ class Post(Base):
     abstract    = Column(String(400))
     content     = Column(Text)
     created     = Column(DateTime, server_default=text('NOW()'))
-    modified    = Column(DateTime, server_default=text('NOW()'))
+    modified    = Column(DateTime, onupdate=datetime.datetime.now)
     author_id   = Column(Integer, ForeignKey('users.id'))
     category_id = Column(Integer, ForeignKey('categories.id'))
     format_id   = Column(Integer, ForeignKey('post_formats.id'))
@@ -90,7 +92,7 @@ class Post(Base):
 class PostFormat(Base):
     __tablename__ = 'post_formats'
     
-    name = Column(String(20), nullable=False)
+    name = Column(String(20), nullable=False, unique=True)
 
 
 

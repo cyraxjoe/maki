@@ -1,6 +1,14 @@
-import cherrypy
-from maki import db
+from maki import dispatcher
 
-@cherrypy.expose
-def index():
-    return "ok %s" % db.ses
+
+class JSONLogin(object):
+    pass
+
+
+class HTMLLogin(object):
+    pass
+
+_cp_dispatch = dispatcher.JSONnHTML(JSONLogin, HTMLLogin)
+exposed = True
+def GET():
+    return "Index login"

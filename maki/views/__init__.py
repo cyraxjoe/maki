@@ -1,14 +1,9 @@
-import cherrypy
 from cherrypy import tools
+from . import post, login
 
-from . import (
-    post,
-    login,
-)
+exposed = True
 
-
-@cherrypy.expose
 @tools.mako(filename="index.mako")
-def index():
+def GET():
     return {}
 
