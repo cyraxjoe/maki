@@ -8,11 +8,10 @@ class JSONnHTML(object):
         self.ctrlr = controller
 
     def __call__(self, vpath):
-        cherrypy.log.error(str(vpath))
         if vpath:
             id_ = vpath.pop()
             if is_a_json_request(id_):
-                id_ = id_[-5]
+                id_ = id_[:-5]
                 return self.jsonrs(self.ctrlr, id_)
             else:
                 return self.htmlrs(self.ctrlr, id_)

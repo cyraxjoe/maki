@@ -26,10 +26,19 @@ class JSONPost(BaseView):
 
     @tools.json_out()
     def GET(self):
-        return {'title': 'Le mighty post\nasas\n',
-                'content': 'Le content',
-                'created': '12/12/12-11:11:11'
-                }
+        post = self.ctrlr.get_post(self.id)
+        pdict ={'title': post.title,
+                'abstract': post.content,
+                'created': post.created.ctime(),
+                'content': post.content,
+                'slug': post.slug,
+                'category': post.category.name,
+                'author': post.author.name,
+                'format': post.format.name,
+                'tags': [t.name for t in post.tags]}
+        if post.modified:
+            pdict['modfied'] =  post.modified.ctime()
+        return pdict
 
     
     def POST(self, **params):

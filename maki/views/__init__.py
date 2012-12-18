@@ -10,5 +10,5 @@ class BaseView(object):
     exposed = True
     
     def __init__(self, ctrlr, id=None):
-        self.ctrl = ctrlr
+        self.ctrlr = ctrlr
         self.id = id

@@ -25,7 +25,7 @@ Base = declarative_base(cls=Base)
 
 tag_post_table = Table('tag_post', Base.metadata,
                        Column('tag_id', Integer, ForeignKey('tags.id')),
-                       Column('user_id', Integer, ForeignKey('users.id')))
+                       Column('post_id', Integer, ForeignKey('posts.id')))
 
 class Category(Base):
     __tablename__ = 'categories'
@@ -52,6 +52,7 @@ class CommentThread(Base):
     comment_id = Column(Integer, ForeignKey('comments.id'))
     comment    = relationship('Comment')
     children   = relationship('CommentThread')
+    post       = relationship('Post')
 
 
 class File(Base):
@@ -76,12 +77,12 @@ class Post(Base):
     abstract    = Column(String(400))
     content     = Column(Text)
     created     = Column(DateTime, server_default=text('NOW()'))
+    slug        = Column(String(64))
+    public      = Column(Boolean, server_default='False')
     modified    = Column(DateTime, onupdate=datetime.datetime.now)
     author_id   = Column(Integer, ForeignKey('users.id'))
     category_id = Column(Integer, ForeignKey('categories.id'))
     format_id   = Column(Integer, ForeignKey('post_formats.id'))
-    slug        = Column(String(64))
-    published   = Column(Boolean, server_default='False')
     tags        = relationship('Tag', secondary=tag_post_table, backref='posts')
     category    = relationship('Category')
     author      = relationship('User')
