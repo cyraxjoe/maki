@@ -10,6 +10,7 @@ requires = ['CherryPy>=3.2',
             'psycopg2',
             'py3k-bcrypt',
             'beautifulsoup4',
+            'wtforms'
             ]
 
 setup(name='maki',

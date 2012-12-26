@@ -1,38 +1,32 @@
+from contextlib import contextmanager
+
 import cherrypy
+from cherrypy.lib import cptools
 
-class JSONnHTML(object):
+class ContentTypeDispatcher(cherrypy.dispatch.Dispatcher):
 
-    def __init__(self, controller, jsonrs, htmlrs):
-        self.jsonrs = jsonrs
-        self.htmlrs = htmlrs
-        self.ctrlr = controller
+    @contextmanager
+    def _branch(self, root, branch_name):
+        app = cherrypy.request.app
+        branch = root.__branches__[branch_name]
+        app.root = branch
+        yield
+        app.root = root
+    
 
-    def __call__(self, vpath):
-        if vpath:
-            id_ = vpath.pop()
-            if is_a_json_request(id_):
-                id_ = id_[:-5]
-                return self.jsonrs(self.ctrlr, id_)
-            else:
-                return self.htmlrs(self.ctrlr, id_)
-        else:
-            return False
+    def find_handler(self, path_info):
+        app = cherrypy.serving.request.app
+        parentcls = super(ContentTypeDispatcher, self)
+        try:
+            bmimes = list(app.root.__branches__)
+            if bmimes:
+                if 'text/html' in bmimes: # set text html at top.
+                    bmimes.insert(0, bmimes.pop(bmimes.index('text/html')))
+                branch_name = cptools.accept(media=bmimes)
+                with self._branch(app.root, branch_name):
+                    return parentcls.find_handler(path_info)
+        except AttributeError as err:
+            cherrypy.log.error(str(err))
+        return parentcls.find_handler(path_info)
 
-        
-    def POST(self, **params):
-        if is_a_json_request():
-            return self.jsonrs().POST(**params)
-        else:
-            return self.htmlrs().POST(**params)
-
-
-def is_a_json_request(vpath=None):
-    if vpath is None:
-        accept = cherrypy.request.headers['Accept'].split(',')
-        if len(accept) == 1  and accept[0] == 'application/json':
-            return True
-        else:
-            return False
-    else:
-        return vpath.endswith('.json')
         

@@ -1,14 +1,9 @@
-from cherrypy import tools
 
-exposed = True
+class View(object):
+    __mime__ = 'text/html'
+        
+    def __init__(self, controller):
+        self.ctrl = controller
 
-@tools.mako(filename="frontpage.mako")
-def GET():
-    return {}
 
-class BaseView(object):
-    exposed = True
-    
-    def __init__(self, ctrlr, id=None):
-        self.ctrlr = ctrlr
-        self.id = id
+

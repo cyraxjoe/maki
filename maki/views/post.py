@@ -1,31 +1,24 @@
 import cherrypy
 from cherrypy import tools
 
-from maki.views import BaseView
-
-@tools.mako(filename="post/list.mako")
-def GET():
-    return {}
+from . import View
 
 
+class HTMLPost(View):
 
-class HTMLPost(BaseView):
-
-    @tools.mako(filename="post/get.mako")
-    def GET(self):
+    @cherrypy.expose
+    @tools.mako(filename="post/list.mako")
+    def index(self):
         return {}
-
-
-    def POST(self, **params):
-        cherrypy.log.error('HTML POST')
-        return "POSTed HTML"
         
 
     
-class JSONPost(BaseView):
+class JSONPost(View):
+    __mime__ = 'application/json'
 
+    @cherrypy.expose
     @tools.json_out()
-    def GET(self):
+    def default(self):
         post = self.ctrlr.get_post(self.id)
         pdict ={'title': post.title,
                 'abstract': post.content,
@@ -39,17 +32,4 @@ class JSONPost(BaseView):
         if post.modified:
             pdict['modfied'] =  post.modified.ctime()
         return pdict
-
-    
-    def POST(self, **params):
-        cherrypy.log.error('JSON POST')
-        return "POSTed JSON"
-
-
-    def PUT(self):
-        pass
-
-
-    def DELETE(self):
-        pass
 
