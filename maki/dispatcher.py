@@ -12,6 +12,7 @@ class ContentTypeDispatcher(cherrypy.dispatch.Dispatcher):
         app.root = branch
         yield
         app.root = root
+        cherrypy.response.headers['Vary'] = 'Content-Type, Accept'
     
 
     def find_handler(self, path_info):
