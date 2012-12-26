@@ -45,8 +45,8 @@ class Category(Base):
 class Comment(Base):
     __tablename__ = 'comments'
     
-    name    = Column(String(64))
-    email   = Column(String(64))
+    author_name    = Column(String(64))
+    author_email   = Column(String(64))
     content = Column(Text)
     created = Column(DateTime, server_default=text('NOW()'))
     visible = Column(Boolean, server_default='True')
@@ -96,6 +96,10 @@ class Post(Base):
     author      = relationship('User')
     format      = relationship('PostFormat')
     comments    = relationship('CommentThread')
+
+    @property
+    def comment_count(self):
+        return len(self.comments)
     
     
 class PostFormat(Base):

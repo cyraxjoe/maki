@@ -31,25 +31,25 @@
       <script type="text/javascript">
 	stLight.options({publisher:'6b2df8ee-5fd7-4a5f-a4f8-27a076045e62'});
       </script>
-      <span class="st_twitter_large" displayText="Tweet"></span>
+      <span class="st_twitter_large" st_via="cyraxjoe" displayText="Tweet"></span>
       <span class="st_facebook_large" displayText="Facebook"></span>
-      <span class="st_ybuzz_large" displayText="Yahoo! Buzz"></span>
-      <span class="st_gbuzz_large" displayText="Google Buzz"></span>
+      <span class="st_googleplus_large" displayText="Google+"></span>
+      <span class="st_linkedin_large" displayText="LinkedIn"></span>
+      <span class="st_pinterest_large" displayText="Pinterest"></span>
       <span class="st_email_large" displayText="Email"></span>
       <span class="st_sharethis_large" displayText="ShareThis"></span>
-      <g:plusone ></g:plusone>
     </div>
 
     <div id="commbox">
       <p><span id="comment_count">${post.comment_count}</span> comentarios:</p>
       <div id="comment-list">
-	# implement comment list
+	## implement comment list
       </div>
       
       <div id="new-comment">
 	<span id="thanks"></span>
         <h3>Agrega un comentario:</h3>
-	# implement comment form
+	## implement comment form
       </div>
       
     </div>
