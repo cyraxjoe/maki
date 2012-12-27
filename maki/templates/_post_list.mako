@@ -6,7 +6,6 @@
       <span id="shortpdate">${post.created}</span>
       <h3><a href="/post/${post.slug}">${post.title}</a></h3>
       <p>${post.abstract}</p>
-      <b id="ccount">${post.comment_count} comentarios</b>
       <ul class="taglist hlist" title="Tags">
     % for tag in post.tags:
 	<li class="tag">${tag.name}</li>

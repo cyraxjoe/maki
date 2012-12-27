@@ -40,20 +40,6 @@
       <span class="st_sharethis_large" displayText="ShareThis"></span>
     </div>
 
-    <div id="commbox">
-      <p><span id="comment_count">${post.comment_count}</span> comentarios:</p>
-      <div id="comment-list">
-	## implement comment list
-      </div>
-      
-      <div id="new-comment">
-	<span id="thanks"></span>
-        <h3>Agrega un comentario:</h3>
-	## implement comment form
-      </div>
-      
-    </div>
-    
   </div>
 </div>
 

@@ -42,35 +42,6 @@ class Category(Base):
     slug = Column(String(32))
 
 
-class Comment(Base):
-    __tablename__ = 'comments'
-    
-    author_name    = Column(String(64))
-    author_email   = Column(String(64))
-    content = Column(Text)
-    created = Column(DateTime, server_default=text('NOW()'))
-    visible = Column(Boolean, server_default='True')
-
-
-class CommentThread(Base):
-    __tablename__ = 'cthreads'
-
-    post_id    = Column(Integer, ForeignKey('posts.id'))
-    parent_id  = Column(Integer, ForeignKey('cthreads.id'))
-    comment_id = Column(Integer, ForeignKey('comments.id'))
-    comment    = relationship('Comment')
-    children   = relationship('CommentThread')
-    post       = relationship('Post')
-
-
-class File(Base):
-    __tablename__ = 'files'
-
-    name   = Column(String(255), nullable=False)
-    note   = Column(String(128))
-    format = Column(String(8))
-
-    
 class Tag(Base):
     __tablename__ = 'tags'
 
@@ -95,7 +66,6 @@ class Post(Base):
     category    = relationship('Category')
     author      = relationship('User')
     format      = relationship('PostFormat')
-    comments    = relationship('CommentThread')
 
     @property
     def comment_count(self):

@@ -18,18 +18,6 @@ def sample_categories(dbs):
     return _simple_add(dbs, db.models.Category, categories)
 
 
-def sample_comments(dbs):
-    comments = [{'name': 'Anonimus',
-                 'email': 'anon@niumus.org',
-                 'content': 'Body of comment'}]
-    return _simple_add(dbs, db.models.Comment, comments)
-
-
-def sample_comment_threads(dbs, post, comment):
-    cthreads = [{'comment': comment,
-                 'post': post}]
-    return _simple_add(dbs, db.models.CommentThread, cthreads)
-
 
 def sample_posts(dbs, pformat, author, category, tags):
     posts = [{'title': 'Sample title of post',
@@ -77,10 +65,7 @@ def load_all():
     pformats = sample_post_formats(db.ses)
     users = sample_users(db.ses)
     categories = sample_categories(db.ses)
-    comments = sample_comments(db.ses)
-    posts = sample_posts(db.ses, pformats[0],  users[0],
-                         categories[0], tags)
-    sample_comment_threads(db.ses, posts[0], comments[0])
+    sample_posts(db.ses, pformats[0],  users[0], categories[0], tags)
     db.ses.commit()
 
 if __name__ == '__main__':
