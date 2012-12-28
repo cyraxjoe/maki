@@ -67,10 +67,6 @@ class Post(Base):
     author      = relationship('User')
     format      = relationship('PostFormat')
 
-    @property
-    def comment_count(self):
-        return len(self.comments)
-    
     
 class PostFormat(Base):
     __tablename__ = 'post_formats'

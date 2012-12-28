@@ -2,9 +2,6 @@ import cherrypy
 from cherrypy import tools
 
 from . import View
-from maki.forms import  CompatParams
-from maki.utils import log
-
 
 class HTMLPost(View):
 
@@ -15,7 +12,7 @@ class HTMLPost(View):
 
 
     @cherrypy.expose
-    @tools.mako(filename="post/show.mako")
+    @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, category=None, slug=None):
         if slug is None: # for backwards compatibility, we use category.
             slug = category
@@ -24,7 +21,8 @@ class HTMLPost(View):
             raise cherrypy.NotFound()
         else:
             return {'post': post,
-                    'parents': []}
+                    'parents': [],
+                    'styles': '/static/'}
 
             
         
@@ -42,7 +40,7 @@ class JSONPost(View):
         post = self.ctrl.get_post_by_id(self.id)
         pdict ={'title': post.title,
                 'abstract': post.content,
-                'created': post.created.ctime(),
+                'created': post.created.isotime(),
                 'content': post.content,
                 'slug': post.slug,
                 'category': post.category.name,
@@ -60,10 +58,15 @@ class JSONPost(View):
     @tools.json_in()
     @tools.allow(methods=('POST',))
     def update(self, id_):
-        form = self.ctrl.get_edit_form()
-        form.process(CompatParams(cherrypy.request.json))
-        if form.validate():
-            errormsg = self.ctrl.update_post(**form.data)
+        valid_fields = set(self.ctrl.get_edit_form().data)
+        changes = set(cherrypy.request.json)
+        unknown_fields = changes - valid_fields
+        if unknown_fields:
+            return {'updated': False,
+                    'messages': ['Invalid field %s' % f
+                                 for f in unknown_fields]}
+        else:
+            errormsg = self.ctrl.update_post(id_, **cherrypy.request.json)
             if errormsg is None:
                 return {'updated': True,
                         'messages': []}
@@ -71,12 +74,3 @@ class JSONPost(View):
                 return {'updated': False,
                         'messages': ['Unable to store the data',
                                      errormsg]}
-        else:
-            return {'updated': False,
-                    'messages': form.errors}
-            
-            
-        
-        
-        
-        

@@ -11,10 +11,11 @@ from maki import middleware
 class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
     """Callable which sets response.body."""
     
-    def __init__(self, template, next_handler, prettify):
+    def __init__(self, template, next_handler, prettify, csstyles):
         self.template = template
         self.next_handler = next_handler
         self.prettify = prettify
+        self.csstyles = csstyles
 
     def _debug_render(self, env):
         try:
@@ -25,6 +26,7 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
     def __call__(self):
         env = self.next_handler()
         middleware.set_defaults(env)
+        middleware.set_csstyles(env, self.csstyles)
         if cherrypy.config.get('environment') == 'production':
             output = self.template.render(**env).decode()
         else:
@@ -43,7 +45,7 @@ class MakoLoader(object):
         self.lookups = {}
     
     def __call__(self, filename, directories, module_directory=None,
-                 collection_size=-1, prettify=True):
+                 collection_size=-1, prettify=True, csstyles=()):
 
         # Find the appropriate template lookup.
         key = (tuple(directories), module_directory)
@@ -63,5 +65,5 @@ class MakoLoader(object):
         # Replace the current handler.
         cherrypy.request.template = t = lookup.get_template(filename)
         cherrypy.request.handler = MakoHandler(t, cherrypy.request.handler,
-                                               prettify)
+                                               prettify, csstyles)
 

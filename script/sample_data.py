@@ -33,8 +33,8 @@ def sample_posts(dbs, pformat, author, category, tags):
 
 
 def sample_post_formats(dbs):
-    frmts = [{'name': 'rst'},
-             {'name': 'textile'}]
+    frmts = [{'name': 'textile'},
+             {'name': 'rst'} ]
     return _simple_add(dbs, db.models.PostFormat, frmts)
 
 

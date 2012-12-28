@@ -1,5 +1,11 @@
 <%inherit file="../_layout.mako" />
 
+<%!
+ from functools import partial
+ from textile import textile
+ textile = partial(textile, html_type='html')
+%>
+
 <div id="c1">
   <span id="breadcrumb">
        % for parent in parents:
@@ -12,17 +18,13 @@
   </span>
 
   <div id="post">
-    <span id="pdate">${post.created}</span>
+    <span id="pdate">${post.created.date().isoformat()}</span>
     
     <h1>${post.title}</h1>
     
     <div id="postcontent">
-      % if post.format.name == 'markdown':
-          ${post.content.as_markdown}
-      % elif post.format.name == 'textile':
-          ${post.content.as_textile}
-      % elif post.format == 'restructuredtext':
-          ${post.content.as_restructuredtext}
+      % if post.format.name == 'textile':
+          ${post.content | textile}
       % endif 
     </div>
     

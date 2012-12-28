@@ -1,0 +1,20 @@
+#post{
+    margin: 0px 20px;
+}
+
+#post h2{
+    padding-top: 40px;
+}
+#postcontent{
+    padding-bottom:40px;
+}
+
+#pdate{
+    float:right;
+    font-size: 90%;
+}
+
+
+#share{
+    text-align: right;
+}
