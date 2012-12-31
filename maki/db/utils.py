@@ -1,4 +1,5 @@
 from maki.utils import log
+from maki import db
 
 
 def update_model(model, fields, dmapper=(lambda x: x)):
@@ -36,3 +37,7 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
         return emsg
     else:
         return None
+
+
+def get_categories():
+    return db.ses.query(db.models.Category).all()

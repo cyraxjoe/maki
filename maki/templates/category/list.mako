@@ -1,4 +1,4 @@
-<%inherit file="../_layout.mako" />
+<%inherit file="../_base.mako" />
    <div id="c1">
      <span id="breadcrumb">
        % for part in parents:

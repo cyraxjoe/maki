@@ -22,6 +22,7 @@ class HTMLPost(View):
         else:
             return {'post': post,
                     'parents': [],
+                    'title': post.title,
                     'styles': '/static/'}
 
             

@@ -10,3 +10,5 @@ def log(message, cntx='DEBUG', tb=False):
         cherrypy.log.error(pprint.pformat(message), context=cntx,
                            traceback=tb)
 
+def in_development():
+    return cherrypy.config.get('environment') != 'production'

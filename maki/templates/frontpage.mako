@@ -1,9 +1,12 @@
-<%inherit file="_layout.mako" />
+<%inherit file="_base.mako" />
+<article>
+  <h4>
+    <a href="#"> Blog Post Title</a> <br>
+    <small class="right">August 12, 2012.</small>
+  </h4>
+  <p>Pork drumstick turkey fugiat. Tri-tip elit turducken pork chop in</p>  
+</article>
 
-<div id="c1">
-  <%include file="_post_list.mako" />
-</div>
-<div id="c2">
-  <%include file="_col_2.mako" />
-</div>
+
+
 

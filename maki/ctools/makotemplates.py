@@ -1,9 +1,9 @@
 import cherrypy
 from bs4 import BeautifulSoup
 
+import maki.utils
 from mako import exceptions
 from mako.lookup import TemplateLookup
-
 from maki.bindutils import bind_tool
 from maki import middleware
 
@@ -27,7 +27,7 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
         env = self.next_handler()
         middleware.set_defaults(env)
         middleware.set_csstyles(env, self.csstyles)
-        if cherrypy.config.get('environment') == 'production':
+        if maki.utils.in_development():
             output = self.template.render(**env).decode()
         else:
             output = self._debug_render(env).decode()

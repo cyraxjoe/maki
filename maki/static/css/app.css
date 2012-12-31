@@ -1,0 +1,70 @@
+/* Artfully masterminded by ZURB  */
+
+/* -------------------------------------------------- 
+   Table of Contents
+-----------------------------------------------------
+:: Shared Styles
+:: Page Name 1
+:: Page Name 2
+*/
+
+
+/* -----------------------------------------
+   Shared Styles
+----------------------------------------- */
+body {
+    background-color: #222;
+    color: white;
+    font-family: Helvetica, Arial;
+}
+
+a {
+    color: #E5AC26;
+}
+
+a:hover {
+    color: #E5DF26;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2A409C;
+}
+
+.orange{
+    color: #E5AC26;
+}
+
+#blogbanner{
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    color: white;
+}
+
+#blogbanner span.orange {
+    font-family: Times new roman;
+}
+
+#license p {
+    font-size: 80%;
+}
+.panel {
+    background-color:  #111;
+}
+
+
+footer ul.link-list li {
+    height: 25px;
+}
+
+/* -----------------------------------------
+   Page Name 1
+----------------------------------------- */
+
+
+
+
+/* -----------------------------------------
+   Page Name 2
+----------------------------------------- */
+
+
