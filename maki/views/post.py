@@ -38,10 +38,14 @@ class JSONPost(View):
     @cherrypy.expose
     @tools.json_out()
     def default(self, id):
-        post = self.ctrl.get_post_by_id(self.id)
+        if not id.isdigit():
+            raise cherrypy.NotFound()
+        else:
+            post = self.ctrl.get_post_by_id(id)
+            
         pdict ={'title': post.title,
                 'abstract': post.content,
-                'created': post.created.isotime(),
+                'created': post.created_fmt,
                 'content': post.content,
                 'slug': post.slug,
                 'category': post.category.name,

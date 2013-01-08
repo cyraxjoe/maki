@@ -65,7 +65,7 @@ def load_all():
     pformats = sample_post_formats(db.ses)
     users = sample_users(db.ses)
     categories = sample_categories(db.ses)
-    sample_posts(db.ses, pformats[0],  users[0], categories[0], tags)
+    sample_posts(db.ses, pformats[1],  users[0], categories[0], tags)
     db.ses.commit()
 
 if __name__ == '__main__':
