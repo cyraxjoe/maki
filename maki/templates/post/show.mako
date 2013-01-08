@@ -4,11 +4,22 @@
  from textile import textile
  textile = partial(textile, html_type='html')
 %>
+<ul class="breadcrumbs">
+  <li> <a href="/"> Home </a></li>
+  <li>
+    <a href="/category/${post.category.slug}" class="current">
+      ${post.category.name}
+    </a>
+  </li>
+  <li class="current">
+    <a href="/post/${post.slug}">${post.title}</a>
+  </li>
+  
+</ul>
+
 <article>
-  <h4>
-    <a href="#">${post.title}</a> <br>
-    <small style="color: white;" class="right">${post.created.strftime('%b %e, %Y')}</small>
-  </h4>
+  <span class="right white">${post.created_fmt}</span>
+  <h4 class="orange"> ${post.title} </h4>
   % if post.format.name == 'textile':
       ${post.content | textile}
   % endif 

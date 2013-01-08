@@ -5,7 +5,6 @@ from maki.views import View
 
 class HTMLFrontPage(View):
 
-
     @cherrypy.expose
     @tools.mako(filename="frontpage.mako")
     def index(self):

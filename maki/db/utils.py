@@ -41,3 +41,5 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
 
 def get_categories():
     return db.ses.query(db.models.Category).all()
+
+

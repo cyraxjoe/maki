@@ -21,6 +21,7 @@ from sqlalchemy.orm import  (
     relationship,
     validates
 )
+from maki.constants import DATE_FORMAT
 
 
 class Base(object):
@@ -66,6 +67,14 @@ class Post(Base):
     category    = relationship('Category')
     author      = relationship('User')
     format      = relationship('PostFormat')
+
+    @property
+    def created_fmt(self):
+        return self.created.strftime(DATE_FORMAT)
+    
+    @property
+    def modified_fmt(self):
+        return self.modified.strftime(DATE_FORMAT)
 
     
 class PostFormat(Base):

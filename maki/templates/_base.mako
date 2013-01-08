@@ -19,8 +19,10 @@
   <!-- Nav Bar -->
   <div class="row">
     <div class="twelve columns">
-      <h3 id="blogbanner"><span class="orange">I</span>ntrospection</h3>
-      <hr />
+      
+      <h4 id="blogbanner">
+	<span class="orange">I</span>ntrospection
+      </h4>
     </div>
   </div>
   <!-- End Nav -->
