@@ -56,7 +56,7 @@ class Post(Controller):
     def _create_or_get_tags(self, nametags):
         tags = []
         Tag = db.models.Tag
-        for ntag in nametags:
+        for ntag in nametags or []:
             tag = db.ses.query(Tag).filter_by(name=ntag).scalar()
             if tag is None:
                 tag = Tag(name=ntag)

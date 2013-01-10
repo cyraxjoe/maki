@@ -40,12 +40,9 @@ def sample_post_formats(dbs):
 
 
 def sample_tags(dbs):
-    tags = [{'name': 'python',
-             'slug': 'python'},
-            {'name': 'monterrey',
-             'slug': 'monterrey'},
-            {'name': 'golang',
-             'slug': 'golang'}]
+    tags = [{'name': 'python'},
+            {'name': 'monterrey'},
+            {'name': 'golang'}]
     return _simple_add(dbs, db.models.Tag, tags)
 
 

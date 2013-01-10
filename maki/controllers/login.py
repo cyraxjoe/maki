@@ -2,7 +2,6 @@ import hashlib
 
 import bcrypt
 import cherrypy
-from sqlalchemy.exc import DataError
 
 from maki import db
 from maki.views.login import JSONLogin
@@ -20,15 +19,9 @@ class Login(Controller):
         else:
             return False
             
-
     def _get_user_by_name(self, username):
-        try:
-            user = db.ses.query(db.models.User).filter_by(name=username).one()
-        except DataError:
-            return None
-        else:
-            return user
-    
+        return db.ses.query(db.models.User).filter_by(name=username).scalar()
+
 
     def authenticate(self, username, passwd):
         user = self._get_user_by_name(username)
