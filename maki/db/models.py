@@ -22,6 +22,7 @@ from sqlalchemy.orm import  (
     validates
 )
 from maki.constants import DATE_FORMAT
+from maki.utils import slugify
 
 
 class Base(object):
@@ -48,6 +49,12 @@ class Tag(Base):
 
     name = Column(String(32), nullable=False)
     slug = Column(String(32), nullable=False)
+
+    def __init__(self, name, slug=None):
+        self.name = name
+        if slug is None:
+            self.slug = slugify(name)
+            
 
 
 class Post(Base):

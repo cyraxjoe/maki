@@ -40,12 +40,27 @@ class Post(Controller):
         return self._get_post(db.ses.query(db.models.Post)\
                               .filter_by(slug=slug))
 
-    def update_post(self, id, **fields):
+    def update_post(self, id, autotag=False, **fields):
         log(fields)
         post = self.get_post_by_id(id)
         if post is None:
             return "The post does not exists."
+        if autotag:
+            fields['tags'] = self._create_or_get_tags(fields['tags'])
         if update_model(post, fields):
             return precautious_commit(db.ses)  # None if everything went ok.
         else:
             return "Unable to update the post model."
+
+
+    def _create_or_get_tags(self, nametags):
+        tags = []
+        Tag = db.models.Tag
+        for ntag in nametags:
+            tag = db.ses.query(Tag).filter_by(name=ntag).scalar()
+            if tag is None:
+                tag = Tag(name=ntag)
+            tags.append(tag)
+        return tags
+
+            

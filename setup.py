@@ -11,7 +11,8 @@ requires = ['CherryPy==3.2.2',
             'py3k-bcrypt==0.3',
             'beautifulsoup4==4.1.3',
             'wtforms==1.0.2',
-            'textile', ]
+            'textile',
+            'unidecode']
 
 setup(name='maki',
       version='0.0.0',

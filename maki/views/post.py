@@ -44,7 +44,7 @@ class JSONPost(View):
             post = self.ctrl.get_post_by_id(id)
             
         pdict ={'title': post.title,
-                'abstract': post.content,
+                'abstract': post.abstract,
                 'created': post.created_fmt,
                 'content': post.content,
                 'slug': post.slug,
@@ -67,15 +67,18 @@ class JSONPost(View):
         changes = set(cherrypy.request.json)
         unknown_fields = changes - valid_fields
         if unknown_fields:
+            cherrypy.response.status = 500
             return {'updated': False,
                     'messages': ['Invalid field %s' % f
                                  for f in unknown_fields]}
         else:
-            errormsg = self.ctrl.update_post(id_, **cherrypy.request.json)
+            errormsg = \
+            self.ctrl.update_post(id_, autotag=True, **cherrypy.request.json)
             if errormsg is None:
                 return {'updated': True,
                         'messages': []}
             else:
+                cherrypy.response.status = 500
                 return {'updated': False,
                         'messages': ['Unable to store the data',
                                      errormsg]}

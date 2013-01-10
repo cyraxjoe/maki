@@ -1,6 +1,8 @@
+import re
 import pprint
 
 import cherrypy
+import unidecode
 
 def log(message, cntx='DEBUG', tb=False):
     if isinstance(message, str):
@@ -12,3 +14,8 @@ def log(message, cntx='DEBUG', tb=False):
 
 def in_development():
     return cherrypy.config.get('environment') != 'production'
+
+
+def slugify(text):
+    text = unidecode.unidecode(text).lower()
+    return re.sub(r'\W+','-', text)
