@@ -1,14 +1,14 @@
 import cherrypy
 from cherrypy import tools
 
+import maki.scaffold
 from maki.forms import (
     LoginForm,
     CompatParams
 )
-from maki.views import View
 
 
-class JSONLogin(View):
+class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
 
     @cherrypy.expose

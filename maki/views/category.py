@@ -1,9 +1,9 @@
 import cherrypy
 from cherrypy import tools
 
-from maki.views import View
+import maki.scaffold
 
-class HTMLCategory(View):
+class HTML(maki.scaffold.View):
 
     @cherrypy.expose
     @tools.mako(filename="category/list.mako")

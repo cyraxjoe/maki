@@ -1,10 +1,9 @@
-from . import Controller
-
-from maki.views.category import HTMLCategory
+import maki.scaffold
+import maki.views
 from maki import db
 
-class Category(Controller):
-    __views__ = (HTMLCategory,)
+class Category(maki.scaffold.Controller):
+    __views__ = (maki.views.category.HTML,)
 
     def get_posts(self, category):
         return db.ses.query(db.models.Post).filter_by(category=category)

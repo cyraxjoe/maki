@@ -1,9 +1,8 @@
+from maki.views import (
+    frontpage,
+    post,
+    login,
+    category
+)
 
-class View(object):
-    __mime__ = 'text/html'
-        
-    def __init__(self, controller):
-        self.ctrl = controller
-
-
-
+__all__ = ['frontpage', 'post', 'login', 'category']

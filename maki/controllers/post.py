@@ -1,16 +1,17 @@
 import cherrypy
 from sqlalchemy.orm.exc import NoResultFound
 
+import maki.views
+import maki.scaffold
 from maki import db
 from maki.utils import log
-from maki.controllers import Controller
-from maki.views.post import HTMLPost, JSONPost
 from maki.db.utils import update_model, precautious_commit
 from maki.forms import AddPostForm, EditPostForm
 
 
-class Post(Controller):
-    __views__ = [HTMLPost, JSONPost]
+class Post(maki.scaffold.Controller):
+    __views__ = [maki.views.post.HTML,
+                 maki.views.post.JSON]
 
 
     def _get_post(self, query):

@@ -1,12 +1,10 @@
 import os
 import cherrypy
 
-import maki.ctools
-import maki.cplugins
-from maki.controllers.root import Root
-from maki import dispatcher
+from maki import scaffold; scaffold.setup() #  Yes... that's what I mean.
+import maki.controllers
+from maki import dispatcher  # this is going to be used in the config file.
 
 __all__ = ['dispatcher',]
 LOCAL_DIR = os.path.join(os.getcwd(), os.path.dirname(__file__))
-APP = cherrypy.Application(Root(), '/')
-
+APP = cherrypy.Application(maki.controllers.Root(), '/')

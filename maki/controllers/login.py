@@ -3,14 +3,13 @@ import hashlib
 import bcrypt
 import cherrypy
 
+import maki.scaffold
+import maki.views
 from maki import db
-from maki.views.login import JSONLogin
-from . import Controller
 
 
-
-class Login(Controller):
-    __views__ = (JSONLogin,)
+class Login(maki.scaffold.Controller):
+    __views__ = (maki.views.login.JSON,)
     
 
     def _have_valid_passwd(self, user, passwd):

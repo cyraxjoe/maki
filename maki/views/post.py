@@ -1,9 +1,9 @@
 import cherrypy
 from cherrypy import tools
 
-from . import View
+import maki.scaffold
 
-class HTMLPost(View):
+class HTML(maki.scaffold.View):
 
     @cherrypy.expose
     @tools.mako(filename="post/list.mako")
@@ -26,14 +26,8 @@ class HTMLPost(View):
                     'styles': '/static/'}
 
             
-        
-        
-
-    
-class JSONPost(View):
+class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
-
-        
 
     @cherrypy.expose
     @tools.json_out()

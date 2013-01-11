@@ -21,7 +21,8 @@ from sqlalchemy.orm import  (
     relationship,
     validates
 )
-from maki.constants import DATE_FORMAT
+
+import maki.constants
 from maki.utils import slugify
 
 
@@ -77,11 +78,11 @@ class Post(Base):
 
     @property
     def created_fmt(self):
-        return self.created.strftime(DATE_FORMAT)
+        return self.created.strftime(maki.constants.DATE_FORMAT)
     
     @property
     def modified_fmt(self):
-        return self.modified.strftime(DATE_FORMAT)
+        return self.modified.strftime(maki.constants.DATE_FORMAT)
 
     
 class PostFormat(Base):
