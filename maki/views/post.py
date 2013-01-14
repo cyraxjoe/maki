@@ -35,6 +35,27 @@ class HTML(maki.scaffold.View):
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
 
+    def _have_valid_fields(self):
+        changes = set(cherrypy.request.json)
+        return self.ctrl.required_fields == changes
+
+
+    def _modify_post(self, update_method, actionrsl,  *args):
+        if self._have_valid_fields():
+            errormsg = update_method(*args, **cherrypy.request.json)
+            if errormsg is None:
+                return {'created': True,
+                        'messages': None}
+            else:
+                cherrypy.response.status = 500
+                return {'created': False,
+                        'messages': errormsg}
+        else:
+            cherrypy.response.status = 500
+            return {'created': False,
+                    'messages': 'Missing required fields'}
+        
+            
     @cherrypy.expose
     @tools.json_out()
     def default(self, id):
@@ -57,15 +78,14 @@ class JSON(maki.scaffold.View):
             pdict['modfied'] =  post.modified.ctime()
         return pdict
 
+
     @cherrypy.expose
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
     @tools.protect()
     def add(self):
-        return {}
-        
-
+        return self._modify_post(self.ctrl.create_post, 'created')
 
     @cherrypy.expose
     @tools.json_out()
@@ -73,21 +93,4 @@ class JSON(maki.scaffold.View):
     @tools.allow(methods=('POST',))
     @tools.protect()
     def update(self, id_):
-        changes = set(cherrypy.request.json)
-        unknown_fields = changes - self.ctrl.required_fields
-        if unknown_fields:
-            cherrypy.response.status = 500
-            return {'updated': False,
-                    'messages': ['Invalid field %s' % f
-                                 for f in unknown_fields]}
-        else:
-            errormsg = \
-            self.ctrl.update_post(id_, autotag=True, **cherrypy.request.json)
-            if errormsg is None:
-                return {'updated': True,
-                        'messages': []}
-            else:
-                cherrypy.response.status = 500
-                return {'updated': False,
-                        'messages': ['Unable to store the data',
-                                     errormsg]}
+        return self._modify_post(self.ctrl.update_post, 'updated',  id_)

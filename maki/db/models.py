@@ -38,23 +38,26 @@ tag_post_table = Table('tag_post', Base.metadata,
                        Column('tag_id', Integer, ForeignKey('tags.id')),
                        Column('post_id', Integer, ForeignKey('posts.id')))
 
-class Category(Base):
-    __tablename__ = 'categories'
 
-    name = Column(String(32), nullable=False)
-    slug = Column(String(32))
-
-
-class Tag(Base):
-    __tablename__ = 'tags'
-
+class PostMetainfo(object):
+    
     name = Column(String(32), nullable=False)
     slug = Column(String(32), nullable=False)
+    endure = Column(Boolean(), server_default='False')
 
     def __init__(self, name, slug=None):
         self.name = name
         if slug is None:
             self.slug = slugify(name)
+
+    
+class Category(PostMetainfo, Base):
+    __tablename__ = 'categories'
+
+
+class Tag(PostMetainfo, Base):
+    __tablename__ = 'tags'
+
             
 
 
@@ -83,6 +86,7 @@ class Post(Base):
     @property
     def modified_fmt(self):
         return self.modified.strftime(maki.constants.DATE_FORMAT)
+
 
     
 class PostFormat(Base):

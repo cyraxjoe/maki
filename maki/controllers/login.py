@@ -10,7 +10,8 @@ from maki import db
 
 class Login(maki.scaffold.Controller):
     __views__ = (maki.views.login.JSON,)
-    
+
+    required_fields = {'user', 'passwd'}
 
     def _have_valid_passwd(self, user, passwd):
         if bcrypt.hashpw(passwd, user.passwd) == user.passwd:

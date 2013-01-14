@@ -19,7 +19,7 @@
   
 </ul>
 
-<article id="post-body" class="left">
+<article id="post-body">
   <span class="right white">${post.created_fmt}</span>
   <h4 class="orange"> ${post.title} </h4>
   % if post.format.name == 'rst':

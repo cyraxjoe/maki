@@ -43,3 +43,9 @@ def get_categories():
     return db.ses.query(db.models.Category).all()
 
 
+def clean_empty_metainfo():
+    for Model in (db.models.Tag, db.models.Category):
+        for elem in db.ses.query(Model):
+            if not elem.endure and not elem.posts: # no post is using this.
+                db.ses.delete(elem)
+    db.ses.commit()

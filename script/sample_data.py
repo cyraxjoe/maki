@@ -11,10 +11,8 @@ def _simple_add(dbs, Model, elements):
         
 
 def sample_categories(dbs):
-    categories = [{'name': 'Programming',
-                   'slug': 'programming'},
-                  {'name': 'Biology',
-                   'slug': 'biology'}]
+    categories = [{'name': 'Programming'},
+                  {'name': 'Biology'}]
     return _simple_add(dbs, db.models.Category, categories)
 
 
