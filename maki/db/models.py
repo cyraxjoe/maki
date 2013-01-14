@@ -72,7 +72,7 @@ class Post(Base):
     category_id = Column(Integer, ForeignKey('categories.id'))
     format_id   = Column(Integer, ForeignKey('post_formats.id'))
     tags        = relationship('Tag', secondary=tag_post_table, backref='posts')
-    category    = relationship('Category')
+    category    = relationship('Category', backref='posts', order_by='Post.created')
     author      = relationship('User')
     format      = relationship('PostFormat')
 

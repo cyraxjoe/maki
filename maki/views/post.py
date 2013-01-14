@@ -14,7 +14,7 @@ class HTML(maki.scaffold.View):
             raise cherrypy.NotFound()
         else:
             return {'category': obcategory,
-                    'posts': self.ctrl.get_posts(obcategory)}
+                    'posts': obcategory.posts}
 
 
     @cherrypy.expose
