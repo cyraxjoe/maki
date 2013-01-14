@@ -1,6 +1,7 @@
 from . import (
     makotemplates,
-    removedbs
+    removedbs,
+    protect
 )
 
 

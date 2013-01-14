@@ -1,12 +1,14 @@
 import types
 import cherrypy
     
-def bind_tool(name, point):
+def bind_tool(name, point, priority=50):
     def set_tool(tool):
         if isinstance(tool, types.FunctionType):
-            setattr(cherrypy.tools, name, cherrypy.Tool(point, tool))
+            setattr(cherrypy.tools, name,
+                    cherrypy.Tool(point, tool, priority=priority))
         else:
-            setattr(cherrypy.tools, name, cherrypy.Tool(point, tool()))
+            setattr(cherrypy.tools, name,
+                    cherrypy.Tool(point, tool(), priority=priority))
     return set_tool
 
 

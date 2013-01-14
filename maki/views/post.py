@@ -62,6 +62,7 @@ class JSON(maki.scaffold.View):
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
+    @tools.protect()
     def update(self, id_):
         valid_fields = set(self.ctrl.get_edit_form().data)
         changes = set(cherrypy.request.json)
