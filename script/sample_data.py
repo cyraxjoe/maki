@@ -10,23 +10,27 @@ def _simple_add(dbs, Model, elements):
     return emodels
         
 
-def sample_categories(dbs):
-    categories = [{'name': 'Programming'},
-                  {'name': 'Biology'}]
+def sample_categories(dbs, lang):
+    categories = [{'name': 'Programming',
+                   'lang': lang},
+                  {'name': 'Biology',
+                   'lang': lang}]
     return _simple_add(dbs, db.models.Category, categories)
 
 
 
-def sample_posts(dbs, pformat, author, category, tags):
-    posts = [{'title': 'Sample title of post',
-              'abstract': 'Micro sample abstract',
-              'content': 'Le content of the sample post',
-              'slug': 'sample-title-of-post',
-              'public': True,
+def sample_posts(dbs, pformat, author, category, tags, lang):
+    revisions = [{'title': 'Sample title of post',
+                  'abstract': 'Micro sample abstract',
+                  'content': 'Le content of the sample post'}]
+    posts = [{'public': True,
               'format': pformat,
               'author': author,
               'category': category,
-              'tags': tags}]
+              'tags': tags,
+              'lang': lang,
+              'revisions':
+              (_simple_add(dbs, db.models.PostRevision, revisions))}]
     return _simple_add(dbs, db.models.Post, posts)
 
 
@@ -36,11 +40,10 @@ def sample_post_formats(dbs):
     return _simple_add(dbs, db.models.PostFormat, frmts)
 
 
-
-def sample_tags(dbs):
-    tags = [{'name': 'python'},
-            {'name': 'monterrey'},
-            {'name': 'golang'}]
+def sample_tags(dbs, lang):
+    tags = [{'name': 'python',   'lang': lang},
+            {'name': 'monterrey', 'lang': lang},
+            {'name': 'golang', 'lang': lang}]
     return _simple_add(dbs, db.models.Tag, tags)
 
 
@@ -52,15 +55,22 @@ def sample_users(dbs):
               'active': True},]
     return _simple_add(dbs, db.models.User, users)
 
+def sample_languages(dbs):
+    langs = [{'name': 'Español', 'code': 'ES'},
+             {'name': 'English', 'code': 'EN'}]
+    return _simple_add(dbs, db.models.Language, langs)
 
 
 
 def load_all():
-    tags = sample_tags(db.ses)
+    languages = sample_languages(db.ses)
+    lang_en = languages[1]
+    tags = sample_tags(db.ses, lang_en)
     pformats = sample_post_formats(db.ses)
     users = sample_users(db.ses)
-    categories = sample_categories(db.ses)
-    sample_posts(db.ses, pformats[1],  users[0], categories[0], tags)
+    categories = sample_categories(db.ses, lang_en)
+    sample_posts(db.ses, pformats[1],  users[0], categories[0],
+                 tags, lang_en)
     db.ses.commit()
 
 if __name__ == '__main__':

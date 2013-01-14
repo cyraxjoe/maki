@@ -89,6 +89,7 @@ class JSON(maki.scaffold.View):
     @tools.allow(methods=('POST',))
     @tools.protect()
     def add(self):
+        log(cherrypy.request.headers)
         return self._modify_post(self.ctrl.create_post, 'created')
 
     @cherrypy.expose

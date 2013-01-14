@@ -11,6 +11,7 @@ from sqlalchemy import (
     Text,
     Boolean,
     DateTime,
+    UniqueConstraint,
     text,
     event
 )
@@ -36,20 +37,36 @@ class Base(object):
 Base = declarative_base(cls=Base)
 
 tag_post_table = Table('tag_post', Base.metadata,
-                       Column('tag_id', Integer, ForeignKey('tags.id')),
-                       Column('post_id', Integer, ForeignKey('posts.id')))
+                          Column('tag_id', Integer, ForeignKey('tags.id')),
+                          Column('post_id', Integer, ForeignKey('posts.id')))
 
 
 class PostMetainfo(object):
+    
     
     name = Column(String(32), nullable=False, unique=True)
     slug = Column(String(32), nullable=False, unique=True)
     endure = Column(Boolean(), server_default='False')
 
-    def __init__(self, name, slug=None):
-        self.name = name
-        if slug is None:
-            self.slug = slugify(name)
+    #def __init__(self, name, slug=None):
+    #    self.name = name
+    #    if slug is None:
+    #        self.slug = slugify(name)
+
+    @declared_attr
+    def __table_args__(self):
+        return (UniqueConstraint('name', 'lang_id'),
+                UniqueConstraint('slug', 'lang_id'))
+    
+
+    @declared_attr
+    def lang_id(self):
+        return Column(Integer, ForeignKey('languages.id'), nullable=False)
+    
+    @declared_attr
+    def lang(self):
+        return relationship('Language')
+
 
     
 class Category(PostMetainfo, Base):
@@ -59,27 +76,65 @@ class Category(PostMetainfo, Base):
 class Tag(PostMetainfo, Base):
     __tablename__ = 'tags'
 
-            
+
+class Language(Base):
+    __tablename__ = 'languages'
+    name = Column(String(48))
+    code = Column(String(2))
 
 
+class PostRevision(Base):
+    __tablename__ = 'post_revisions'
+
+    title       = Column(String(64), nullable=False)
+    slug        = Column(String(64), nullable=False)
+    abstract    = Column(String(400))
+    content     = Column(Text)
+    modified    = Column(DateTime, onupdate=datetime.datetime.now, server_default=text('NOW()'))
+    post_id     = Column(Integer, ForeignKey('posts.id'), nullable=False)
+
+
+    
 class Post(Base):
     __tablename__ = 'posts'
 
-    title       = Column(String(64), unique=True, nullable=False)
-    abstract    = Column(String(400))
-    content     = Column(Text)
     created     = Column(DateTime, server_default=text('NOW()'))
-    slug        = Column(String(64), unique=True, nullable=False)
     public      = Column(Boolean, server_default='False', nullable=False)
-    modified    = Column(DateTime, onupdate=datetime.datetime.now)
     author_id   = Column(Integer, ForeignKey('users.id'), nullable=False)
-    category_id = Column(Integer, ForeignKey('categories.id'),
-                         nullable=False)
+    lang_id     = Column(Integer, ForeignKey('languages.id'), nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
     format_id   = Column(Integer, ForeignKey('post_formats.id'), nullable=False)
     tags        = relationship('Tag', secondary=tag_post_table, backref='posts')
     category    = relationship('Category', backref='posts', order_by='Post.created')
-    author      = relationship('User')
     format      = relationship('PostFormat')
+    lang        = relationship('Language')
+    author      = relationship('User')
+    revisions   = relationship('PostRevision', backref='post', uselist=True,
+                               order_by='PostRevision.modified')
+
+    @property
+    def crev(self):
+        return self.revisions[-1]
+
+    @property
+    def title(self):
+        return self.crev.title
+    
+    @property
+    def slug(self):
+        return self.crev.slug
+
+    @property
+    def abstract(self):
+        return self.crev.abstract
+
+    @property
+    def content(self):
+        return self.crev.content
+
+    @property
+    def modified(self):
+        return self.crev.modified
 
 
     @property
@@ -89,7 +144,8 @@ class Post(Base):
     @property
     def modified_fmt(self):
         return self.modified.strftime(maki.constants.DATE_FORMAT)
-
+    
+    
     
     
 class PostFormat(Base):
@@ -122,7 +178,9 @@ class User(Base):
         return bcrypt.hashpw(hpasswd, bcrypt.gensalt())
 
 
-def set_post_slug(post, newvalue, oldvalue, initiator):
-    post.slug = slugify(newvalue)
+def set_slug_in_elem(elem, newvalue, oldvalue, initiator):
+    elem.slug = slugify(newvalue)
     
-event.listen(Post.title, 'set', set_post_slug)
+event.listen(PostRevision.title, 'set', set_slug_in_elem)
+event.listen(Tag.name, 'set', set_slug_in_elem)
+event.listen(Category.name, 'set', set_slug_in_elem)
