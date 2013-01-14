@@ -2,13 +2,19 @@ import cherrypy
 from cherrypy import tools
 
 import maki.scaffold
+#from maki.utils import log  
 
 class HTML(maki.scaffold.View):
 
     @cherrypy.expose
     @tools.mako(filename="post/list.mako")
-    def index(self):
-        return {}
+    def index(self, category):
+        obcategory = self.ctrl.get_category_by_slug(category)
+        if obcategory is None:
+            raise cherrypy.NotFound()
+        else:
+            return {'category': obcategory,
+                    'posts': self.ctrl.get_posts(obcategory)}
 
 
     @cherrypy.expose

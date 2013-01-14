@@ -9,7 +9,7 @@
 <ul class="breadcrumbs">
   <li> <a href="/"> Home </a></li>
   <li>
-    <a href="/category/${post.category.slug}" class="current">
+    <a href="/post/?category=${post.category.slug}" class="current">
       ${post.category.name}
     </a>
   </li>
@@ -19,7 +19,7 @@
   
 </ul>
 
-<article>
+<article id="post-body" class="left">
   <span class="right white">${post.created_fmt}</span>
   <h4 class="orange"> ${post.title} </h4>
   % if post.format.name == 'rst':
