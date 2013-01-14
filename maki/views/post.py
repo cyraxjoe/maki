@@ -2,7 +2,7 @@ import cherrypy
 from cherrypy import tools
 
 import maki.scaffold
-#from maki.utils import log  
+from maki.utils import log  
 
 class HTML(maki.scaffold.View):
 
@@ -42,18 +42,20 @@ class JSON(maki.scaffold.View):
 
     def _modify_post(self, update_method, actionrsl,  *args):
         if self._have_valid_fields():
-            errormsg = update_method(*args, **cherrypy.request.json)
-            if errormsg is None:
-                return {'created': True,
-                        'messages': None}
-            else:
+            try:
+                post_id_slug= update_method(*args, **cherrypy.request.json)
+            except Exception as exep:
+                log('Unable to modify post', tb=True)
                 cherrypy.response.status = 500
-                return {'created': False,
-                        'messages': errormsg}
+                return {actionrsl: False,
+                        'message': str(exep)}
+            else:
+                return {actionrsl: True,
+                        'message': post_id_slug}
         else:
             cherrypy.response.status = 500
-            return {'created': False,
-                    'messages': 'Missing required fields'}
+            return {actionrsl: False,
+                    'message': 'Missing required fields'}
         
             
     @cherrypy.expose
@@ -63,6 +65,8 @@ class JSON(maki.scaffold.View):
             raise cherrypy.NotFound()
         else:
             post = self.ctrl.get_post_by_id(id)
+            if post is None:
+                raise cherrypy.NotFound()
             
         pdict ={'title': post.title,
                 'abstract': post.abstract,
