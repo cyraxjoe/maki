@@ -57,6 +57,15 @@ class JSON(maki.scaffold.View):
             pdict['modfied'] =  post.modified.ctime()
         return pdict
 
+    @cherrypy.expose
+    @tools.json_out()
+    @tools.json_in()
+    @tools.allow(methods=('POST',))
+    @tools.protect()
+    def add(self):
+        return {}
+        
+
 
     @cherrypy.expose
     @tools.json_out()
@@ -64,9 +73,8 @@ class JSON(maki.scaffold.View):
     @tools.allow(methods=('POST',))
     @tools.protect()
     def update(self, id_):
-        valid_fields = set(self.ctrl.get_edit_form().data)
         changes = set(cherrypy.request.json)
-        unknown_fields = changes - valid_fields
+        unknown_fields = changes - self.ctrl.required_fields
         if unknown_fields:
             cherrypy.response.status = 500
             return {'updated': False,
