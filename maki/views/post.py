@@ -9,7 +9,8 @@ class HTML(maki.scaffold.View):
     @cherrypy.expose
     @tools.mako(filename="post/list.mako")
     def index(self, category):
-        obcategory = self.ctrl.get_category_by_slug(category)
+        lang = cherrypy.response.i18n.clang
+        obcategory = self.ctrl.get_category_by_slug(category, lang)
         if obcategory is None:
             raise cherrypy.NotFound()
         else:
@@ -20,9 +21,10 @@ class HTML(maki.scaffold.View):
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, category=None, slug=None):
+        lang = cherrypy.response.i18n.clang
         if slug is None: # for backwards compatibility, we use category.
             slug = category
-        post = self.ctrl.get_post_by_slug(slug)
+        post = self.ctrl.get_post_by_slug(slug, lang)
         if post is None:
             raise cherrypy.NotFound()
         else:

@@ -1,4 +1,7 @@
+import cherrypy
+
 import maki
+import maki.i18n
 import maki.utils
 import maki.db.utils
 
@@ -6,6 +9,8 @@ def set_defaults(env):
     env['IN_DEVELOPMENT'] = maki.utils.in_development()
     env['STATIC'] = maki.APP.config['templates']['static_url']
     env['CATEGORIES'] = maki.db.utils.get_categories()
+    env['LOCALE'] = cherrypy.response.i18n.clang
+    env['_'] = maki.i18n.gettext
 
 
 def set_csstyles(env, csstyles):

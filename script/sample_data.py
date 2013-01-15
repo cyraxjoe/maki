@@ -56,8 +56,8 @@ def sample_users(dbs):
     return _simple_add(dbs, db.models.User, users)
 
 def sample_languages(dbs):
-    langs = [{'name': 'Español', 'code': 'ES'},
-             {'name': 'English', 'code': 'EN'}]
+    langs = [{'name': 'Español', 'code': 'es'},
+             {'name': 'English', 'code': 'en'}]
     return _simple_add(dbs, db.models.Language, langs)
 
 

@@ -23,8 +23,7 @@ from sqlalchemy.orm import  (
     relationship,
     validates
 )
-
-import maki.constants
+import maki.i18n
 from maki.utils import slugify
 
 
@@ -42,23 +41,15 @@ tag_post_table = Table('tag_post', Base.metadata,
 
 
 class PostMetainfo(object):
-    
-    
     name = Column(String(32), nullable=False, unique=True)
     slug = Column(String(32), nullable=False, unique=True)
     endure = Column(Boolean(), server_default='False')
-
-    #def __init__(self, name, slug=None):
-    #    self.name = name
-    #    if slug is None:
-    #        self.slug = slugify(name)
 
     @declared_attr
     def __table_args__(self):
         return (UniqueConstraint('name', 'lang_id'),
                 UniqueConstraint('slug', 'lang_id'))
     
-
     @declared_attr
     def lang_id(self):
         return Column(Integer, ForeignKey('languages.id'), nullable=False)
@@ -87,7 +78,6 @@ class PostRevision(Base):
     __tablename__ = 'post_revisions'
 
     title       = Column(String(64), nullable=False)
-    slug        = Column(String(64), nullable=False)
     abstract    = Column(String(400))
     content     = Column(Text)
     modified    = Column(DateTime, onupdate=datetime.datetime.now, server_default=text('NOW()'))
@@ -97,7 +87,9 @@ class PostRevision(Base):
     
 class Post(Base):
     __tablename__ = 'posts'
+    __table_args__ = (UniqueConstraint('slug', 'lang_id'),)
 
+    slug        = Column(String(64), nullable=False)
     created     = Column(DateTime, server_default=text('NOW()'))
     public      = Column(Boolean, server_default='False', nullable=False)
     author_id   = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -121,10 +113,6 @@ class Post(Base):
         return self.crev.title
     
     @property
-    def slug(self):
-        return self.crev.slug
-
-    @property
     def abstract(self):
         return self.crev.abstract
 
@@ -139,12 +127,11 @@ class Post(Base):
 
     @property
     def created_fmt(self):
-        return self.created.strftime(maki.constants.DATE_FORMAT)
+        return maki.i18n.fmt_date(self.created)
     
     @property
     def modified_fmt(self):
-        return self.modified.strftime(maki.constants.DATE_FORMAT)
-    
+        return maki.i18n.fmt_date(self.modified)
     
     
     
@@ -180,7 +167,9 @@ class User(Base):
 
 def set_slug_in_elem(elem, newvalue, oldvalue, initiator):
     elem.slug = slugify(newvalue)
-    
-event.listen(PostRevision.title, 'set', set_slug_in_elem)
+
 event.listen(Tag.name, 'set', set_slug_in_elem)
 event.listen(Category.name, 'set', set_slug_in_elem)
+event.listen(Post.revisions, 'append',
+             lambda post, revision, init:
+                 setattr(post, 'slug',  slugify(revision.title)))

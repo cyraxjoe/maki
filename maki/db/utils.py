@@ -49,3 +49,5 @@ def clean_empty_metainfo():
             if not elem.endure and not elem.posts: # no post is using this.
                 db.ses.delete(elem)
     db.ses.commit()
+
+    

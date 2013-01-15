@@ -1,4 +1,5 @@
-from . import (
+from maki.ctools import (
+    i18n,
     makotemplates,
     removedbs,
     protect

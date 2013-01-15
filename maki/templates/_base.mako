@@ -7,9 +7,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
 % if title:
-  <title>Introspection | ${title}</title>
+  <title>${_("Introspection")} | ${title}</title>
 % else:
-  <title>Introspection</title>
+  <title>${_("Introspection")}</title>
 % endif
   <link rel="stylesheet" href="${STATIC}/css/foundation.min.css">
   <link rel="stylesheet" href="${STATIC}/css/app.css">
@@ -21,7 +21,7 @@
     <div class="twelve columns">
       
       <h4 id="blogbanner">
-	<span class="orange">I</span>ntrospection
+	<span class="orange">I</span>${_("ntrospection")}
       </h4>
     </div>
   </div>
@@ -37,7 +37,7 @@
     <!-- Sidebar -->
     <aside class="three columns">
   <%block name="sidebar">
-      <h5 style="margin-bottom: 4px;">Categories</h5>
+      <h5 style="margin-bottom: 4px;">${_("Categories")}</h5>
       <ul class="side-nav" style="padding-top: 4px;">
 	% for category in CATEGORIES:
         <li><a href="/post/?category=${category.slug}">${category.name}</a></li>
@@ -45,9 +45,9 @@
       </ul>
 
       <div class="panel">
-        <h5>Who am I?</h5>
-        <p><strong>Joel Rivera</strong>, just another programmer from Monterrey, Mexico.</p>
-        <a href="http://joel.mx/"><strong>More about me &rarr;</strong></a>
+        <h5>${_("Who am I?")}</h5>
+        <p><strong>Joel Rivera</strong>, ${_("just another programmer from Monterrey, Mexico")}.</p>
+        <a href="http://joel.mx/"><strong>${_("More about me")} &rarr;</strong></a>
       </div>
 
  </%block>
@@ -69,9 +69,9 @@
 	      <img alt="Creative Commons License" style="border-width:0"
 		   src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a>
 	    <br>
-	    This work is licensed under a
-	    <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">
-	      Creative Commons Attribution 3.0 Unported License</a>.
+	    ${_("This work is licensed under a")}
+	    <a rel="license" href="${_('http://creativecommons.org/licenses/by/3.0/deed.en_US')}">
+	      ${_("Creative Commons Attribution 3.0 Unported License")}</a>.
 	  </p>
         </div>
         <div class="four columns">

@@ -43,7 +43,7 @@ from pprint import pprint
 import cherrypy
 from cherrypy.lib import reprconf
 config = reprconf.Config(sys.argv[1]) # first arg == config file
-cherrypy.config.update(config) 
+cherrypy.config = config
 
 import maki
 from maki import db

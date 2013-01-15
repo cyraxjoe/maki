@@ -51,8 +51,8 @@ class Post(maki.scaffold.Controller):
         # This methods flush the sessions, because of the ".scalar" call.
         lang = fields['lang'] = self._get_lang(fields['lang'])
         fields['tags'] = self._create_or_get_tags(fields['tags'], lang)
-        fields['category'] = self._create_or_get_category(fields['category'],
-                                                          lang)
+        fields['category'] = \
+                         self._create_or_get_category(fields['category'], lang)
         fields['format'] = self._get_format(fields['format'])
 
         log(fields)
@@ -79,23 +79,29 @@ class Post(maki.scaffold.Controller):
         return self._get_post(db.ses.query(db.models.Post)\
                               .filter_by(id=id))
 
-    def get_post_by_slug(self, slug):
-        rev =  self._get_post(db.ses.query(db.models.PostRevision)\
-                              .filter_by(slug=slug))
-        return rev.post
+    def get_post_by_slug(self, slug, lang):
+        return self._get_post(db.ses.query(db.models.Post)\
+                              .filter_by(slug=slug)\
+                              .filter_by(lang=lang))
 
+    def get_category_by_slug(self, slug, lang):
+        return db.ses.query(db.models.Category)\
+               .filter_by(slug=slug)\
+               .filter_by(lang=lang).scalar()
 
-    def get_category_by_slug(self, slug):
-        return db.ses.query(db.models.Category).filter_by(slug=slug).scalar()
 
     def _get_format(self, fname):
         # this could "explode" but that's ok.
         return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
 
-    def _get_lang(self, langcode):
-        # this could "explode" but that's ok.
-        return db.ses.query(db.models.Language).filter_by(code=langcode).one()
 
+    def _get_lang(self, langcode):
+        lang = db.ses.query(db.models.Language)\
+               .filter_by(code=langcode).scalar()
+        if lang is None:
+            raise Exception('Unknown langcode %s' % langcode)
+        else:
+            return lang
 
     def create_post(self, **fields):
         return self._update_post(None, fields)
