@@ -79,10 +79,9 @@ class Post(maki.scaffold.Controller):
         return self._get_post(db.ses.query(db.models.Post)\
                               .filter_by(id=id))
 
-    def get_post_by_slug(self, slug, lang):
+    def get_post_by_slug(self, slug):
         return self._get_post(db.ses.query(db.models.Post)\
-                              .filter_by(slug=slug)\
-                              .filter_by(lang=lang))
+                              .filter_by(slug=slug))
 
     def get_category_by_slug(self, slug, lang):
         return db.ses.query(db.models.Category)\

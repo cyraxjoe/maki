@@ -87,9 +87,8 @@ class PostRevision(Base):
     
 class Post(Base):
     __tablename__ = 'posts'
-    __table_args__ = (UniqueConstraint('slug', 'lang_id'),)
 
-    slug        = Column(String(64), nullable=False)
+    slug        = Column(String(64), nullable=False, unique=True)
     created     = Column(DateTime, server_default=text('NOW()'))
     public      = Column(Boolean, server_default='False', nullable=False)
     author_id   = Column(Integer, ForeignKey('users.id'), nullable=False)

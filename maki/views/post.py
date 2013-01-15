@@ -21,10 +21,9 @@ class HTML(maki.scaffold.View):
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, category=None, slug=None):
-        lang = cherrypy.response.i18n.clang
         if slug is None: # for backwards compatibility, we use category.
             slug = category
-        post = self.ctrl.get_post_by_slug(slug, lang)
+        post = self.ctrl.get_post_by_slug(slug)
         if post is None:
             raise cherrypy.NotFound()
         else:
