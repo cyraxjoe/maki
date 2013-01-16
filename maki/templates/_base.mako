@@ -18,12 +18,24 @@
 <body>
   <!-- Nav Bar -->
   <div class="row">
-    <div class="twelve columns">
-      
+    <div class="eight columns">
       <h4 id="blogbanner">
 	<span class="orange">I</span>${_("ntrospection")}
       </h4>
     </div>
+    <div class="four columns" id="lang-block">
+      <span class="right" >
+	<ul class="button-group square" style="margin-bottom: 10px;">
+	  <li><a href="javascript:void()" title="English" id="active-lang" class="has-tip tiny secondary button square">en</a></li>
+	  <li><a href="#" title="Español" class="has-tip tiny secondary button square">es </a></li>
+	  <li><a href="#" title="Any" class="has-tip tiny secondary button square">&#x2736;&#x2736;</a></li>
+	</ul>
+	<small id="what-is-this" class="right orange has-tip" 
+	       title="The visibility of the posts is filtered by the selected option.">
+	  what is this?</small>
+      </span>
+    </div>
+    
   </div>
   <!-- End Nav -->
   <!-- Main Page Content and Sidebar -->
@@ -96,6 +108,7 @@
   <!-- Included JS Files (Compressed) -->
   <script src="${STATIC}/js/jquery.js"></script>
   <script src="${STATIC}/js/foundation.min.js"></script>
+  <script src="${STATIC}/js/jquery.foundation.tooltips.js"></script>
   <!-- Initialize JS Plugins -->
   <script src="${STATIC}/js/app.js"></script>
   % if not IN_DEVELOPMENT:

@@ -73,6 +73,47 @@ footer ul.link-list li {
     height: 25px;
 }
 
+#active-lang {
+    background-color: #D0D0D0;
+    
+}
+
+#active-lang:hover {
+    cursor: default;
+}
+
+
+#what-is-this {
+    border: 0;
+}
+
+
+#lang-block {
+    margin-top: 16px;
+}
+
+/* Small screens */
+@media only screen and (max-width: 767px) { 
+    #what-is-this {
+	padding-bottom: 40px;
+	margin-left: 60px;
+    }
+
+    #lang-block {
+	margin-top: 0px;
+	margin-bottom: 16px;
+	
+    }
+    
+    ul.breadcrumbs li {
+	padding-right: 2px;
+    }
+
+    ul.breadcrumbs li a, ul.breadcrumbs li span {
+	padding-left: 2px;
+    }
+
+}
 
 /* -----------------------------------------
   Post 
