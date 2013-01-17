@@ -1,3 +1,5 @@
+import cherrypy
+
 import maki.scaffold
 import maki.views
 from maki import db
@@ -14,5 +16,9 @@ class Root(maki.scaffold.Controller):
     lang = Lang()
 
     def get_posts(self, limit=8):
-        return db.ses.query(db.models.Post).limit(limit)
+        locale = cherrypy.response.i18n
+        posts = db.ses.query(db.models.Post)
+        if not locale.showall:
+            posts = posts.filter_by(lang=locale.lang)
+        return posts.limit(limit)
 

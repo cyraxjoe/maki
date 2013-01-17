@@ -9,7 +9,7 @@ class HTML(maki.scaffold.View):
     @cherrypy.expose
     @tools.mako(filename="post/list.mako")
     def index(self, category):
-        lang = cherrypy.response.i18n.clang
+        lang = cherrypy.response.i18n.lang
         obcategory = self.ctrl.get_category_by_slug(category, lang)
         if obcategory is None:
             raise cherrypy.NotFound()

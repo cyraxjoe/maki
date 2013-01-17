@@ -7,7 +7,7 @@
  rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1')['fragment']
 %>
 <ul class="breadcrumbs">
-  <li> <a href="/"> Home </a></li>
+  <li> <a href="/"> ${_('Home')}</a></li>
   <li>
     <a href="/post/?category=${post.category.slug}" class="current">
       ${post.category.name}

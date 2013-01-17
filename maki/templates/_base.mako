@@ -29,7 +29,7 @@
 	  % for name, code in [('English', 'en'), ('Español', 'es')]:
 	    <li>
 	       <a \
-		  % if not LOCALE_SHOW_ALL and code == LOCALE.code: 
+		  % if not LOCALE.showall and code == LOCALE.lang.code: 
 		   id="active-lang" \
 		  % endif  
 		  href="/lang/${code}" title="${name}" 
@@ -40,7 +40,7 @@
 	  % endfor
 	  <li>
 	    <a \
-	       % if LOCALE_SHOW_ALL:
+	       % if LOCALE.showall:
                id="active-lang" \
 	       % endif 
 	       href="/lang/ANY" title="${_('Any')}" class="has-tip tiny secondary button square">

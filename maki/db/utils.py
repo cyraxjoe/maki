@@ -39,8 +39,12 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
         return None
 
 
-def get_categories():
-    return db.ses.query(db.models.Category).all()
+def get_categories(locale=None):
+    if locale is None or locale.showall:
+        return db.ses.query(db.models.Category).all()
+    else:
+        return db.ses.query(db.models.Category)\
+               .filter_by(lang=locale.lang)
 
 
 def clean_empty_metainfo():

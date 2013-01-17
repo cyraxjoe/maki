@@ -33,16 +33,20 @@ STRINGS = \
        {'es': 'La visibilidad de los posts es filtrada por la opción seleccionada'},
   'Any': {'es': 'Todos'},
   'what is this?': {'es': '¿Qué es esto?'},
+  'Home': {'es': 'Inicio',},
 
  }
 
 
 def getlangcode():
     try:
-        return cherrypy.response.i18n.clang.code
+        return cherrypy.response.i18n.lang.code
     except AttributeError:
         maki.utils.log('Unable to get i18n from cherrypy.response.')
-        return cherrypy.config['i18n']['default']
+        try:
+            return maki.APP.config['i18n']['default']
+        except KeyError:
+            return cherrypy.config['i18n']['default']
 
 def gettext(string, langcode=None):
     if langcode is None:
