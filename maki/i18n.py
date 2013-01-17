@@ -5,6 +5,8 @@ import cherrypy
 import maki.utils
 
 AVAILABLE_LANGS = ('en', 'es')
+ANY_LANG = 'ANY'
+SES_KEY = '_lang_'
 
 STRINGS = \
 { '_DATE_FORMAT_': {'en': '%b %e, %Y',
@@ -16,7 +18,7 @@ STRINGS = \
  'Categories':
         {'es': 'Categorías'},
  'Who am I?':
-        {'es': '¿Quien soy?'},
+        {'es': '¿Quién soy yo?'},
  'just another programmer from Monterrey, Mexico': 
         {'es': 'solo un programador más de Monterrey, México'},
  'More about me':
@@ -26,7 +28,11 @@ STRINGS = \
  'http://creativecommons.org/licenses/by/3.0/deed.en_US':
         {'es': 'http://creativecommons.org/licenses/by/3.0/deed.es'},
  'Creative Commons Attribution 3.0 Unported License':
-        {'es': 'Licencia Creative Commons Atribución 3.0 Unported'}
+        {'es': 'Licencia Creative Commons Atribución 3.0 Unported',},
+  'The visibility of the posts is filtered by the selected option':
+       {'es': 'La visibilidad de los posts es filtrada por la opción seleccionada'},
+  'Any': {'es': 'Todos'},
+  'what is this?': {'es': '¿Qué es esto?'},
 
  }
 

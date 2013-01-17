@@ -26,13 +26,31 @@
     <div class="four columns" id="lang-block">
       <span class="right" >
 	<ul class="button-group square" style="margin-bottom: 10px;">
-	  <li><a href="javascript:void()" title="English" id="active-lang" class="has-tip tiny secondary button square">en</a></li>
-	  <li><a href="#" title="Español" class="has-tip tiny secondary button square">es </a></li>
-	  <li><a href="#" title="Any" class="has-tip tiny secondary button square">&#x2736;&#x2736;</a></li>
+	  % for name, code in [('English', 'en'), ('Español', 'es')]:
+	    <li>
+	       <a \
+		  % if not LOCALE_SHOW_ALL and code == LOCALE.code: 
+		   id="active-lang" \
+		  % endif  
+		  href="/lang/${code}" title="${name}" 
+		  class="has-tip tiny secondary button square">
+		 ${code}
+	       </a>
+	    </li>
+	  % endfor
+	  <li>
+	    <a \
+	       % if LOCALE_SHOW_ALL:
+               id="active-lang" \
+	       % endif 
+	       href="/lang/ANY" title="${_('Any')}" class="has-tip tiny secondary button square">
+	      &#x2736;&#x2736;
+	    </a>
+	  </li>
 	</ul>
 	<small id="what-is-this" class="right orange has-tip" 
-	       title="The visibility of the posts is filtered by the selected option.">
-	  what is this?</small>
+	       title="${_('The visibility of the posts is filtered by the selected option')}.">
+	  ${_('what is this?')}</small>
       </span>
     </div>
     
@@ -77,7 +95,7 @@
       <div class="row">
         <div id="license" class="eight columns">
 	  <p>
-	    <a rel="license"  href="http://creativecommons.org/licenses/by/3.0/deed.en_US">
+	    <a rel="license"  href="${_('http://creativecommons.org/licenses/by/3.0/deed.en_US')}">
 	      <img alt="Creative Commons License" style="border-width:0"
 		   src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a>
 	    <br>

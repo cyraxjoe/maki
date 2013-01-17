@@ -7,7 +7,7 @@ from maki import db
 from maki.utils import log
 
 
-Locale = namedtuple('Locale', ('langs', 'clang'))
+Locale = namedtuple('Locale', ('langs', 'clang', 'showall'))
 
 
 def choose_lang(langs):
@@ -20,15 +20,19 @@ def choose_lang(langs):
 
 
 def get_lang(default='en'):
-    langs = [x.value.split('-')[0] for x in
+    langs = [x.value.split('-')[0].lower() for x in
              cherrypy.request.headers.elements('Accept-Language')]
-    seslang = cherrypy.session.get('_lang_')
-    if seslang is not None: #  the preffered language code is in the session.
-        langs.insert(0, seslang)
     langs.append(default)
-    cherrypy.response.i18n = \
-                   Locale(langs=langs, clang=choose_lang(langs))
-    log(cherrypy.response.i18n)
+    seslang = cherrypy.session.get(maki.i18n.SES_KEY)
+    locargs = {'langs': langs,
+               'showall': False}        
+    if seslang is not None:
+        if seslang == maki.i18n.ANY_LANG: 
+            locargs['showall'] = True
+        else:
+            langs.insert(0, seslang)
+    locargs['clang'] = choose_lang(locargs['langs'])
+    cherrypy.response.i18n = Locale(**locargs)
 
 
 def set_lang():

@@ -10,6 +10,7 @@ def set_defaults(env):
     env['STATIC'] = maki.APP.config['templates']['static_url']
     env['CATEGORIES'] = maki.db.utils.get_categories()
     env['LOCALE'] = cherrypy.response.i18n.clang
+    env['LOCALE_SHOW_ALL'] = cherrypy.response.i18n.showall
     env['_'] = maki.i18n.gettext
 
 

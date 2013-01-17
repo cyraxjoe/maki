@@ -12,7 +12,9 @@ class ContentTypeDispatcher(cherrypy.dispatch.Dispatcher):
         app.root = branch
         yield
         app.root = root
-        cherrypy.response.headers['Vary'] = 'Content-Type, Accept'
+        # HACK ON SIGHT: Content-Language shouldn't be here.
+        cherrypy.response.headers['Vary'] = \
+                    'Content-Type, Accept, Content-Language'  
     
 
     def find_handler(self, path_info):

@@ -10,5 +10,4 @@ class HTML(maki.scaffold.View):
     def index(self):
         posts = self.ctrl.get_posts()
         return {'posts': posts}
-        
-    
+
