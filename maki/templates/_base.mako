@@ -123,11 +123,7 @@
 </%block>
   </footer>
   <!-- End Footer -->
-  <!-- Included JS Files (Compressed) -->
-  <script src="${STATIC}/js/jquery.js"></script>
   <script src="${STATIC}/js/foundation.min.js"></script>
-  <script src="${STATIC}/js/jquery.foundation.tooltips.js"></script>
-  <!-- Initialize JS Plugins -->
   <script src="${STATIC}/js/app.js"></script>
   % if not IN_DEVELOPMENT:
       <%include file="_google_analytics.mako" />
