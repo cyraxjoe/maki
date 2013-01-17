@@ -1,5 +1,19 @@
+// The tooltips with links does not works nicely with touch devices,
+// remove the tooltip and set the title as the text  of the "a".
+function format_langs_for_touch(){
+    $('.has-tip').each(function(idx, elem){
+	if (elem.tagName == 'A') {
+	    var title = $(elem).attr('title');
+	    if (title !== undefined) {
+		$(elem).removeClass('has-tip');
+		$(elem).text(title);
+	    }
+	}
+    });
+}
+
 ;(function ($, window, undefined) {
-  'use strict';
+    'use strict';
 
   var $doc = $(document),
       Modernizr = window.Modernizr;
@@ -16,7 +30,6 @@
     $.fn.foundationTooltips         ? $doc.foundationTooltips() : null;
     $.fn.foundationMagellan         ? $doc.foundationMagellan() : null;
     $.fn.foundationClearing         ? $doc.foundationClearing() : null;
-
     $.fn.placeholder                ? $('input, textarea').placeholder() : null;
   });
 
@@ -26,13 +39,20 @@
   // $('.block-grid.four-up>li:nth-child(4n+1)').css({clear: 'both'});
   // $('.block-grid.five-up>li:nth-child(5n+1)').css({clear: 'both'});
 
-  // Hide address bar on mobile devices (except if #hash present, so we don't mess up deep linking).
-  if (Modernizr.touch && !window.location.hash) {
-    $(window).load(function () {
-      setTimeout(function () {
-        window.scrollTo(0, 1);
-      }, 0);
-    });
-  }
+    // Hide address bar on mobile devices (except if #hash present, so we don't mess up deep linking).
+    if (Modernizr.touch && !window.location.hash) {
+	$(window).load(function () {
+	    setTimeout(function () {
+		window.scrollTo(0, 1);
+	    }, 0);
+	});
+    }
 
+    if (Modernizr.touch) { 
+	format_langs_for_touch();
+    }
 })(jQuery, this);
+
+
+
+
