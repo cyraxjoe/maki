@@ -11,3 +11,4 @@ class HTML(maki.scaffold.View):
         posts = self.ctrl.get_posts()
         return {'posts': posts}
 
+

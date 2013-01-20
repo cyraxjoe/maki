@@ -10,11 +10,13 @@ from maki.db.utils import update_model, precautious_commit, clean_empty_metainfo
 
 
 class Post(maki.scaffold.Controller):
-    __views__ = [maki.views.post.HTML,
-                 maki.views.post.JSON]
-    required_fields = {'title', 'abstract', 'content',
-                       'category', 'tags', 'format',
-                       'lang'}
+    __views__ = [maki.views.post.HTML,  maki.views.post.JSON]
+    CREATE_ACT = 'create'
+    EDIT_ACT = 'edit'
+    fields_to_create = {'title', 'abstract', 'content',
+                       'category', 'tags', 'format', 'lang'}
+    fields_to_edit = fields_to_create - {'lang',}
+
 
     def _create_or_get_post_meta(self, Model, name, lang):
         elem = db.ses.query(Model)\
@@ -36,7 +38,6 @@ class Post(maki.scaffold.Controller):
     def _create_or_get_category(self, cname, lang):
         return self._create_or_get_post_meta(db.models.Category, cname, lang)
 
-
             
     def _get_post(self, query):
         try:
@@ -46,23 +47,27 @@ class Post(maki.scaffold.Controller):
             return None
 
 
-    def _update_post(self, post, fields):
-        log('Updating post <%s>:%s' % (post, fields))
+    def _fields_to_db_models(self, fields, lang):
         # This methods flush the sessions, because of the ".scalar" call.
-        lang = fields['lang'] = self._get_lang(fields['lang'])
         fields['tags'] = self._create_or_get_tags(fields['tags'], lang)
         fields['category'] = \
                          self._create_or_get_category(fields['category'], lang)
         fields['format'] = self._get_format(fields['format'])
+        return fields
+        
 
-        log(fields)
+    def _update_post_model(self, post, fields, isnew=False):
+        log('Updating (isnew?: %s) post <%s>:%s' % (isnew, post, fields))
+        if isnew:
+            lang = fields['lang'] = self._get_lang(fields['lang'])
+            post.author_id = cherrypy.session['uid']
+            db.ses.add(post)
+        else:
+            lang = post.lang
+        fields = self._fields_to_db_models(fields, lang)
         revision = db.models.PostRevision(title=fields.pop('title'),
                                           abstract=fields.pop('abstract'),
                                           content=fields.pop('content'))
-        if post is None:  # new
-            post = db.models.Post()
-            post.author_id = cherrypy.session['uid']
-            db.ses.add(post)
         if update_model(post, fields):
             post.revisions.append(revision)
             message = precautious_commit(db.ses)  # None if everything went ok.
@@ -103,7 +108,7 @@ class Post(maki.scaffold.Controller):
             return lang
 
     def create_post(self, **fields):
-        return self._update_post(None, fields)
+        return self._update_post_model(db.models.Post(), fields, isnew=True)
 
     
     def update_post(self, id,  **fields):
@@ -111,4 +116,4 @@ class Post(maki.scaffold.Controller):
         if post is None:
             raise Exception("The post does not exist.")
         else:
-            return self._update_post(post, fields)
+            return self._update_post_model(post, fields)
