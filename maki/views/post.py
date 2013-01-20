@@ -78,6 +78,7 @@ class JSON(maki.scaffold.View):
                 'author': post.author.name,
                 'format': post.format.name,
                 'tags': [t.name for t in post.tags],
+                'lang': post.lang.code,
                 'id': post.id}
         if post.modified:
             pdict['modfied'] =  post.modified.ctime()

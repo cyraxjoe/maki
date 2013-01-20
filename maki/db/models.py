@@ -35,29 +35,52 @@ class Base(object):
 
 Base = declarative_base(cls=Base)
 
-tag_post_table = Table('tag_post', Base.metadata,
-                          Column('tag_id', Integer, ForeignKey('tags.id')),
-                          Column('post_id', Integer, ForeignKey('posts.id')))
+tag_post_table = \
+    Table('tag_post', Base.metadata,
+          Column('tag_id', Integer, ForeignKey('tags.id'), primary_key=True),
+          Column('post_id', Integer, ForeignKey('posts.id'),  primary_key=True))
+trans_post_table = \
+    Table('trans_post_rel', Base.metadata,
+          Column('from_id', Integer, ForeignKey('posts.id'), primary_key=True),
+          Column('to_id', Integer, ForeignKey('posts.id'), primary_key=True))
+trans_tag_table = \
+    Table('trans_tag_rel', Base.metadata,
+          Column('from_id', Integer, ForeignKey('tags.id'), primary_key=True),
+          Column('to_id', Integer, ForeignKey('tags.id'), primary_key=True))
+trans_category_table = \
+     Table('trans_category_rel', Base.metadata,
+           Column('from_id', Integer, ForeignKey('categories.id'), primary_key=True),
+           Column('to_id', Integer, ForeignKey('categories.id'), primary_key=True))
 
 
-class PostMetainfo(object):
+class Translatable(object):
+    
+    @declared_attr
+    def lang_id(cls):
+        return Column(Integer, ForeignKey('languages.id'), nullable=False)
+    
+    @declared_attr
+    def lang(cls):
+        return relationship('Language')
+
+    @declared_attr
+    def trans_of(cls):
+        secondary = 'trans_%s_rel' %  cls.__name__.lower()
+        return relationship(cls.__name__, secondary=secondary,
+                            primaryjoin="%s.id==%s.c.from_id" % (cls.__name__, secondary),
+                            secondaryjoin='%s.id==%s.c.to_id' % (cls.__name__, secondary),
+                            backref='translations')
+
+
+class PostMetainfo(Translatable):
     name = Column(String(32), nullable=False, unique=True)
     slug = Column(String(32), nullable=False, unique=True)
     endure = Column(Boolean(), server_default='False')
 
     @declared_attr
-    def __table_args__(self):
+    def __table_args__(cls):
         return (UniqueConstraint('name', 'lang_id'),
                 UniqueConstraint('slug', 'lang_id'))
-    
-    @declared_attr
-    def lang_id(self):
-        return Column(Integer, ForeignKey('languages.id'), nullable=False)
-    
-    @declared_attr
-    def lang(self):
-        return relationship('Language')
-
 
     
 class Category(PostMetainfo, Base):
@@ -85,7 +108,7 @@ class PostRevision(Base):
 
 
     
-class Post(Base):
+class Post(Translatable, Base):
     __tablename__ = 'posts'
 
     slug        = Column(String(64), nullable=False, unique=True)
@@ -100,8 +123,9 @@ class Post(Base):
     format      = relationship('PostFormat')
     lang        = relationship('Language')
     author      = relationship('User')
-    revisions   = relationship('PostRevision', backref='post', uselist=True,
+    revisions   = relationship('PostRevision', backref='post',
                                order_by='PostRevision.modified')
+
 
     @property
     def crev(self):
