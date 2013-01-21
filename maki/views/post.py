@@ -96,7 +96,8 @@ class JSON(maki.scaffold.View):
                 'format': post.format.name,
                 'tags': [t.name for t in post.tags],
                 'lang': post.lang.code,
-                'id': post.id}
+                'id': post.id,
+                'public': post.public}
         if post.modified:
             pdict['modfied'] =  post.modified.ctime()
         return pdict
@@ -126,3 +127,23 @@ class JSON(maki.scaffold.View):
     @tools.protect()
     def index(self):
         return {}
+
+    @cherrypy.expose
+    @tools.json_out()
+    @tools.json_in()
+    @tools.allow(methods=('POST',))
+    @tools.protect()
+    def visibility(self):
+        response = {"published": False, "message": None}
+        rjson = cherrypy.request.json
+        if 'id' in rjson and 'public' in rjson:
+            message = self.ctrl.change_visibility(rjson['id'], rjson['public'])
+            if message is None:
+                response['published'] = True
+            else:
+                cherrypy.response.status = 500
+                response['message'] = message
+        else:
+            cherrypy.response.status = 500
+            response['message'] = 'Missing required field.'
+        return response

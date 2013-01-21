@@ -1,3 +1,5 @@
+import json
+
 import cherrypy
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -46,6 +48,20 @@ class Post(maki.scaffold.Controller):
             log('Unable to find post', 'ERROR', tb=True)
             return None
 
+    
+    def _get_format(self, fname):
+        # this could "explode" but that's ok.
+        return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
+
+
+    def _get_lang(self, langcode):
+        lang = db.ses.query(db.models.Language)\
+               .filter_by(code=langcode).scalar()
+        if lang is None:
+            raise Exception('Unknown langcode %s' % langcode)
+        else:
+            return lang
+
 
     def _fields_to_db_models(self, fields, lang):
         # This methods flush the sessions, because of the ".scalar" call.
@@ -61,19 +77,24 @@ class Post(maki.scaffold.Controller):
         if isnew:
             lang = fields['lang'] = self._get_lang(fields['lang'])
             post.author_id = cherrypy.session['uid']
-            db.ses.add(post)
         else:
             lang = post.lang
         fields = self._fields_to_db_models(fields, lang)
+        # add the post to the session, even if this is not new, because
+        # of the .scalar call in `_fields_to_db_models`
+        db.ses.add(post) 
         revision = db.models.PostRevision(title=fields.pop('title'),
                                           abstract=fields.pop('abstract'),
                                           content=fields.pop('content'))
+        post.revisions.append(revision)
         if update_model(post, fields):
-            post.revisions.append(revision)
             message = precautious_commit(db.ses)  # None if everything went ok.
             if message is None:
                 clean_empty_metainfo()
-                return '{"id": %s, "slug": "%s"}' % (post.id, post.slug)
+                return json.dumps({'id': post.id,
+                                   'slug': post.slug,
+                                   'lang': post.lang.code,
+                                   'public': post.public})
             else:
                 raise Exception(message)
         else:
@@ -94,22 +115,17 @@ class Post(maki.scaffold.Controller):
                .filter_by(lang=lang).scalar()
 
 
-    def _get_format(self, fname):
-        # this could "explode" but that's ok.
-        return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
-
-
-    def _get_lang(self, langcode):
-        lang = db.ses.query(db.models.Language)\
-               .filter_by(code=langcode).scalar()
-        if lang is None:
-            raise Exception('Unknown langcode %s' % langcode)
-        else:
-            return lang
-
     def create_post(self, **fields):
         return self._update_post_model(db.models.Post(), fields, isnew=True)
 
+
+    def change_visibility(self, postid, public):
+        post = self.get_post_by_id(postid)
+        if post is None:
+            raise Exception("The post does not exist.")
+        else:
+            post.public = public
+            return precautious_commit(db.ses)
     
     def update_post(self, id,  **fields):
         post = self.get_post_by_id(id)

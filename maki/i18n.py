@@ -38,15 +38,18 @@ STRINGS = \
  }
 
 
+def getlang_from_config():
+    try:
+        return maki.APP.config['i18n']['default']
+    except KeyError:
+        return cherrypy.config['i18n']['default']
+    
 def getlangcode():
     try:
         return cherrypy.response.i18n.lang.code
     except AttributeError:
         maki.utils.log('Unable to get i18n from cherrypy.response.')
-        try:
-            return maki.APP.config['i18n']['default']
-        except KeyError:
-            return cherrypy.config['i18n']['default']
+        return getlang_from_config()
 
 def gettext(string, langcode=None):
     if langcode is None:

@@ -1,10 +1,11 @@
 from collections import namedtuple
 
 import cherrypy
+from sqlalchemy.exc import InvalidRequestError
 
 import maki.i18n
 from maki import db
-from maki.utils import log
+#from maki.utils import log
 
 
 Locale = namedtuple('Locale', ('lang', 'showall'))
@@ -13,7 +14,6 @@ Locale = namedtuple('Locale', ('lang', 'showall'))
 def choose_lang(langs):
     for langcode in langs:
         if langcode in maki.i18n.AVAILABLE_LANGS:
-            log(langcode)
             olang = db.ses.query(db.models.Language)\
                     .filter_by(code=langcode).one()
             return olang
@@ -37,8 +37,13 @@ def get_lang(default='en'):
 def set_lang():
     headers = cherrypy.response.headers
     if 'Content-Language' not in headers:
-        headers['Content-Language'] = cherrypy.response.i18n.lang.code
-
+        try:
+            headers['Content-Language'] = cherrypy.response.i18n.lang.code
+        except InvalidRequestError:  # rollback in the sqlsession.
+            headers['Content-Language'] = maki.i18n.getlang_from_config()
+        except AttributeError:  # in case that the request wasn't i18n'ted
+            pass
+        
 
 class I18nTool(cherrypy.Tool):
 
@@ -57,7 +62,6 @@ class I18nTool(cherrypy.Tool):
         if c.get('tools.staticdir.on', False) or \
            c.get('tools.staticfile.on', False):
             return
-        log('settin i18n')
         cherrypy.Tool._setup(self)
         cherrypy.request.hooks.attach('before_finalize', set_lang)
 
