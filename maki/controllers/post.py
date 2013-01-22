@@ -109,10 +109,16 @@ class Post(maki.scaffold.Controller):
         return self._get_post(db.ses.query(db.models.Post)\
                               .filter_by(slug=slug))
 
+
     def get_category_by_slug(self, slug, lang):
         return db.ses.query(db.models.Category)\
                .filter_by(slug=slug)\
                .filter_by(lang=lang).scalar()
+
+
+    def find_lang(self, lang):
+        return db.ses.query(db.models.Language)\
+               .filter_by(code=lang).scalar()
 
 
     def create_post(self, **fields):

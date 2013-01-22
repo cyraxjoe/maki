@@ -6,10 +6,26 @@ from maki.utils import log
 
 class HTML(maki.scaffold.View):
 
+
+    def _use_lang(self, lang):
+        if lang is None:
+            return cherrypy.response.i18n.lang
+        else:
+            lang = self.ctrl.find_lang(lang)
+            if lang is None:
+                return cherrypy.response.i18n.lang
+            else:
+                return lang
+            
+
     @cherrypy.expose
     @tools.mako(filename="post/list.mako")
-    def index(self, category):
-        lang = cherrypy.response.i18n.lang
+    def index(self, category, lang=None):
+        """The index posts is filtered by a category.
+        The unfiltered list is basically the front page.
+        If the *lang* parameter is set then is goingo to use it
+        to fond the category, instead of the *lang* of the request."""
+        lang = self._use_lang(lang)
         obcategory = self.ctrl.get_category_by_slug(category, lang)
         if obcategory is None:
             raise cherrypy.NotFound()
@@ -28,9 +44,7 @@ class HTML(maki.scaffold.View):
             raise cherrypy.NotFound()
         else:
             return {'post': post,
-                    'parents': [],
-                    'title': post.title,
-                    'styles': '/static/'}
+                    'title': post.title,}
 
             
 class JSON(maki.scaffold.View):

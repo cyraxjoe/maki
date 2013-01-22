@@ -70,7 +70,15 @@
       <h5 style="margin-bottom: 4px;">${_("Categories")}</h5>
       <ul class="side-nav" style="padding-top: 4px;">
 	% for category in CATEGORIES:
-        <li><a href="/post/?category=${category.slug}">${category.name}</a></li>
+            <li>
+	% if LOCALE.showall:
+	      <a href="/post/?category=${category.slug}&amp;lang=${category.lang.code}">
+        % else:
+	      <a href="/post/?category=${category.slug}">
+        % endif
+		${category.name}
+	      </a>
+ 	    </li>
 	% endfor
       </ul>
 
