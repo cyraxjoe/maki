@@ -73,8 +73,8 @@ class Translatable(object):
 
 
 class PostMetainfo(Translatable):
-    name = Column(String(32), nullable=False, unique=True)
-    slug = Column(String(32), nullable=False, unique=True)
+    name = Column(String(32), nullable=False)
+    slug = Column(String(32), nullable=False)
     endure = Column(Boolean(), server_default='False')
 
     @declared_attr

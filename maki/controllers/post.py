@@ -1,7 +1,6 @@
 import json
 
 import cherrypy
-from sqlalchemy.orm.exc import NoResultFound
 
 import maki.views
 import maki.scaffold
@@ -21,12 +20,14 @@ class Post(maki.scaffold.Controller):
 
 
     def _create_or_get_post_meta(self, Model, name, lang):
+        log('Searching for %s with name %s and lang %s' % (Model, name, lang.name))
         elem = db.ses.query(Model)\
                .filter_by(name=name).filter_by(lang=lang).scalar()
         if elem is None:
             if not name.strip():
                 raise Exception('Invalid name for %s' % Model.__name__)
             elem = Model(name=name, lang=lang)
+            log('NOT FOUND!! Creating a new one')
         return elem
 
     
@@ -41,14 +42,6 @@ class Post(maki.scaffold.Controller):
         return self._create_or_get_post_meta(db.models.Category, cname, lang)
 
             
-    def _get_post(self, query):
-        try:
-            return query.one()
-        except NoResultFound:
-            log('Unable to find post', 'ERROR', tb=True)
-            return None
-
-    
     def _get_format(self, fname):
         # this could "explode" but that's ok.
         return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
@@ -102,12 +95,11 @@ class Post(maki.scaffold.Controller):
 
     
     def get_post_by_id(self, id):
-        return self._get_post(db.ses.query(db.models.Post)\
-                              .filter_by(id=id))
+        return db.ses.query(db.models.Post).filter_by(id=id).scalar()
+
 
     def get_post_by_slug(self, slug):
-        return self._get_post(db.ses.query(db.models.Post)\
-                              .filter_by(slug=slug))
+        return db.ses.query(db.models.Post).filter_by(slug=slug).scalar()
 
 
     def get_category_by_slug(self, slug, lang):
@@ -115,7 +107,7 @@ class Post(maki.scaffold.Controller):
                .filter_by(slug=slug)\
                .filter_by(lang=lang).scalar()
 
-
+    
     def find_lang(self, lang):
         return db.ses.query(db.models.Language)\
                .filter_by(code=lang).scalar()
@@ -132,6 +124,7 @@ class Post(maki.scaffold.Controller):
         else:
             post.public = public
             return precautious_commit(db.ses)
+
     
     def update_post(self, id,  **fields):
         post = self.get_post_by_id(id)

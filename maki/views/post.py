@@ -4,9 +4,10 @@ from cherrypy import tools
 import maki.scaffold
 from maki.utils import log  
 
+
 class HTML(maki.scaffold.View):
 
-
+    
     def _use_lang(self, lang):
         if lang is None:
             return cherrypy.response.i18n.lang
@@ -16,9 +17,9 @@ class HTML(maki.scaffold.View):
                 return cherrypy.response.i18n.lang
             else:
                 return lang
-            
 
-    @cherrypy.expose
+
+    @cherrypy.expose            
     @tools.mako(filename="post/list.mako")
     def index(self, category, lang=None):
         """The index posts is filtered by a category.
@@ -31,7 +32,8 @@ class HTML(maki.scaffold.View):
             raise cherrypy.NotFound()
         else:
             return {'category': obcategory,
-                    'posts': obcategory.posts}
+                    'posts': [post for post in obcategory.posts
+                              if post.public]}
 
 
     @cherrypy.expose
@@ -40,7 +42,7 @@ class HTML(maki.scaffold.View):
         if slug is None: # for backwards compatibility, we use category.
             slug = category
         post = self.ctrl.get_post_by_slug(slug)
-        if post is None:
+        if post is None or not post.public:
             raise cherrypy.NotFound()
         else:
             return {'post': post,
@@ -88,18 +90,20 @@ class JSON(maki.scaffold.View):
             cherrypy.response.status = 500
             return {actionrslt: False,
                     'message': 'Invalid fields'}
-       
+
             
     @cherrypy.expose
     @tools.json_out()
-    def default(self, id):
-        if not id.isdigit():
-            raise cherrypy.NotFound()
+    def default(self, identifier, by='id'):
+        if by == 'id':
+            post = self.ctrl.get_post_by_id(identifier) 
+        elif by == 'slug':
+            post = self.ctrl.get_post_by_slug(identifier)
         else:
-            post = self.ctrl.get_post_by_id(id)
-            if post is None:
-                raise cherrypy.NotFound()
-            
+            post = None            
+        if post is None:
+            raise cherrypy.NotFound()
+        
         pdict ={'title': post.title,
                 'abstract': post.abstract,
                 'created': post.created_fmt,
@@ -142,18 +146,19 @@ class JSON(maki.scaffold.View):
     def index(self):
         return {}
 
+
     @cherrypy.expose
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
     @tools.protect()
     def visibility(self):
-        response = {"published": False, "message": None}
+        response = {"visib-chg": False, "message": None}
         rjson = cherrypy.request.json
         if 'id' in rjson and 'public' in rjson:
             message = self.ctrl.change_visibility(rjson['id'], rjson['public'])
             if message is None:
-                response['published'] = True
+                response['visib-chg'] = True
             else:
                 cherrypy.response.status = 500
                 response['message'] = message

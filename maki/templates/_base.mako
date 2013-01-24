@@ -73,10 +73,11 @@
             <li>
 	% if LOCALE.showall:
 	      <a href="/post/?category=${category.slug}&amp;lang=${category.lang.code}">
+		${category.name} / <small>${category.lang.name}<small>
         % else:
 	      <a href="/post/?category=${category.slug}">
+		${category.name} 
         % endif
-		${category.name}
 	      </a>
  	    </li>
 	% endfor

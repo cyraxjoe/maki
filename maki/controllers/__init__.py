@@ -17,7 +17,7 @@ class Root(maki.scaffold.Controller):
 
     def get_posts(self, limit=8):
         locale = cherrypy.response.i18n
-        posts = db.ses.query(db.models.Post)
+        posts = db.ses.query(db.models.Post).filter_by(public=True)
         if not locale.showall:
             posts = posts.filter_by(lang=locale.lang)
         return posts.limit(limit)
