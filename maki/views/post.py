@@ -48,9 +48,28 @@ class HTML(maki.scaffold.View):
             return {'post': post,
                     'title': post.title,}
 
+
             
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
+
+    def _model_to_dict(self, post):
+        pdict ={'title': post.title,
+                'abstract': post.abstract,
+                'created': post.created_fmt,
+                'content': post.content,
+                'slug': post.slug,
+                'category': post.category.name,
+                'author': post.author.name,
+                'format': post.format.name,
+                'tags': [t.name for t in post.tags],
+                'lang': post.lang.code,
+                'id': post.id,
+                'public': post.public}
+        if post.modified:
+            pdict['modfied'] =  post.modified.ctime()
+        return pdict
+
 
     def _have_valid_fields(self, reqfields):
         changes = set(cherrypy.request.json)
@@ -102,23 +121,8 @@ class JSON(maki.scaffold.View):
         else:
             post = None            
         if post is None:
-            raise cherrypy.NotFound()
-        
-        pdict ={'title': post.title,
-                'abstract': post.abstract,
-                'created': post.created_fmt,
-                'content': post.content,
-                'slug': post.slug,
-                'category': post.category.name,
-                'author': post.author.name,
-                'format': post.format.name,
-                'tags': [t.name for t in post.tags],
-                'lang': post.lang.code,
-                'id': post.id,
-                'public': post.public}
-        if post.modified:
-            pdict['modfied'] =  post.modified.ctime()
-        return pdict
+            raise cherrypy.NotFound(message="Unable to find any post")
+        return self._model_to_dict(post)
 
 
     @cherrypy.expose
@@ -143,9 +147,14 @@ class JSON(maki.scaffold.View):
     @tools.json_in()
     @tools.allow(methods=('GET',))
     @tools.protect()
-    def index(self):
-        return {}
-
+    def index(self, category=None, public=None, min_date=None, max_date=None):
+        if public is not None:
+            if public.isdigit() and int(public) > 1:
+                public = True
+            else:
+                public = None
+        return  [self._model_to_dict(post) for post in \
+                 self.ctrl.get_posts(category, public, min_date, max_date)]
 
     @cherrypy.expose
     @tools.json_out()

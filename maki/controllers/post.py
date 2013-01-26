@@ -102,10 +102,25 @@ class Post(maki.scaffold.Controller):
         return db.ses.query(db.models.Post).filter_by(slug=slug).scalar()
 
 
+    def get_posts(self, catname, public, min_date, max_date):
+        # dates limits are not yet inmplented
+        query = db.ses.query(db.models.Post)
+        if catname is not None:
+            category = self.get_category_by_name()
+            query = query.filter_by(category_id=category)
+        if isinstance(public, bool):
+            query = query.filter_by(public=public)
+        return query.order_by(db.models.Post.created)
+        
+
+
     def get_category_by_slug(self, slug, lang):
         return db.ses.query(db.models.Category)\
                .filter_by(slug=slug)\
                .filter_by(lang=lang).scalar()
+    
+    def get_categor_by_name(self, name):
+        return db.ses.query(db.models.Category).filter_by(name=name).scalar()
 
     
     def find_lang(self, lang):
