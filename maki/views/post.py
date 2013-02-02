@@ -2,7 +2,8 @@ import cherrypy
 from cherrypy import tools
 
 import maki.scaffold
-from maki.utils import log  
+from maki.utils import log
+from maki.db import utils  as dbutils
 
 
 class HTML(maki.scaffold.View):
@@ -21,19 +22,25 @@ class HTML(maki.scaffold.View):
 
     @cherrypy.expose            
     @tools.mako(filename="post/list.mako")
-    def index(self, category, lang=None):
+    def index(self, category, page='1', lang=None):
         """The index posts is filtered by a category.
         The unfiltered list is basically the front page.
         If the *lang* parameter is set then is goingo to use it
         to fond the category, instead of the *lang* of the request."""
         lang = self._use_lang(lang)
+        if page.isdigit():
+            page = int(page)
+        else:
+            page = 1
         obcategory = self.ctrl.get_category_by_slug(category, lang)
+        posts = dbutils.public_posts_query(category=obcategory)
+        pages = dbutils.public_posts_pages(posts)
         if obcategory is None:
             raise cherrypy.NotFound()
         else:
             return {'category': obcategory,
-                    'posts': [post for post in obcategory.posts
-                              if post.public]}
+                    'posts': posts,
+                    'pages': pages}
 
 
     @cherrypy.expose

@@ -1,5 +1,10 @@
+import math
+
+import cherrypy
+
 from maki.utils import log
 from maki import db
+from maki.constants import POSTS_PER_PAGE
 
 
 def update_model(model, fields, dmapper=(lambda x: x)):
@@ -54,4 +59,17 @@ def clean_empty_metainfo():
                 db.ses.delete(elem)
     db.ses.commit()
 
-    
+
+def public_posts_query(**filters):
+    locale = cherrypy.response.i18n
+    Post = db.models.Post
+    posts = db.ses.query(Post).filter_by(public=True, **filters)
+    posts = posts.order_by(Post.created.desc())
+    if not locale.showall:
+        posts = posts.filter_by(lang=locale.lang)
+    return posts
+
+
+def public_posts_pages(posts_query, limit=POSTS_PER_PAGE):
+    count = posts_query.count()
+    return math.ceil(count / limit) + 1

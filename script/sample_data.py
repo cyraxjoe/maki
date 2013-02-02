@@ -65,12 +65,12 @@ def sample_languages(dbs):
 def load_all():
     languages = sample_languages(db.ses)
     lang_en = languages[1]
-    tags = sample_tags(db.ses, lang_en)
-    pformats = sample_post_formats(db.ses)
-    users = sample_users(db.ses)
-    categories = sample_categories(db.ses, lang_en)
-    sample_posts(db.ses, pformats[1],  users[0], categories[0],
-                 tags, lang_en)
+    #tags = sample_tags(db.ses, lang_en)
+    sample_post_formats(db.ses)
+    sample_users(db.ses)
+    sample_categories(db.ses, lang_en)
+    #sample_posts(db.ses, pformats[1],  users[0], categories[0],
+    #             tags, lang_en)
     db.ses.commit()
 
 if __name__ == '__main__':

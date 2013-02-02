@@ -18,13 +18,15 @@ body {
     font-family: Helvetica, Arial;
 }
 
+
 a {
     color: #E5AC26;
 }
 
-a:hover {
+a:hover, a:focus {
     color: #FCBE2A;
 }
+
 
 h1, h2, h3, h4, h5, h6 {
     color: white; 
@@ -114,6 +116,17 @@ footer ul.link-list li {
     }
 
 }
+
+
+ul.pagination li.current a {
+    background-color:  #E5AC26;
+    color: #222;
+}
+ul.pagination li.current a:hover, ul.pagination li.current a:focus {
+    background-color: #FCBE2A;
+    color: #222;
+}
+
 
 /* -----------------------------------------
   Post 

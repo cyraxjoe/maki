@@ -1,8 +1,10 @@
-import cherrypy
+import math
 
 import maki.scaffold
 import maki.views
-from maki import db
+
+from maki.db import utils as dbutils
+from maki.constants import POSTS_PER_PAGE
 from maki.controllers.login import Login
 from maki.controllers.post import Post
 from maki.controllers.lang import Lang
@@ -15,10 +17,9 @@ class Root(maki.scaffold.Controller):
     login = Login()
     lang = Lang()
 
-    def get_posts(self, limit=8):
-        locale = cherrypy.response.i18n
-        posts = db.ses.query(db.models.Post).filter_by(public=True)
-        if not locale.showall:
-            posts = posts.filter_by(lang=locale.lang)
-        return posts.limit(limit)
+
+    def get_posts(self, page=1, limit=POSTS_PER_PAGE):
+        offset = (page - 1) * limit
+        posts = dbutils.public_posts_query()
+        return posts.offset(offset).limit(limit)
 

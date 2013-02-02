@@ -82,13 +82,17 @@ class PostMetainfo(Translatable):
         return (UniqueConstraint('name', 'lang_id'),
                 UniqueConstraint('slug', 'lang_id'))
 
+
     
 class Category(PostMetainfo, Base):
     __tablename__ = 'categories'
+    posts = relationship('Post', order_by='Post.created.desc()')
 
 
 class Tag(PostMetainfo, Base):
     __tablename__ = 'tags'
+    posts = relationship('Post', secondary=tag_post_table,
+                         order_by='Post.created.desc()' )
 
 
 class Language(Base):
@@ -118,8 +122,8 @@ class Post(Translatable, Base):
     lang_id     = Column(Integer, ForeignKey('languages.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
     format_id   = Column(Integer, ForeignKey('post_formats.id'), nullable=False)
-    tags        = relationship('Tag', secondary=tag_post_table, backref='posts')
-    category    = relationship('Category', backref='posts', order_by='Post.created')
+    tags        = relationship('Tag', secondary=tag_post_table)
+    category    = relationship('Category')
     format      = relationship('PostFormat')
     lang        = relationship('Language')
     author      = relationship('User')
