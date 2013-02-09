@@ -43,6 +43,7 @@ def getlang_from_config():
         return maki.APP.config['i18n']['default']
     except KeyError:
         return cherrypy.config['i18n']['default']
+
     
 def getlangcode():
     try:
@@ -50,6 +51,7 @@ def getlangcode():
     except AttributeError:
         maki.utils.log('Unable to get i18n from cherrypy.response.')
         return getlang_from_config()
+
 
 def gettext(string, langcode=None):
     if langcode is None:
@@ -60,6 +62,7 @@ def gettext(string, langcode=None):
         return string
     else:
         return string
+
 
 def full_locale(langcode=None):
     if langcode is None:

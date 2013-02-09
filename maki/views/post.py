@@ -28,19 +28,15 @@ class HTML(maki.scaffold.View):
         If the *lang* parameter is set then is goingo to use it
         to fond the category, instead of the *lang* of the request."""
         lang = self._use_lang(lang)
-        if page.isdigit():
-            page = int(page)
-        else:
-            page = 1
         obcategory = self.ctrl.get_category_by_slug(category, lang)
-        posts = dbutils.public_posts_query(category=obcategory)
-        pages = dbutils.public_posts_pages(posts)
         if obcategory is None:
             raise cherrypy.NotFound()
         else:
+            page, pages, posts = self.ctrl.public_posts(page, category=obcategory)
             return {'category': obcategory,
                     'posts': posts,
-                    'pages': pages}
+                    'pages': pages,
+                    'currpage': page}
 
 
     @cherrypy.expose

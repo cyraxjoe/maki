@@ -1,12 +1,18 @@
+import math
 import json
 
 import cherrypy
 
+import maki.constants
 import maki.views
 import maki.scaffold
 from maki import db
 from maki.utils import log
-from maki.db.utils import update_model, precautious_commit, clean_empty_metainfo
+from maki.db.utils import (
+    update_model,
+    precautious_commit,
+    clean_empty_metainfo
+)
 
 
 
@@ -17,6 +23,7 @@ class Post(maki.scaffold.Controller):
     fields_to_create = {'title', 'abstract', 'content',
                        'category', 'tags', 'format', 'lang'}
     fields_to_edit = fields_to_create - {'lang',}
+    plimit = maki.constants.POSTS_PER_PAGE
 
 
     def _create_or_get_post_meta(self, Model, name, lang):
@@ -93,6 +100,19 @@ class Post(maki.scaffold.Controller):
         else:
             raise Exception("Unable to update the post model.")
 
+
+    def change_visibility(self, postid, public):
+        post = self.get_post_by_id(postid)
+        if post is None:
+            raise Exception("The post does not exist.")
+        else:
+            post.public = public
+            return precautious_commit(db.ses)
+
+
+    def create_post(self, **fields):
+        return self._update_post_model(db.models.Post(), fields, isnew=True)
+
     
     def get_post_by_id(self, id):
         return db.ses.query(db.models.Post).filter_by(id=id).scalar()
@@ -111,34 +131,43 @@ class Post(maki.scaffold.Controller):
         if isinstance(public, bool):
             query = query.filter_by(public=public)
         return query.order_by(db.models.Post.created)
-        
 
+
+    def _public_posts_query(self, **filters):
+        locale = cherrypy.response.i18n
+        Post = db.models.Post
+        posts = db.ses.query(Post).filter_by(public=True, **filters)
+        posts = posts.order_by(Post.created.desc())
+        if not locale.showall:
+            posts = posts.filter_by(lang=locale.lang)
+        return posts
+
+
+    def public_posts(self, page, **filters):
+        """Return a tuple (real_page, page_count, posts_in_page)"""
+        if page.isdigit():
+            page = int(page)
+        else:
+            page = 1
+        pquery = self._public_posts_query(**filters)
+        page_count = math.ceil(pquery.count() / self.plimit) + 1
+        offset = (page - 1) * self.plimit
+        return page, page_count, pquery.offset(offset).limit(self.plimit)
+        
 
     def get_category_by_slug(self, slug, lang):
         return db.ses.query(db.models.Category)\
                .filter_by(slug=slug)\
                .filter_by(lang=lang).scalar()
+
     
-    def get_categor_by_name(self, name):
+    def get_category_by_name(self, name):
         return db.ses.query(db.models.Category).filter_by(name=name).scalar()
 
     
     def find_lang(self, lang):
         return db.ses.query(db.models.Language)\
                .filter_by(code=lang).scalar()
-
-
-    def create_post(self, **fields):
-        return self._update_post_model(db.models.Post(), fields, isnew=True)
-
-
-    def change_visibility(self, postid, public):
-        post = self.get_post_by_id(postid)
-        if post is None:
-            raise Exception("The post does not exist.")
-        else:
-            post.public = public
-            return precautious_commit(db.ses)
 
     
     def update_post(self, id,  **fields):

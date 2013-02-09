@@ -66,10 +66,11 @@ class Translatable(object):
     @declared_attr
     def trans_of(cls):
         secondary = 'trans_%s_rel' %  cls.__name__.lower()
-        return relationship(cls.__name__, secondary=secondary,
-                            primaryjoin="%s.id==%s.c.from_id" % (cls.__name__, secondary),
-                            secondaryjoin='%s.id==%s.c.to_id' % (cls.__name__, secondary),
-                            backref='translations')
+        return relationship(
+            cls.__name__, secondary=secondary,
+            primaryjoin="%s.id==%s.c.from_id" % (cls.__name__, secondary),
+            secondaryjoin='%s.id==%s.c.to_id' % (cls.__name__, secondary),
+            backref='translations')
 
 
 class PostMetainfo(Translatable):
@@ -107,7 +108,8 @@ class PostRevision(Base):
     title       = Column(String(64), nullable=False)
     abstract    = Column(String(400))
     content     = Column(Text)
-    modified    = Column(DateTime, onupdate=datetime.datetime.now, server_default=text('NOW()'))
+    modified    = Column(DateTime, onupdate=datetime.datetime.now,
+                         server_default=text('NOW()'))
     post_id     = Column(Integer, ForeignKey('posts.id'), nullable=False)
 
 
@@ -119,13 +121,12 @@ class Post(Translatable, Base):
     created     = Column(DateTime, server_default=text('NOW()'))
     public      = Column(Boolean, server_default='False', nullable=False)
     author_id   = Column(Integer, ForeignKey('users.id'), nullable=False)
-    lang_id     = Column(Integer, ForeignKey('languages.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
-    format_id   = Column(Integer, ForeignKey('post_formats.id'), nullable=False)
+    format_id   = Column(Integer, ForeignKey('post_formats.id'),
+                         nullable=False)
     tags        = relationship('Tag', secondary=tag_post_table)
     category    = relationship('Category')
     format      = relationship('PostFormat')
-    lang        = relationship('Language')
     author      = relationship('User')
     revisions   = relationship('PostRevision', backref='post',
                                order_by='PostRevision.modified')
