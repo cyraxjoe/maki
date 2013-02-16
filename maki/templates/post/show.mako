@@ -29,7 +29,17 @@
   % else:
       ${post.content}
   % endif 
+
+ % if post.tags:
+  <div>
+    <span  style="padding-right: 10px;">Tags:</span>
+    % for tag in post.tags:
+    <span class="radius secondary label">${tag.name}</span>
+    % endfor
+  </div>
+% endif
 </article>
+
 <div class="right">
   <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
   <script type="text/javascript">

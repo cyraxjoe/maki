@@ -19,8 +19,8 @@ STRINGS = \
         {'es': 'Categorías'},
  'Who am I?':
         {'es': '¿Quién soy yo?'},
- 'just another programmer from Monterrey, Mexico': 
-        {'es': 'solo un programador más de Monterrey, México'},
+ 'just another software developer from Monterrey, Mexico': 
+        {'es': 'solo un desarrollador de software más de Monterrey, México'},
  'More about me':
         {'es': 'Más sobre mí'},
  'This work is licensed under a': 

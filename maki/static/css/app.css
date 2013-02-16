@@ -27,6 +27,10 @@ a:hover, a:focus {
     color: #FCBE2A;
 }
 
+.button.secondary:hover, .button.secondary:focus {
+    color: #CF9100;
+}
+
 
 h1, h2, h3, h4, h5, h6 {
     color: white; 
@@ -40,6 +44,12 @@ h1, h2, h3, h4, h5, h6 {
 .white{
     color: white;
 }
+
+.label {
+    background-color: #E5AC26;
+    color: #333;
+}
+
 
 ul.breadcrumbs {
     background-color: #222;
@@ -132,5 +142,8 @@ ul.pagination li.current a:hover, ul.pagination li.current a:focus {
   Post 
 ----------------------------------------- */
 #post-body {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
+
+
+

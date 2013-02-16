@@ -1,8 +1,28 @@
 % for post in posts:
 <article>
   <span class="right white ">${post.created_fmt}</span>
-  <h4><a href="/post/${post.slug}">${post.title}</a> </h4>
+  <h5><a href="/post/${post.slug}">${post.title}</a> </h5>
   <p>${post.abstract}</p>  
+  <div style="padding: 0 0 1px 0;">
+
+% if category is UNDEFINED:
+    <span class="left">
+      % for tag in post.tags:
+      <span class="radius secondary label">${tag.name}</span>
+      % endfor
+    </span>
+    <span class="right label" style="margin-left: 10px;font-size: 100%" >
+      ${post.category.name}
+    </span>
+% else:
+    <span class="right">
+      % for tag in post.tags:
+      <span class="radius secondary label">${tag.name}</span>
+      % endfor
+    </span>
+% endif
+  </div>
+
 </article>
 <hr>
 % endfor 

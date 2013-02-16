@@ -1,7 +1,7 @@
-import json
 import sys
 from datetime import datetime
 
+import yaml
 from cherrypy.lib import reprconf
 
 from maki import db
@@ -28,8 +28,8 @@ def build_category(catname, cat_cache=cat_cache):
     
 
 
-def load_posts(json_posts):
-    posts = reversed(json.load(json_posts))
+def load_posts(yaml_posts):
+    posts = reversed(yaml.load(yaml_posts))
     # new : old,...
     common_fields = {'slug': 'url',
                      'public': 'published',
@@ -51,5 +51,5 @@ def load_posts(json_posts):
 if __name__ == '__main__':
     config = reprconf.Config(sys.argv[1])
     db.load_engine(config['sqlalchemy'])
-    with open(sys.argv[2]) as json_posts:
-        load_posts(json_posts)
+    with open(sys.argv[2]) as yaml_posts:
+        load_posts(yaml_posts)

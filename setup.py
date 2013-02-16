@@ -12,7 +12,8 @@ requires = ['CherryPy==3.2.2',
             'beautifulsoup4==4.1.3',
             'docutils',
             'textile',
-            'unidecode']
+            'unidecode',
+            'PyYaml']
 
 setup(name='maki',
       version='0.1.0',

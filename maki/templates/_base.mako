@@ -85,7 +85,7 @@
 
       <div class="panel">
         <h5>${_("Who am I?")}</h5>
-        <p><strong>Joel Rivera</strong>, ${_("just another programmer from Monterrey, Mexico")}.</p>
+        <p><strong>Joel Rivera</strong>, ${_("just another software developer from Monterrey, Mexico")}.</p>
         <a href="http://joel.mx/"><strong>${_("More about me")} &rarr;</strong></a>
       </div>
 

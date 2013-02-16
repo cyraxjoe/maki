@@ -3,11 +3,9 @@ from cherrypy import tools
 
 import maki.scaffold
 from maki.utils import log
-from maki.db import utils  as dbutils
 
 
 class HTML(maki.scaffold.View):
-
     
     def _use_lang(self, lang):
         if lang is None:
@@ -18,7 +16,6 @@ class HTML(maki.scaffold.View):
                 return cherrypy.response.i18n.lang
             else:
                 return lang
-
 
     @cherrypy.expose            
     @tools.mako(filename="post/list.mako")
