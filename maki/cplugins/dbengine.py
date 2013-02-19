@@ -8,5 +8,5 @@ from maki.bindutils import bind_plugin
 class LoadDatabaseEngine(plugins.SimplePlugin):
 
     def start(self):
-        maki.db.load_engine(maki.APP.config['sqlalchemy'])
+        maki.db.load_engine(maki.CONFIG('sqlalchemy'))
         

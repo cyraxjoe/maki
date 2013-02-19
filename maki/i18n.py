@@ -40,7 +40,7 @@ STRINGS = \
 
 def getlang_from_config():
     try:
-        return maki.APP.config['i18n']['default']
+        return maki.CONFIG('i18n')['default']
     except KeyError:
         return cherrypy.config['i18n']['default']
 

@@ -38,7 +38,7 @@ def main():
     else:
         if extrcom == 'drop':
             drop_and_create_db(config)
-        fill_db(config)
+    fill_db(config)
     db.session.commit()
 
     
