@@ -28,4 +28,5 @@ setup(name='maki',
                 'maki.views',
                 ],
       scripts=['scripts/wsgi.py', ],
+      include_package_data=True,
       install_requires=requires)
