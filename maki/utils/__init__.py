@@ -13,7 +13,7 @@ def log(message, cntx='DEBUG', tb=False):
                            traceback=tb)
 
 def in_development():
-    return cherrypy.config.get('environment') != 'production'
+    return cherrypy.config.get('environment') not in ('production', 'embedded')
 
 
 def slugify(text):
