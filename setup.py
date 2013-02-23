@@ -26,6 +26,7 @@ setup(name='maki',
                 'maki.ctools',
                 'maki.db',
                 'maki.views',
+                'maki.utils'
                 ],
       scripts=['scripts/wsgi.py', ],
       include_package_data=True,

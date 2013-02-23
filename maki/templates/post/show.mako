@@ -1,4 +1,4 @@
-<%inherit file="../_base.mako" />
+<%inherit file="../_layout.mako" />
 <%!
  from functools import partial
  from textile import textile
