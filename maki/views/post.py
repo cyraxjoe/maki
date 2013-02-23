@@ -6,47 +6,51 @@ from maki.utils import log
 
 
 class HTML(maki.scaffold.View):
-    
-    def _use_lang(self, lang):
-        if lang is None:
-            return cherrypy.response.i18n.lang
-        else:
-            lang = self.ctrl.find_lang(lang)
-            if lang is None:
-                return cherrypy.response.i18n.lang
-            else:
-                return lang
 
     @cherrypy.expose            
     @tools.mako(filename="post/list.mako")
-    def index(self, category, page='1', lang=None):
+    def index(self, cat, page='1'):
         """The index posts is filtered by a category.
         The unfiltered list is basically the front page.
-        If the *lang* parameter is set then is goingo to use it
-        to fond the category, instead of the *lang* of the request."""
-        lang = self._use_lang(lang)
-        obcategory = self.ctrl.get_category_by_slug(category, lang)
-        if obcategory is None:
+        """
+        lang = cherrypy.response.i18n.lang
+        category = self.ctrl.get_category_by_slug(cat, lang)
+        if category is None:
             raise cherrypy.NotFound()
         else:
-            page, pages, posts = self.ctrl.public_posts(page, category=obcategory)
-            return {'category': obcategory,
+            page, pages, posts = self.ctrl.public_posts(page, category=category)
+            breadcrumb = self._breadcrumb(category)
+            return {'category': category,
                     'posts': posts,
                     'pages': pages,
-                    'currpage': page}
+                    'currpage': page,
+                    'breadcrumb': breadcrumb}
 
 
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
-    def default(self, category=None, slug=None):
-        if slug is None: # for backwards compatibility, we use category.
-            slug = category
+    def default(self, slug=None):
         post = self.ctrl.get_post_by_slug(slug)
         if post is None or not post.public:
             raise cherrypy.NotFound()
         else:
+            breadcrumb = self._breadcrumb(post.category, post)
             return {'post': post,
-                    'title': post.title,}
+                    'title': post.title,
+                    'breadcrumb': breadcrumb}
+
+
+    def _breadcrumb(self, cat, post=None):
+        if cherrypy.response.i18n.showall:
+            caturl = '/post/?cat=%s&amp;l=%s' % (cat.slug, cat.lang.code)
+        else:
+            caturl = '/post/?cat=%s' % cat.slug
+        bcrumb = [(caturl, cat.name), ]
+        if post is not None:
+            bcrumb.append(('/post/%s' % post.slug, post.title))
+        return bcrumb
+    
+
 
 
             
@@ -175,3 +179,5 @@ class JSON(maki.scaffold.View):
             cherrypy.response.status = 500
             response['message'] = 'Missing required field.'
         return response
+
+

@@ -16,7 +16,7 @@ requires = ['CherryPy==3.2.2',
             'PyYaml']
 
 setup(name='maki',
-      version='0.1.0',
+      version='0.2.0',
       author='Joel Rivera',
       author_email='rivera@joel.mx',
       provides=['maki',],

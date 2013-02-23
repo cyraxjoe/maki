@@ -6,6 +6,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
+% if KEYWORDS:
+  <meta name="keywords" content="${','.join(KEYWORDS)}" />
+% endif
+% if DESCRIPTION:
+  <meta name="description" content="${DESCRIPTION}" />
+% endif  
   <link rel="shortcut icon" href="/static/images/favicon.ico" />
 % if title:
   <title>${_("Introspection")} | ${title}</title>
@@ -30,8 +36,10 @@
 	  % for name, code in [('English', 'en'), ('Español', 'es')]:
 	    <li>
 	       <a \
-		  % if not LOCALE.showall and code == LOCALE.lang.code: 
-		   id="active-lang" \
+		  % if not LOCALE.showall and LANG_IN_REQ and LANG_IN_REQ == code:
+		     id="active-lang" \
+		  % elif not LOCALE.showall and code == LOCALE.lang.code: 
+		     id="active-lang" \
 		  % endif  
 		  href="/lang/${code}" title="${name}" 
 		  class="has-tip tiny secondary button square">
@@ -73,10 +81,13 @@
 	% for category in CATEGORIES:
             <li>
 	% if LOCALE.showall:
-	      <a href="/post/?category=${category.slug}&amp;lang=${category.lang.code}">
+	      <a href="/post/?cat=${category.slug}&amp;l=${category.lang.code}">
 		${category.name} / <small>${category.lang.name}<small>
+        % elif LANG_IN_REQ is not None:
+  	      <a href="/post/?cat=${category.slug}&amp;l=${category.lang.code}">
+		${category.name} 
         % else:
-	      <a href="/post/?category=${category.slug}">
+	      <a href="/post/?cat=${category.slug}">
 		${category.name} 
         % endif
 	      </a>
@@ -118,12 +129,11 @@
           <ul class="link-list right">
 	    <li style="padding: 5px 0;">
 	      <a href="http://www.webfaction.com?affiliate=thejoe">
-		<img src="http://www.webfaction.com/banners/80x15.png" border="0"  alt="Hospedado en web faction" title="Proudly hosted at webfaction"/></a>
+		<img src="http://www.webfaction.com/banners/80x15.png" alt="Webfaction" title="${_('Proudly hosted at webfaction')}"/></a>
 	    </li>
             <li>
 	      <a href="http://www.cherrypy.org/">
-		<img src="${STATIC}/images/made_with_cherrypy.png" 
-		     border="0" alt="Made with cherrypy." title="Made with cherrypy" />
+		<img src="${STATIC}/images/made_with_cherrypy.png"  alt="CherryPy" title="${_('Made with cherrypy')}" />
 	      </a>
 	    </li>
           </ul>

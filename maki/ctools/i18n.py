@@ -11,7 +11,8 @@ from maki import db
 Locale = namedtuple('Locale', ('lang', 'showall'))
 
 
-def choose_lang(langs):
+def choose_lang(langs, default='en'):
+    langs.append(default)
     for langcode in langs:
         if langcode in maki.i18n.AVAILABLE_LANGS:
             olang = db.ses.query(db.models.Language)\
@@ -19,10 +20,9 @@ def choose_lang(langs):
             return olang
 
 
-def get_lang(default='en'):
+def get_lang():        
     langs = [x.value.split('-')[0].lower() for x in
              cherrypy.request.headers.elements('Accept-Language')]
-    langs.append(default)
     seslang = cherrypy.session.get(maki.i18n.SES_KEY)
     locargs = {'showall': False}        
     if seslang is not None:
@@ -30,6 +30,10 @@ def get_lang(default='en'):
             locargs['showall'] = True
         else:
             langs.insert(0, seslang)
+     # top priority if the lang is in the request
+    if hasattr(cherrypy.request, 'lang') and \
+           cherrypy.request.lang is not None:
+        langs.insert(0, cherrypy.request.lang)
     locargs['lang'] = choose_lang(langs)
     cherrypy.response.i18n = Locale(**locargs)
 
@@ -46,7 +50,6 @@ def set_lang():
         
 
 class I18nTool(cherrypy.Tool):
-
 
     def __init__(self):
         self._name = 'I18nTool'
@@ -66,5 +69,9 @@ class I18nTool(cherrypy.Tool):
         cherrypy.request.hooks.attach('before_finalize', set_lang)
 
 
+def set_lang_in_request():
+    cherrypy.request.lang = cherrypy.request.params.pop('l', None)
+
 cherrypy.tools.i18n = I18nTool()
+cherrypy.tools.i18n_request = cherrypy.Tool('before_handler', set_lang_in_request)
 

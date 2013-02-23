@@ -8,6 +8,7 @@ import maki.db.utils
 def set_defaults(env):
     locale = cherrypy.response.i18n
     env['LOCALE'] = locale
+    env['LANG_IN_REQ'] = cherrypy.request.lang
     env['IN_DEVELOPMENT'] = maki.utils.in_development()
     env['STATIC'] = maki.CONFIG('templates')['static_url']
     env['CATEGORIES'] = maki.db.utils.get_categories(locale)

@@ -155,19 +155,19 @@ class Post(maki.scaffold.Controller):
         return page, page_count, pquery.offset(offset).limit(self.plimit)
         
 
-    def get_category_by_slug(self, slug, lang):
-        return db.ses.query(db.models.Category)\
-               .filter_by(slug=slug)\
-               .filter_by(lang=lang).scalar()
+    def get_category_by_slug(self, slug, preflang, strict=False):
+        category =  db.ses.query(db.models.Category)\
+                   .filter_by(slug=slug)\
+                   .filter_by(lang=preflang).scalar()
+        if category is None and not strict: 
+            return db.ses.query(db.models.Category)\
+                   .filter_by(slug=slug).first()
+        else:
+            return category
 
     
     def get_category_by_name(self, name):
         return db.ses.query(db.models.Category).filter_by(name=name).scalar()
-
-    
-    def find_lang(self, lang):
-        return db.ses.query(db.models.Language)\
-               .filter_by(code=lang).scalar()
 
     
     def update_post(self, id,  **fields):

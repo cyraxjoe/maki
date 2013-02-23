@@ -10,14 +10,18 @@ class HTML(maki.scaffold.View):
     def default(self, lang):
         self.ctrl.set_lang_in_session(lang)
         referer = cherrypy.request.headers.get('Referer', '/')
-        if '/post/' in referer:
-            referer = self._referer_for_post_index(referer)
+        if '?' in referer:
+            referer = self._ref_without_lang(referer)
         raise cherrypy.HTTPRedirect(referer, 303)
+
+
+    def _ref_without_lang(self, referer):
+        newqs = []
+        qs = referer.split('?', 1)[-1]
+        for elem in qs.split('&'):
+            if 'l=' not in elem:
+                newqs.append(elem)
+        url  = referer[:referer.index('?')]
+        return '?'.join([url, '&'.join(newqs)])
+
     
-    
-    def _referer_for_post_index(self, referer):
-        #  avoid 404 in case that the user is viewing an specific category.
-        if '?' in referer and 'lang=' not in referer:
-            prevlangcode = maki.i18n.getlangcode()
-            referer = '%s&lang=%s' % (referer, prevlangcode)
-        return referer

@@ -34,7 +34,8 @@ STRINGS = \
   'Any': {'es': 'Todos'},
   'what is this?': {'es': '¿Qué es esto?'},
   'Home': {'es': 'Inicio',},
-
+  'Made with cherrypy': {'es': 'Hecho con cherrypy'},
+  'Proudly hosted at webfaction': {'es': 'Orgullosamente hospedado en webfaction'}
  }
 
 

@@ -6,18 +6,7 @@
  textile = partial(textile, html_type='html')
  rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1')['fragment']
 %>
-<ul class="breadcrumbs">
-  <li> <a href="/"> ${_('Home')}</a></li>
-  <li>
-    <a href="/post/?category=${post.category.slug}" class="current">
-      ${post.category.name}
-    </a>
-  </li>
-  <li class="current">
-    <a href="/post/${post.slug}">${post.title}</a>
-  </li>
-  
-</ul>
+<%include file="_breadcrumb.mako" />
 
 <article id="post-body">
   <span class="right white">${post.created_fmt}</span>
