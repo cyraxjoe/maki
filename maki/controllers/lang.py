@@ -10,12 +10,16 @@ class Lang(maki.scaffold.Controller):
 
 
     def set_lang_in_session(self, lang):
+        save = True
         if lang  == maki.i18n.ANY_LANG:
             cherrypy.session[maki.i18n.SES_KEY] = maki.i18n.ANY_LANG
         else:
             if lang in maki.i18n.AVAILABLE_LANGS:
                 cherrypy.session[maki.i18n.SES_KEY] = lang
             else:
+                save = False
                 log('Trying to set invalid lang %s' % lang,
                     'ERROR')
+        if save:
+            cherrypy.session.save()
     

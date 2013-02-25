@@ -29,6 +29,7 @@ class Login(maki.scaffold.Controller):
         if user is not None:
             if self._have_valid_passwd(user, passwd):
                 cherrypy.session['uid'] = user.id
+                cherrypy.session.save()
                 return True
             else:
                 return False
