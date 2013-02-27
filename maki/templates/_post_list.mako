@@ -30,18 +30,18 @@
 <ul class="pagination right">
 % for pagenum in range(1, pages):
     % if pagenum == currpage:
-       <li class="current">  <a href="javascript:void()">${pagenum}</a> </li>
+       <li class="current">  <a href="#">${pagenum}</a> </li>
     % else:
        % if category is UNDEFINED:
            <li><a href="?page=${pagenum}">${pagenum}</a></li>
        % else:
 	   % if LOCALE.showall:
            <li>
-	     <a href="?category=${category.slug}&amp;lang=${category.lang.code}&amp;page=${pagenum}">
+	     <a href="/posts/${category.slug}?l=${category.lang.code}&amp;page=${pagenum}">
 	       ${pagenum}</a>
 	   </li>
 	   % else:
-          <li><a href="?category=${category.slug}&amp;page=${pagenum}">${pagenum}</a></li>
+          <li><a href="/posts/${category.slug}?page=${pagenum}">${pagenum}</a></li>
 	   % endif
            
        % endif
