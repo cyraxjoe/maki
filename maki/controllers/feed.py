@@ -37,7 +37,7 @@ class Feed(maki.scaffold.Controller):
                 alturl = '/?l=%s' % lang.code
         else:
             alturl = '/'
-        feedurl, title = maki.feeds.url_and_title(category)
+        feedurl, title = maki.feeds.url_and_title(category, strict=True)
         query = query.order_by(Post.created.desc())
         return query, feedurl, cp.url(alturl), title
 
