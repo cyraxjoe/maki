@@ -123,7 +123,7 @@ class Post(maki.scaffold.Controller):
 
 
     def get_posts(self, catname, public, min_date, max_date):
-        # dates limits are not yet inmplented
+        # dates limits are not yet implented
         query = db.ses.query(db.models.Post)
         if catname is not None:
             category = self.get_category_by_name()
@@ -176,3 +176,7 @@ class Post(maki.scaffold.Controller):
             raise Exception("The post does not exist.")
         else:
             return self._update_post_model(post, fields)
+
+
+class Posts(Post):
+    __views__ = [maki.views.post.PostsHTML,]

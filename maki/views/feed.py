@@ -9,7 +9,7 @@ class XML(maki.scaffold.View):
     def default(self, category=None):
         log('category is %s' % category)
         cp.response.headers['Content-type'] = 'application/atom+xml'
-        if cp.response.i18n.showall:
+        if not cp.request.lang:
             return self.ctrl.atom_feed(category)
         else:
             return self.ctrl.atom_feed(category, cp.response.i18n.lang)

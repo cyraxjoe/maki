@@ -7,7 +7,7 @@ import maki.scaffold
 import maki.views
 import maki.feeds
 from maki import db
-from maki.utils import log
+#from maki.utils import log
 
 
 class Feed(maki.scaffold.Controller):
@@ -18,33 +18,47 @@ class Feed(maki.scaffold.Controller):
         return db.ses.query(db.models.User).first()
 
 
-    def _posts_link_and_title(self, catslug, lang):
-        query = db.ses.query(db.models.Post).filter_by(public=True)
+    def _posts_links_and_title(self, catslug, lang):
+        Post = db.models.Post
+        query = db.ses.query(Post).filter_by(public=True)
+        alturl = None
         if catslug is not None:
             category = db.ses.query(db.models.Category)\
                        .filter_by(slug=catslug).scalar()
             if category is not None:
                 query = query.filter_by(category=category)
+                alturl = '/posts/%s?l=%s' % \
+                         (category.slug, category.lang.code)
         else:
             category = None
         if lang is not None:
             query = query.filter_by(lang=lang)
-        url, title = maki.feeds.url_and_title(category)
-        return query, url, title
+            if alturl is None:
+                alturl = '/?l=%s' % lang.code
+        else:
+            alturl = '/'
+        feedurl, title = maki.feeds.url_and_title(category)
+        query = query.order_by(Post.created.desc())
+        return query, feedurl, cp.url(alturl), title
 
 
     def atom_feed(self, catslug, lang=None):
-        posts, self_link, title = self._posts_link_and_title(catslug, lang)
-        log('link, title: %s %s' % (self_link, title))
+        (posts, self_link, html_link, title) = \
+                self._posts_links_and_title(catslug, lang)
+        favicon_url = cp.url('/static/images/favicon.ico')
         feed = atomize.Feed(title=title,
                             updated=datetime.datetime.now(),
                             guid=self_link,
                             author=self._get_blog_owner().vname,
-                            self_link=self_link)
+                            self_link=self_link,
+                            icon=atomize.Icon(favicon_url),
+                            links=[atomize.Link(html_link, rel='alternate',
+                                                content_type='text/html')])
         for post in posts:
             url = cp.url('/post/' + post.slug)
             entry = atomize.Entry(title=post.title,
                                   guid=url,
+                                  published=atomize.Published(post.created),
                                   updated=post.modified, author=post.author.vname,
                                   links=[atomize.Link(url,
                                                       rel='alternate',

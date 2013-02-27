@@ -6,15 +6,22 @@ import maki.feeds
 from maki.utils import log
 
 
+def breadcrumb(cat, post=None):
+    if cherrypy.response.i18n.showall:
+        caturl = '/posts/%s?l=%s' % (cat.slug, cat.lang.code)
+    else:
+        caturl = '/posts/%s' % cat.slug
+    bcrumb = [(caturl, cat.name), ]
+    if post is not None:
+        bcrumb.append(('/post/%s' % post.slug, post.title))
+    return bcrumb
 
-class HTML(maki.scaffold.View):
+
+class PostsHTML(maki.scaffold.View):
 
     @cherrypy.expose            
     @tools.mako(filename="post/list.mako")
-    def index(self, cat, page='1'):
-        """The index posts is filtered by a category.
-        The unfiltered list is basically the front page.
-        """
+    def default(self, cat, page='1'):
         lang = cherrypy.response.i18n.lang
         category = self.ctrl.get_category_by_slug(cat, lang)
         if category is None:
@@ -22,17 +29,21 @@ class HTML(maki.scaffold.View):
         else:
             page, pages, posts = self.ctrl.public_posts(page, category=category)
             feed_url, feed_title = maki.feeds.url_and_title(category)
-            breadcrumb = self._breadcrumb(category)
+            bc = breadcrumb(category)
             return {'title': category.name, 
                     'category': category,
                     'posts': posts,
                     'pages': pages,
                     'currpage': page,
-                    'breadcrumb': breadcrumb,
+                    'breadcrumb': bc,
                     'feed_url': feed_url,
                     'feed_title': feed_title}
 
 
+
+
+class HTML(maki.scaffold.View):
+    
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, slug=None):
@@ -40,21 +51,12 @@ class HTML(maki.scaffold.View):
         if post is None or not post.public:
             raise cherrypy.NotFound()
         else:
-            breadcrumb = self._breadcrumb(post.category, post)
+            bc = breadcrumb(post.category, post)
             return {'post': post,
                     'title': post.title,
-                    'breadcrumb': breadcrumb}
+                    'breadcrumb': bc}
 
 
-    def _breadcrumb(self, cat, post=None):
-        if cherrypy.response.i18n.showall:
-            caturl = '/post/?cat=%s&amp;l=%s' % (cat.slug, cat.lang.code)
-        else:
-            caturl = '/post/?cat=%s' % cat.slug
-        bcrumb = [(caturl, cat.name), ]
-        if post is not None:
-            bcrumb.append(('/post/%s' % post.slug, post.title))
-        return bcrumb
     
 
 
