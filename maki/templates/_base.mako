@@ -12,9 +12,12 @@
 % if DESCRIPTION:
     <meta name="description" content="${DESCRIPTION}" />
 % endif  
+% if feed_url:
+    <link href="${feed_url}" type="application/atom+xml"  rel="alternate" title="${feed_title}">
+% endif
     <link rel="shortcut icon" href="/static/images/favicon.ico" />
 % if title:
-    <title>${_("Introspection")} | ${title}</title>
+    <title>${_("Introspection")} / ${title}</title>
 % else:
     <title>${_("Introspection")}</title>
 % endif

@@ -2,7 +2,9 @@ import cherrypy
 from cherrypy import tools
 
 import maki.scaffold
+import maki.feeds
 from maki.utils import log
+
 
 
 class HTML(maki.scaffold.View):
@@ -19,12 +21,16 @@ class HTML(maki.scaffold.View):
             raise cherrypy.NotFound()
         else:
             page, pages, posts = self.ctrl.public_posts(page, category=category)
+            feed_url, feed_title = maki.feeds.url_and_title(category)
             breadcrumb = self._breadcrumb(category)
-            return {'category': category,
+            return {'title': category.name, 
+                    'category': category,
                     'posts': posts,
                     'pages': pages,
                     'currpage': page,
-                    'breadcrumb': breadcrumb}
+                    'breadcrumb': breadcrumb,
+                    'feed_url': feed_url,
+                    'feed_title': feed_title}
 
 
     @cherrypy.expose

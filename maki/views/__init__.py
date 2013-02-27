@@ -3,6 +3,7 @@ from maki.views import (
     post,
     login,
     lang,
+    feed,
 )
 
-__all__ = ['frontpage', 'post', 'login', 'lang']
+__all__ = ['frontpage', 'post', 'login', 'lang', 'feed']

@@ -24,12 +24,15 @@ def get_lang():
     langs = [x.value.split('-')[0].lower() for x in
              cherrypy.request.headers.elements('Accept-Language')]
     seslang = cherrypy.session.get(maki.i18n.SES_KEY)
-    locargs = {'showall': False}        
-    if seslang is not None:
-        if seslang == maki.i18n.ANY_LANG: 
-            locargs['showall'] = True
-        else:
-            langs.insert(0, seslang)
+    locargs = {'showall': False}
+    if cherrypy.request.lang == '*':
+        locargs['showall'] = True
+    else:
+        if seslang is not None:
+            if seslang == maki.i18n.ANY_LANG: 
+                locargs['showall'] = True
+            else:
+                langs.insert(0, seslang)
      # top priority if the lang is in the request
     if hasattr(cherrypy.request, 'lang') and \
            cherrypy.request.lang is not None:

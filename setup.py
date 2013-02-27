@@ -13,8 +13,10 @@ requires = ['CherryPy==3.2.2',
             'docutils',
             'textile',
             'unidecode',
-            'PyYaml']
-
+            'PyYaml',
+            'atomize']
+# tested atomize
+# hg+https://joelriv@code.google.com/r/joelriv-atomize/#egg=atomize'
 setup(name='maki',
       version='0.2.0',
       author='Joel Rivera',

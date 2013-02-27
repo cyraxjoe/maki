@@ -8,7 +8,7 @@
       </h4>
     </div>
     <div class="four columns" id="lang-block">
-      <span class="right" >
+      <div class="right" >
 	<ul class="button-group square" style="margin-bottom: 10px;">
 	  % for name, code in [('English', 'en'), ('Español', 'es')]:
 	    <li>
@@ -37,7 +37,7 @@
 	<small id="what-is-this" class="right orange has-tip" 
 	       title="${_('The visibility of the posts is filtered by the selected option')}.">
 	  ${_('what is this?')}</small>
-      </span>
+      </div>
     </div>
     
   </div>
@@ -45,7 +45,7 @@
   <!-- Main Page Content and Sidebar -->
   <div class="row">
     <!-- Main Content -->
-    <div class="nine columns" role="content">
+    <div class="nine columns" role="main">
       ${next.body()}
     </div>
     <!-- End Main Content -->
