@@ -1,10 +1,5 @@
-import math
-
-import cherrypy
-
 from maki.utils import log
 from maki import db
-from maki.constants import POSTS_PER_PAGE
 
 
 def update_model(model, fields, dmapper=(lambda x: x)):
@@ -60,3 +55,9 @@ def clean_empty_metainfo():
     db.ses.commit()
 
 
+def get_user_ha1(realm, username):
+    # realm is not used the stored hash already used it.
+    user = db.ses.query(db.models.User).filter_by(name=username).first()
+    if user is not None:
+        log('HA1 is %s' % user.ha1)
+        return user.ha1

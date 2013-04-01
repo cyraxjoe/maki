@@ -6,7 +6,7 @@ import maki.utils
 
 AVAILABLE_LANGS = ('en', 'es')
 ANY_LANG = 'ANY'
-SES_KEY = '_lang_'
+CKEY = '_lang_'
 
 STRINGS = \
 { '_DATE_FORMAT_': {'en': '%b %e, %Y',

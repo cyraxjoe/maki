@@ -1,6 +1,7 @@
 import cherrypy
 from cherrypy import tools
 
+import maki
 import maki.scaffold
 import maki.feeds
 from maki.utils import log
@@ -59,11 +60,12 @@ class HTML(maki.scaffold.View):
 
     
 
-
-
-            
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
+    _cp_config = {'tools.auth_digest.on': True,
+                  'tools.auth_digest.get_ha1': maki.db.utils.get_user_ha1,
+                  'tools.auth_digest.realm': maki.constants.REALM}
+    
 
     def _model_to_dict(self, post):
         pdict ={'title': post.title,
@@ -141,7 +143,6 @@ class JSON(maki.scaffold.View):
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
-    @tools.protect()
     def add(self):
         return self._modify_post(self.ctrl.CREATE_ACT)
 
@@ -149,7 +150,6 @@ class JSON(maki.scaffold.View):
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
-    @tools.protect()
     def update(self, id_):
         return self._modify_post(self.ctrl.EDIT_ACT, id_)
 
@@ -158,7 +158,6 @@ class JSON(maki.scaffold.View):
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('GET',))
-    @tools.protect()
     def index(self, category=None, public=None, min_date=None, max_date=None):
         if public is not None:
             if public.isdigit() and int(public) > 1:
@@ -172,7 +171,6 @@ class JSON(maki.scaffold.View):
     @tools.json_out()
     @tools.json_in()
     @tools.allow(methods=('POST',))
-    @tools.protect()
     def visibility(self):
         response = {"visib-chg": False, "message": None}
         rjson = cherrypy.request.json

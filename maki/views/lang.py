@@ -8,7 +8,7 @@ class HTML(maki.scaffold.View):
 
     @cherrypy.expose
     def default(self, lang):
-        self.ctrl.set_lang_in_session(lang)
+        self.ctrl.set_lang_in_cookie(lang)
         referer = cherrypy.request.headers.get('Referer', '/')
         if '?' in referer:
             referer = self._ref_without_lang(referer)

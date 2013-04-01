@@ -9,17 +9,17 @@ class Lang(maki.scaffold.Controller):
     __views__ = (maki.views.lang.HTML,)
 
 
-    def set_lang_in_session(self, lang):
-        save = True
+    def set_lang_in_cookie(self, lang):
+        response = cherrypy.response
         if lang  == maki.i18n.ANY_LANG:
-            cherrypy.session[maki.i18n.SES_KEY] = maki.i18n.ANY_LANG
+            response.cookie[maki.i18n.CKEY] = maki.i18n.ANY_LANG
         else:
             if lang in maki.i18n.AVAILABLE_LANGS:
-                cherrypy.session[maki.i18n.SES_KEY] = lang
+                response.cookie[maki.i18n.CKEY] = lang
             else:
-                save = False
                 log('Trying to set invalid lang %s' % lang,
                     'ERROR')
-        if save:
-            cherrypy.session.save()
+                return
+        response.cookie[maki.i18n.CKEY]['path'] = '/'
+        response.cookie[maki.i18n.CKEY]['expires'] = 3600
     

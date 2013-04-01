@@ -106,7 +106,7 @@
           <ul class="link-list right">
 	    <li style="padding: 5px 0;">
 	      <a href="http://www.webfaction.com?affiliate=thejoe">
-		<img src="http://www.webfaction.com/banners/80x15.png" alt="Webfaction" title="${_('Proudly hosted at webfaction')}"/></a>
+		<img src="${STATIC}/images/webfaction.png" alt="Webfaction" title="${_('Proudly hosted at webfaction')}"/></a>
 	    </li>
             <li>
 	      <a href="http://www.cherrypy.org/">

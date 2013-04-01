@@ -17,12 +17,14 @@ def default_post_formats(dbs):
 
 
 def default_users(dbs):
-    users = [{'name': 'joe',
-              'vname': 'Joel Rivera',
-              'email': 'rivera@joel.mx',
-              'passwd': 'samplepasswd',
-              'active': True},]
-    return _simple_add(dbs, db.models.User, users)
+    user = {'name': 'joe',
+            'vname': 'Joel Rivera',
+            'email': 'rivera@joel.mx',
+            'active': True}
+    usermod = db.models.User(**user)
+    usermod.ha1 =  'samplepasswd'
+    dbs.add(usermod)
+    return usermod
 
 
 def default_languages(dbs):

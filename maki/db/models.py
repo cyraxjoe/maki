@@ -1,7 +1,6 @@
 import datetime
 import hashlib
 
-import bcrypt
 from sqlalchemy import (
     ForeignKey,
     Table,
@@ -23,6 +22,8 @@ from sqlalchemy.orm import  (
     relationship,
     validates
 )
+
+import maki.constants
 import maki.i18n
 from maki.utils import slugify
 
@@ -176,21 +177,16 @@ class User(Base):
     name   = Column(String(32), unique=True, nullable=False)
     vname  = Column(String(64))
     email  = Column(String(64), nullable=False)
-    passwd = Column(String(60), nullable=False)
+    ha1    = Column(String(32), nullable=False)
     active = Column(Boolean, server_default='True')
 
 
-    @validates('passwd')
-    def validate_passwd(self, key, passwd):
-        """Hash the passwd (sha256) then bcrypt-it and return."""
-        try:
-            hpasswd = hashlib.sha256(passwd.encode()).hexdigest()
-        except AttributeError: # bytes
-            hpasswd = hashlib.sha256(passwd).hexdigest()
-        except Exception: # any other exception, raise.
-            raise
-        
-        return bcrypt.hashpw(hpasswd, bcrypt.gensalt())
+    @validates('ha1')
+    def validates_ha1(self, key, passwd):
+        if self.name is None:
+            raise Exception('Set the name first')
+        pack = ':'.join([self.name, maki.constants.REALM, passwd])
+        return hashlib.md5(pack.encode()).hexdigest()
 
 
 def set_slug_in_elem(elem, newvalue, oldvalue, initiator):

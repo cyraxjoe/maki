@@ -23,13 +23,13 @@ def choose_lang(langs, default='en'):
 def get_lang():        
     langs = [x.value.split('-')[0].lower() for x in
              cherrypy.request.headers.elements('Accept-Language')]
-    seslang = cherrypy.session.get(maki.i18n.SES_KEY)
+    cookielang = cherrypy.request.cookie.get(maki.i18n.CKEY)
     locargs = {'showall': False}
-    if seslang is not None:
-        if seslang == maki.i18n.ANY_LANG: 
+    if cookielang is not None:
+        if cookielang.value == maki.i18n.ANY_LANG: 
             locargs['showall'] = True
         else:
-            langs.insert(0, seslang)
+            langs.insert(0, cookielang.value)
      # top priority if the lang is in the request
     if hasattr(cherrypy.request, 'lang') and \
            cherrypy.request.lang is not None:
