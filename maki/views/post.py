@@ -63,6 +63,7 @@ class HTML(maki.scaffold.View):
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
     _cp_config = {'tools.auth_digest.on': True,
+                  'tools.auth_digest.debug': True,
                   'tools.auth_digest.get_ha1': maki.db.utils.get_user_ha1,
                   'tools.auth_digest.realm': maki.constants.REALM}
     
