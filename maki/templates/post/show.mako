@@ -4,7 +4,8 @@
  from textile import textile
  from docutils.core import publish_parts
  textile = partial(textile, html_type='html')
- rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1')['fragment']
+ rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1', 
+                                  settings_overrides={'initial_header_level': 5})['fragment']
 %>
 <%include file="_breadcrumb.mako" />
 
