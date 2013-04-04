@@ -153,6 +153,6 @@ ul.pagination li.current a:hover, ul.pagination li.current a:focus {
     margin-bottom: 10px;
 }
 
-
-
-
+blockquote, blockquote p {
+    color: white;
+}

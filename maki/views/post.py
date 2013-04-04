@@ -47,7 +47,11 @@ class HTML(maki.scaffold.View):
     
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
-    def default(self, slug=None):
+    def default(self, slug=None, cat=None):
+        # Hack for backward compatibility just for the
+        # first months.
+        if slug is not None and cat is not None:
+            raise cherrypy.HTTPRedirect('/post/%s' % cat, 301)
         post = self.ctrl.get_post_by_slug(slug)
         if post is None or not post.public:
             raise cherrypy.NotFound()
