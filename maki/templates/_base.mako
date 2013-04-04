@@ -29,6 +29,7 @@ else:
 % endif
     <link rel="stylesheet" href="${STATIC}/css/foundation.min.css">
     <link rel="stylesheet" href="${STATIC}/css/app.css">
+    <%block name="pygments" />
     <script src="${STATIC}/js/modernizr.foundation.js"></script>
   </head>
   <body>

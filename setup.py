@@ -13,7 +13,8 @@ requires = ['CherryPy==3.2.2',
             'textile',
             'unidecode',
             'PyYaml',
-            'atomize']
+            'atomize',
+            'Pygments']
 # tested atomize
 # hg+https://joelriv@code.google.com/r/joelriv-atomize/#egg=atomize'
 setup(name='maki',

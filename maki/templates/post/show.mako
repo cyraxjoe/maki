@@ -5,9 +5,15 @@
  from docutils.core import publish_parts
  textile = partial(textile, html_type='html')
  rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1', 
-                                  settings_overrides={'initial_header_level': 5})['fragment']
+                                  settings_overrides={
+                                     'initial_header_level': 5,
+                                     'syntax_highlight': 'short'
+                                  }).get('fragment')
 %>
 <%include file="_breadcrumb.mako" />
+<%block name="pygments">
+    <link rel="stylesheet" href="${STATIC}/css/pygments/monokai.css">
+</%block>
 
 <article id="post-body">
   <span class="right white">${post.created_fmt}</span>

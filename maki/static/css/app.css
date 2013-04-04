@@ -104,6 +104,9 @@ footer ul.link-list li {
     margin-top: 16px;
 }
 
+pre {
+    padding: 10px;
+}
 /* Small screens */
 @media only screen and (max-width: 767px) { 
     #what-is-this {
@@ -123,6 +126,10 @@ footer ul.link-list li {
 
     ul.breadcrumbs li a, ul.breadcrumbs li span {
 	padding-left: 2px;
+    }
+    
+    pre {
+	padding: 5px;
     }
 
 }
@@ -144,6 +151,7 @@ ul.pagination li.current a:hover, ul.pagination li.current a:focus {
 #post-body {
     margin-bottom: 10px;
 }
+
 
 
 
