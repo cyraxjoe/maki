@@ -69,7 +69,9 @@ class JSON(maki.scaffold.View):
     _cp_config = {'tools.auth_digest.on': True,
                   'tools.auth_digest.debug': True,
                   'tools.auth_digest.get_ha1': maki.db.utils.get_user_ha1,
-                  'tools.auth_digest.realm': maki.constants.REALM}
+                  'tools.auth_digest.realm': maki.constants.REALM,
+                  'tools.json_out.on': True,
+                  'tools.json_in.on': True}
     
 
     def _model_to_dict(self, post):
@@ -131,7 +133,7 @@ class JSON(maki.scaffold.View):
 
             
     @cherrypy.expose
-    @tools.json_out()
+    @cherrypy.config(**{'tools.json_in.on': False})
     def default(self, identifier, by='id'):
         if by == 'id':
             post = self.ctrl.get_post_by_id(identifier) 
@@ -145,23 +147,17 @@ class JSON(maki.scaffold.View):
 
 
     @cherrypy.expose
-    @tools.json_out()
-    @tools.json_in()
     @tools.allow(methods=('POST',))
     def add(self):
         return self._modify_post(self.ctrl.CREATE_ACT)
 
     @cherrypy.expose
-    @tools.json_out()
-    @tools.json_in()
     @tools.allow(methods=('POST',))
     def update(self, id_):
         return self._modify_post(self.ctrl.EDIT_ACT, id_)
 
 
     @cherrypy.expose
-    @tools.json_out()
-    @tools.json_in()
     @tools.allow(methods=('GET',))
     def index(self, category=None, public=None, min_date=None, max_date=None):
         if public is not None:
@@ -173,8 +169,6 @@ class JSON(maki.scaffold.View):
                  self.ctrl.get_posts(category, public, min_date, max_date)]
 
     @cherrypy.expose
-    @tools.json_out()
-    @tools.json_in()
     @tools.allow(methods=('POST',))
     def visibility(self):
         response = {"visib-chg": False, "message": None}
