@@ -76,7 +76,8 @@ class Post(maki.scaffold.Controller):
         log('Updating (isnew?: %s) post <%s>:%s' % (isnew, post, fields))
         if isnew:
             lang = fields['lang'] = self._get_lang(fields['lang'])
-            post.author_id = cherrypy.session['uid']
+            post.author_id = db.ses.query(db.models.User)\
+                             .filter_by(name=cherrypy.request.login).one().id
         else:
             lang = post.lang
         fields = self._fields_to_db_models(fields, lang)
