@@ -51,7 +51,7 @@ class HTML(maki.scaffold.View):
         # Hack for backward compatibility just for the
         # first months.
         if slug is not None and cat is not None:
-            raise cherrypy.HTTPedirect('/post/%s' % cat, 301)
+            raise cherrypy.HTTPRedirect('/post/%s' % cat, 301)
         # fuck you linkedin or any other platform that modify my URLs
         if slug is not None and kwargs: 
             raise cherrypy.HTTPRedirect('/post/%s' % slug, 301)
