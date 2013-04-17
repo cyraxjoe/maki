@@ -47,11 +47,14 @@ class HTML(maki.scaffold.View):
     
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
-    def default(self, slug=None, cat=None):
+    def default(self, slug=None, cat=None, **kwargs):
         # Hack for backward compatibility just for the
         # first months.
         if slug is not None and cat is not None:
-            raise cherrypy.HTTPRedirect('/post/%s' % cat, 301)
+            raise cherrypy.HTTPedirect('/post/%s' % cat, 301)
+        # fuck you linkedin or any other platform that modify my URLs
+        if slug is not None and kwargs: 
+            raise cherrypy.HTTPRedirect('/post/%s' % slug, 301)
         post = self.ctrl.get_post_by_slug(slug)
         if post is None or not post.public:
             raise cherrypy.NotFound()
@@ -140,7 +143,7 @@ class JSON(maki.scaffold.View):
         elif by == 'slug':
             post = self.ctrl.get_post_by_slug(identifier)
         else:
-            post = None            
+            post = None
         if post is None:
             raise cherrypy.NotFound(message="Unable to find any post")
         return self._model_to_dict(post)
