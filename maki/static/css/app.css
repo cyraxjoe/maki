@@ -156,3 +156,7 @@ ul.pagination li.current a:hover, ul.pagination li.current a:focus {
 blockquote, blockquote p {
     color: white;
 }
+
+.fyre-comment > p {
+   color: white;
+}
