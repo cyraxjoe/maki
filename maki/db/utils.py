@@ -41,11 +41,11 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
 def get_categories(locale=None, only_with_public_posts=True):
     C = db.models.Category
     P = db.models.Post
-    query = db.ses.query(C.name, C.slug)
+    query = db.ses.query(C)
     if only_with_public_posts:
         query = (query.outerjoin(P)
                  .filter(P.public==True)
-                 .group_by(C.name, C.slug))
+                 .group_by(C.name, C.slug, C.id))
     if locale is None or locale.showall:
         return query
     else:
