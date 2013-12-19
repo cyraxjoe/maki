@@ -18,32 +18,34 @@ def breadcrumb(cat, post=None):
     return bcrumb
 
 
-class PostsHTML(maki.scaffold.View):
 
-    @cherrypy.expose            
+class HTML(maki.scaffold.View):
+
+    @cherrypy.expose
+    @cherrypy.popargs('cat')
     @tools.mako(filename="post/list.mako")
-    def default(self, cat, page='1'):
+    def index(self, cat=None, page='1'):
         lang = cherrypy.response.i18n.lang
-        category = self.ctrl.get_category_by_slug(cat, lang)
+        if cat is None:
+            raise cherrypy.HTTPRedirect('/')
+        else:
+            category = self.ctrl.get_category_by_slug(cat, lang)
         if category is None:
             raise cherrypy.NotFound()
         else:
             page, pages, posts = self.ctrl.public_posts(page, category=category)
-            feed_url, feed_title = maki.feeds.url_and_title(category)
-            bc = breadcrumb(category)
-            return {'title': category.name, 
-                    'category': category,
-                    'posts': posts,
-                    'pages': pages,
-                    'currpage': page,
-                    'breadcrumb': bc,
-                    'feed_url': feed_url,
-                    'feed_title': feed_title}
+        feed_url, feed_title = maki.feeds.url_and_title(category)
+        tplparams = {'title':category.name,
+                     'category': category,
+                     'breadcrumb': breadcrumb(category),
+                     'posts': posts,
+                     'pages': pages,
+                     'currpage': page,
+                     'feed_url': feed_url,
+                     'feed_title': feed_title}
+        return tplparams
 
-
-
-
-class HTML(maki.scaffold.View):
+        
     
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
@@ -62,7 +64,8 @@ class HTML(maki.scaffold.View):
             bc = breadcrumb(post.category, post)
             return {'post': post,
                     'title': post.title,
-                    'breadcrumb': bc}
+                    'breadcrumb': bc,
+                    'DESCRIPTION': post.abstract}
 
 
     

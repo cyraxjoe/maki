@@ -3,9 +3,9 @@
   <!-- Nav Bar -->
   <div class="row">
     <div class="eight columns">
-      <h4 id="blogbanner">
+      <div id="blogbanner">
 	<span class="orange">I</span>${_("ntrospection")}
-      </h4>
+      </div>
     </div>
     <div class="four columns" id="lang-block">
       <div class="right" >

@@ -1,7 +1,7 @@
 % for post in posts:
 <article>
   <span class="right white ">${post.created_fmt}</span>
-  <h5><a href="/post/${post.slug}">${post.title}</a> </h5>
+  <h5><a href="/posts/${post.slug}">${post.title}</a> </h5>
   <p>${post.abstract}</p>  
   <div style="padding: 0 0 1px 0;">
 

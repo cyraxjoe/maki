@@ -6,7 +6,7 @@
  textile = partial(textile, html_type='html')
  rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1', 
                                   settings_overrides={
-                                     'initial_header_level': 5,
+                                     'initial_header_level': 2,
                                      'syntax_highlight': 'short'
                                   }).get('fragment')
 %>
@@ -17,7 +17,7 @@
 
 <article id="post-body">
   <span class="right white">${post.created_fmt}</span>
-  <h4 class="orange"> ${post.title} </h4>
+  <h1 class="orange"> ${post.title} </h1>
   % if post.format.name == 'rst':
       ${post.content | rst}
   % elif post.format.name == 'textile':

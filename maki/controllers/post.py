@@ -16,7 +16,7 @@ from maki.db.utils import (
 
 
 
-class Post(maki.scaffold.Controller):
+class Posts(maki.scaffold.Controller):
     __views__ = [maki.views.post.HTML,  maki.views.post.JSON]
     CREATE_ACT = 'create'
     EDIT_ACT = 'edit'
@@ -178,6 +178,3 @@ class Post(maki.scaffold.Controller):
         else:
             return self._update_post_model(post, fields)
 
-
-class Posts(Post):
-    __views__ = [maki.views.post.PostsHTML,]
