@@ -18,7 +18,7 @@ requires = ['CherryPy==3.2.2',
 # tested atomize
 # hg+https://joelriv@code.google.com/r/joelriv-atomize/#egg=atomize'
 setup(name='maki',
-      version='0.2.0',
+      version='0.3.0',
       author='Joel Rivera',
       author_email='rivera@joel.mx',
       provides=['maki',],
