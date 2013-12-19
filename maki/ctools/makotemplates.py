@@ -28,10 +28,9 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
         middleware.set_defaults(env)
         middleware.set_csstyles(env, self.csstyles)
         if maki.utils.in_development():
-            output = self.template.render(**env).decode()
-        else:
             output = self._debug_render(env).decode()
-            
+        else:
+            output = self.template.render(**env).decode()                
         if self.prettify:
             return BeautifulSoup(output).prettify(formatter='minimal')
         else:
