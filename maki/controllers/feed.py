@@ -20,21 +20,26 @@ class Feed(maki.scaffold.Controller):
 
     def _posts_links_and_title(self, catslug, lang):
         Post = db.models.Post
+        Category = db.models.Category
         query = db.ses.query(Post).filter_by(public=True)
         alturl = None
         if catslug is not None:
-            category = db.ses.query(db.models.Category)\
-                       .filter_by(slug=catslug).scalar()
-            if category is not None:
+            category = (db.ses.query(Category)
+                        .join(Post)
+                        .filter(Post.public==True)
+                        .filter(Category.slug==catslug)).scalar()
+            if category is None:
+                raise cp.NotFound()
+            else:
                 query = query.filter_by(category=category)
-                alturl = '/posts/%s?l=%s' % \
-                         (category.slug, category.lang.code)
+                alturl = '/posts/?cat={}&amp;l={}'.format(
+                             category.slug, category.lang.code)
         else:
             category = None
         if lang is not None:
             query = query.filter_by(lang=lang)
             if alturl is None:
-                alturl = '/?l=%s' % lang.code
+                alturl = '/?l={}'.format(lang.code)
         else:
             alturl = '/'
         feedurl, title = maki.feeds.url_and_title(category, strict=True)
@@ -55,7 +60,7 @@ class Feed(maki.scaffold.Controller):
                             links=[atomize.Link(html_link, rel='alternate',
                                                 content_type='text/html')])
         for post in posts:
-            url = cp.url('/post/' + post.slug)
+            url = cp.url('/posts/{}'.format(post.slug))
             entry = atomize.Entry(title=post.title,
                                   guid=url,
                                   published=atomize.Published(post.created),

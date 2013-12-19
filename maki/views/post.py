@@ -4,32 +4,46 @@ from cherrypy import tools
 import maki
 import maki.scaffold
 import maki.feeds
-from maki.utils import log
+from maki.utils import log, redirect_if_kwargs
 
 
 def breadcrumb(cat, post=None):
     if cherrypy.response.i18n.showall:
-        caturl = '/posts/%s?l=%s' % (cat.slug, cat.lang.code)
+        caturl = '/posts/?cat={}&amp;l={}'.format(cat.slug, cat.lang.code)
     else:
-        caturl = '/posts/%s' % cat.slug
+        caturl = '/posts/?cat={}'.format(cat.slug)
     bcrumb = [(caturl, cat.name), ]
     if post is not None:
-        bcrumb.append(('/post/%s' % post.slug, post.title))
+        bcrumb.append(('/posts/{}'.format(post.slug), post.title))
     return bcrumb
 
+old_categories = {
+    'programacion', 'general',
+    'it', 'despotrico', 'glosa',
+    'programming'
+}
+
+def temp_redir_for_old_categories(slug, categories=old_categories):
+    """
+    Temporal fix to redirect the old categories.
+
+    Delete any call and the implementation in around... six months.
+    """
+    if slug in categories:
+        raise cherrypy.HTTPRedirect('/posts/?cat={}'.format(slug), 301)
 
 
 class HTML(maki.scaffold.View):
 
     @cherrypy.expose
-    @cherrypy.popargs('cat')
     @tools.mako(filename="post/list.mako")
-    def index(self, cat=None, page='1'):
-        lang = cherrypy.response.i18n.lang
+    def index(self, cat=None, page='1', **kwargs):
+        redirect_if_kwargs(kwargs, '/posts', 'cat', 'page')
         if cat is None:
             raise cherrypy.HTTPRedirect('/')
         else:
-            category = self.ctrl.get_category_by_slug(cat, lang)
+            category = (self.ctrl.get_category_by_slug(
+                            cat, cherrypy.response.i18n.lang))
         if category is None:
             raise cherrypy.NotFound()
         else:
@@ -49,14 +63,9 @@ class HTML(maki.scaffold.View):
     
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
-    def default(self, slug=None, cat=None, **kwargs):
-        # Hack for backward compatibility just for the
-        # first months.
-        if slug is not None and cat is not None:
-            raise cherrypy.HTTPRedirect('/post/%s' % cat, 301)
-        # fuck you linkedin or any other platform that modify my URLs
-        if slug is not None and kwargs: 
-            raise cherrypy.HTTPRedirect('/post/%s' % slug, 301)
+    def default(self, slug, **kwargs):
+        redirect_if_kwargs(kwargs, '/posts/{}'.format(slug))
+        temp_redir_for_old_categories(slug)
         post = self.ctrl.get_post_by_slug(slug)
         if post is None or not post.public:
             raise cherrypy.NotFound()

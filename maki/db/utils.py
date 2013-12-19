@@ -9,7 +9,6 @@ def update_model(model, fields, dmapper=(lambda x: x)):
     if model:
         try:
             for k, v in fields.items():
-                log((k, v))
                 setattr(model, k, dmapper(v))
         except Exception:
             log('Error at k=%s and v=%s' % (k, v))
@@ -39,12 +38,18 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
         return None
 
 
-def get_categories(locale=None):
+def get_categories(locale=None, only_with_public_posts=True):
+    C = db.models.Category
+    P = db.models.Post
+    query = db.ses.query(C)
+    if only_with_public_posts:
+        query = (query.outerjoin(P)
+                 .filter(P.public==True)
+                 .group_by(C.name, C.id))
     if locale is None or locale.showall:
-        return db.ses.query(db.models.Category).all()
+        return query
     else:
-        return db.ses.query(db.models.Category)\
-               .filter_by(lang=locale.lang)
+        return query.filter_by(lang=locale.lang)
 
 
 def clean_empty_metainfo():

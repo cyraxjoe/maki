@@ -58,13 +58,13 @@
 	% for category in CATEGORIES:
             <li>
 	% if LOCALE.showall:
-	      <a href="/posts/${category.slug}?l=${category.lang.code}">
+	      <a href="/posts/?cat=${category.slug}&amp;l=${category.lang.code}">
 		${category.name} / <small>${category.lang.name}<small>
         % elif LANG_IN_REQ is not None:
-  	      <a href="/posts/${category.slug}?l=${category.lang.code}">
+  	      <a href="/posts/?cat=${category.slug}&amp;l=${category.lang.code}">
 		${category.name} 
         % else:
-	      <a href="/posts/${category.slug}">
+	      <a href="/posts/?cat=${category.slug}">
 		${category.name} 
         % endif
 	      </a>

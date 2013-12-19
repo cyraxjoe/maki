@@ -37,11 +37,11 @@
        % else:
 	   % if LOCALE.showall:
            <li>
-	     <a href="/posts/${category.slug}?l=${category.lang.code}&amp;page=${pagenum}">
+	     <a href="/posts/?cat=${category.slug}&amp;l=${category.lang.code}&amp;page=${pagenum}">
 	       ${pagenum}</a>
 	   </li>
 	   % else:
-          <li><a href="/posts/${category.slug}?page=${pagenum}">${pagenum}</a></li>
+          <li><a href="/posts/?cat=${category.slug}&amp;page=${pagenum}">${pagenum}</a></li>
 	   % endif
            
        % endif

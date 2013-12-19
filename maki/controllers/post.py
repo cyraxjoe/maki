@@ -7,7 +7,6 @@ import maki.constants
 import maki.views
 import maki.scaffold
 from maki import db
-from maki.utils import log
 from maki.db.utils import (
     update_model,
     precautious_commit,
@@ -27,14 +26,13 @@ class Posts(maki.scaffold.Controller):
 
 
     def _create_or_get_post_meta(self, Model, name, lang):
-        log('Searching for %s with name %s and lang %s' % (Model, name, lang.name))
-        elem = db.ses.query(Model)\
-               .filter_by(name=name).filter_by(lang=lang).scalar()
+        elem = (db.ses.query(Model)
+                .filter_by(name=name)
+                .filter_by(lang=lang)).scalar()
         if elem is None:
             if not name.strip():
                 raise Exception('Invalid name for %s' % Model.__name__)
             elem = Model(name=name, lang=lang)
-            log('NOT FOUND!! Creating a new one')
         return elem
 
     
@@ -73,7 +71,6 @@ class Posts(maki.scaffold.Controller):
         
 
     def _update_post_model(self, post, fields, isnew=False):
-        log('Updating (isnew?: %s) post <%s>:%s' % (isnew, post, fields))
         if isnew:
             lang = fields['lang'] = self._get_lang(fields['lang'])
             post.author_id = db.ses.query(db.models.User)\
