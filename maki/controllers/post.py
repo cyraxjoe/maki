@@ -44,7 +44,8 @@ class Posts(maki.scaffold.Controller):
 
 
     def _create_or_get_category(self, cname, lang):
-        return self._create_or_get_post_meta(db.models.Category, cname, lang)
+        return self._create_or_get_post_meta(db.models.Category,
+                                             cname.capitalize(), lang)
 
             
     def _get_format(self, fname):
