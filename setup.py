@@ -1,14 +1,14 @@
-import os 
+import os
 from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README')).read()
 
-requires = ['CherryPy==3.2.2',
-            'Mako==0.7.3',
-            'SQLAlchemy==0.7.9',
-            'psycopg2==2.4.5',
-            'beautifulsoup4==4.1.3',
+requires = ['CherryPy',
+            'Mako',
+            'SQLAlchemy',
+            'psycopg2',
+            'beautifulsoup4',
             'docutils',
             'textile',
             'unidecode',
