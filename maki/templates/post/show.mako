@@ -37,7 +37,7 @@
 </article>
 
 <div class="right">
-  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+  <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
   <script type="text/javascript">
     stLight.options({publisher:'6b2df8ee-5fd7-4a5f-a4f8-27a076045e62'});
   </script>
@@ -47,26 +47,3 @@
   <span class="st_linkedin_large" displayText="LinkedIn"></span>
   <span class="st_sharethis_large" displayText="ShareThis"></span>
 </div>
-
-<!-- START: Livefyre Embed -->
-<div id="livefyre-comments"></div>
-<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
-<script type="text/javascript">
-(function () {
-    var articleId = fyre.conv.load.makeArticleId(null);
-    fyre.conv.load({}, [{
-        el: 'livefyre-comments',
-        network: "livefyre.com",
-        siteId: "330145",
-        articleId: articleId,
-        signed: false,
-        collectionMeta: {
-            articleId: articleId,
-            url: fyre.conv.load.makeCollectionUrl(),
-        }
-    }], function() {});
-}());
-</script>
-<!-- END: Livefyre Embed -->
-            
-

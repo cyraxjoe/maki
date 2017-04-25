@@ -26,8 +26,8 @@ STRINGS = \
         {'es': 'Más sobre mí'},
  'This work is licensed under a': 
         {'es': 'Este obra está bajo una'},
- 'http://creativecommons.org/licenses/by/3.0/deed.en_US':
-        {'es': 'http://creativecommons.org/licenses/by/3.0/deed.es'},
+ 'https://creativecommons.org/licenses/by/3.0/deed.en_US':
+        {'es': 'https://creativecommons.org/licenses/by/3.0/deed.es'},
  'Creative Commons Attribution 3.0 Unported License':
         {'es': 'Licencia Creative Commons Atribución 3.0 Unported',},
   'The visibility of the posts is filtered by the selected option':

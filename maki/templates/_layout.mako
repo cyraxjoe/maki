@@ -93,19 +93,19 @@
       <div class="row">
         <div id="license" class="eight columns">
 	  <p>
-	    <a rel="license"  href="${_('http://creativecommons.org/licenses/by/3.0/deed.en_US')}">
+	    <a rel="license"  href="${_('https://creativecommons.org/licenses/by/3.0/deed.en_US')}">
 	      <img alt="Creative Commons License" style="border-width:0"
-		   src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a>
+		   src="//i.creativecommons.org/l/by/3.0/80x15.png" /></a>
 	    <br>
 	    ${_("This work is licensed under a")}
-	    <a rel="license" href="${_('http://creativecommons.org/licenses/by/3.0/deed.en_US')}">
+	    <a rel="license" href="${_('https://creativecommons.org/licenses/by/3.0/deed.en_US')}">
 	      ${_("Creative Commons Attribution 3.0 Unported License")}</a>.
 	  </p>
         </div>
         <div class="four columns">
           <ul class="link-list right">
 	    <li style="padding: 5px 0;">
-	      <a href="http://www.webfaction.com?affiliate=thejoe">
+	      <a href="https://www.webfaction.com?affiliate=thejoe">
 		<img src="${STATIC}/images/webfaction.png" alt="Webfaction" title="${_('Proudly hosted at webfaction')}"/></a>
 	    </li>
             <li>
