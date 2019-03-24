@@ -13,14 +13,13 @@ requires = [
     'docutils',
     'textile',
     'unidecode',
-    'PyYaml',
     'atomize',
     'Pygments'
 ]
 # tested atomize
 # hg+https://joelriv@code.google.com/r/joelriv-atomize/#egg=atomize'
 setup(name='maki',
-      version='0.3.1',
+      version='0.3.2',
       author='Joel Rivera',
       author_email='rivera@joel.mx',
       provides=['maki',],

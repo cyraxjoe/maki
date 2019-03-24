@@ -123,22 +123,6 @@ let
     };
 
 
-
-    "PyYAML" = python.mkDerivation {
-      name = "PyYAML-3.11";
-      src = pkgs.fetchurl { url = "https://files.pythonhosted.org/packages/75/5e/b84feba55e20f8da46ead76f14a3943c8cb722d40360702b2365b91dec00/PyYAML-3.11.tar.gz"; sha256 = "c36c938a872e5ff494938b33b14aaa156cb439ec67548fcab3535bb78b0846e8"; };
-      doCheck = commonDoCheck;
-      buildInputs = commonBuildInputs;
-      propagatedBuildInputs = [ ];
-      meta = with pkgs.stdenv.lib; {
-        homepage = "http://pyyaml.org/wiki/PyYAML";
-        license = licenses.mit;
-        description = "YAML parser and emitter for Python";
-      };
-    };
-
-
-
     "Pygments" = python.mkDerivation {
       name = "Pygments-2.1.3";
       src = pkgs.fetchurl { url = "https://files.pythonhosted.org/packages/b8/67/ab177979be1c81bc99c8d0592ef22d547e70bb4c6815c383286ed5dec504/Pygments-2.1.3.tar.gz"; sha256 = "88e4c8a91b2af5962bfa5ea2447ec6dd357018e86e94c7d14bd8cacbc5b55d81"; };
