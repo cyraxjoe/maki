@@ -15,10 +15,10 @@
 	       <a \
 		  % if not LOCALE.showall and LANG_IN_REQ and LANG_IN_REQ == code:
 		     id="active-lang" \
-		  % elif not LOCALE.showall and code == LOCALE.lang.code: 
+		  % elif not LOCALE.showall and code == LOCALE.lang.code:
 		     id="active-lang" \
-		  % endif  
-		  href="/lang/${code}" title="${name}" 
+		  % endif
+		  href="/lang/${code}" title="${name}"
 		  class="has-tip tiny secondary button square">
 		 ${code}
 	       </a>
@@ -28,18 +28,18 @@
 	    <a \
 	       % if LOCALE.showall:
                id="active-lang" \
-	       % endif 
+	       % endif
 	       href="/lang/ANY" title="${_('Any')}" class="has-tip tiny secondary button square">
 	      &#x2736;&#x2736;
 	    </a>
 	  </li>
 	</ul>
-	<small id="what-is-this" class="right orange has-tip" 
+	<small id="what-is-this" class="right orange has-tip"
 	       title="${_('The visibility of the posts is filtered by the selected option')}.">
 	  ${_('what is this?')}</small>
       </div>
     </div>
-    
+
   </div>
   <!-- End Nav -->
   <!-- Main Page Content and Sidebar -->
@@ -49,7 +49,7 @@
       ${next.body()}
     </div>
     <!-- End Main Content -->
-    
+
     <!-- Sidebar -->
     <aside class="three columns">
   <%block name="sidebar">
@@ -62,10 +62,10 @@
 		${category.name} / <small>${category.lang.name}<small>
         % elif LANG_IN_REQ is not None:
   	      <a href="/posts/?cat=${category.slug}&amp;l=${category.lang.code}">
-		${category.name} 
+		${category.name}
         % else:
 	      <a href="/posts/?cat=${category.slug}">
-		${category.name} 
+		${category.name}
         % endif
 	      </a>
  	    </li>
@@ -104,10 +104,6 @@
         </div>
         <div class="four columns">
           <ul class="link-list right">
-	    <li style="padding: 5px 0;">
-	      <a href="https://www.webfaction.com?affiliate=thejoe">
-		<img src="${STATIC}/images/webfaction.png" alt="Webfaction" title="${_('Proudly hosted at webfaction')}"/></a>
-	    </li>
             <li>
 	      <a href="http://www.cherrypy.org/">
 		<img src="${STATIC}/images/made_with_cherrypy.png"  alt="CherryPy" title="${_('Made with cherrypy')}" />

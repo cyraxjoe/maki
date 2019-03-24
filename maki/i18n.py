@@ -20,11 +20,11 @@ STRINGS = \
         {'es': 'Categorías'},
  'Who am I?':
         {'es': '¿Quién soy yo?'},
- 'just another software developer from Monterrey, Mexico': 
+ 'just another software developer from Monterrey, Mexico':
         {'es': 'solo un desarrollador de software más de Monterrey, México'},
  'More about me':
         {'es': 'Más sobre mí'},
- 'This work is licensed under a': 
+ 'This work is licensed under a':
         {'es': 'Este obra está bajo una'},
  'https://creativecommons.org/licenses/by/3.0/deed.en_US':
         {'es': 'https://creativecommons.org/licenses/by/3.0/deed.es'},
@@ -36,7 +36,6 @@ STRINGS = \
   'what is this?': {'es': '¿Qué es esto?'},
   'Home': {'es': 'Inicio',},
   'Made with cherrypy': {'es': 'Hecho con cherrypy'},
-  'Proudly hosted at webfaction': {'es': 'Orgullosamente hospedado en webfaction'}
  }
 
 
@@ -46,7 +45,7 @@ def getlang_from_config():
     except KeyError:
         return cherrypy.config['i18n']['default']
 
-    
+
 def getlangcode():
     try:
         return cherrypy.response.i18n.lang.code
@@ -70,12 +69,12 @@ def full_locale(langcode=None):
     if langcode is None:
         langcode = getlangcode()
     if langcode  == 'en':  # US
-        return 'en_US.UTF-8' 
+        return 'en_US.UTF-8'
     elif langcode == 'es':  # MX
         return 'es_MX.UTF-8'
     else:
-        return locale.normalize(langcode) 
-        
+        return locale.normalize(langcode)
+
 
 def fmt_date(date, langcode=None):
     if langcode is None:
@@ -87,4 +86,3 @@ def fmt_date(date, langcode=None):
         return date.strftime(dformat)
     finally:
         locale.setlocale(locale.LC_ALL, original_loc)
-        
