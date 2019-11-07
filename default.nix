@@ -2,7 +2,7 @@
 let
   pkgs = import <nixpkgs> {};
   python = import ./requirements.nix { inherit pkgs; };
-  cherryPy = python.packages."CherryPy";
+  cherryPy = python.packages."cherrypy";
   inherit(pkgs) makeWrapper;
   inherit(python.__old)  buildPythonApplication;
 in buildPythonApplication {
