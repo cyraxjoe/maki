@@ -7,7 +7,7 @@ from maki.utils import in_development
 
 
 def get_admin_addresses():
-    config = maki.CONFIG('email') 
+    config = maki.CONFIG('email')
     return config['admin'], config['sender']
 
 
@@ -36,10 +36,13 @@ def get_smtp_config(inputconf):
             if not host.strip() or not user.strip() or not passwd.strip():
                 return None
             else:
-                return {'host': host,
-                        'user': user,
-                        'passwd': passwd}
-            
+                return {
+                    'host': host,
+                    'user': user,
+                    'passwd': passwd,
+                    'port': config.get('port', 587)
+                }
+
 
 def send(from_, to, subject, content, smtpconf=None):
     """
@@ -72,11 +75,9 @@ def send(from_, to, subject, content, smtpconf=None):
         if smtpconf is None:
             return False
         else: # Finally send!
-            server = smtplib.SMTP_SSL(smtpconf['host'])
-            server.login(smtpconf['user'], smtpconf['passwd'])
-            server.send_message(msg)
-            server.quit()
+            connection = smtplib.SMTP(smtpconf['host'], smtpconf['port'])
+            connection.starttls()
+            connection.login(smtpconf['user'], smtpconf['passwd'])
+            connection.send_message(msg)
+            connection.quit()
             return True
-    
-
-    
