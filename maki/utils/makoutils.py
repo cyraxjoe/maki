@@ -7,7 +7,9 @@ import maki
 
 TEMPLATE_DIR = os.path.join(maki.LOCAL_DIR, "templates")
 DEFAULT_LOOKUP = TemplateLookup(
-    directories=[TEMPLATE_DIR,], input_encoding="utf-8", output_encoding="utf-8"
+    directories=[TEMPLATE_DIR,],
+    input_encoding="utf-8",
+    output_encoding="utf-8",
 )
 
 

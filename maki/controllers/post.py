@@ -7,7 +7,11 @@ import maki.constants
 import maki.views
 import maki.scaffold
 from maki import db
-from maki.db.utils import update_model, precautious_commit, clean_empty_metainfo
+from maki.db.utils import (
+    update_model,
+    precautious_commit,
+    clean_empty_metainfo,
+)
 
 
 class Posts(maki.scaffold.Controller):
@@ -27,7 +31,9 @@ class Posts(maki.scaffold.Controller):
     plimit = maki.constants.POSTS_PER_PAGE
 
     def _create_or_get_post_meta(self, Model, name, lang):
-        elem = (db.ses.query(Model).filter_by(name=name).filter_by(lang=lang)).scalar()
+        elem = (
+            db.ses.query(Model).filter_by(name=name).filter_by(lang=lang)
+        ).scalar()
         if elem is None:
             if not name.strip():
                 raise Exception("Invalid name for %s" % Model.__name__)
@@ -37,7 +43,9 @@ class Posts(maki.scaffold.Controller):
     def _create_or_get_tags(self, nametags, lang):
         tags = []
         for ntag in nametags or []:
-            tags.append(self._create_or_get_post_meta(db.models.Tag, ntag, lang))
+            tags.append(
+                self._create_or_get_post_meta(db.models.Tag, ntag, lang)
+            )
         return tags
 
     def _create_or_get_category(self, cname, lang):
@@ -50,7 +58,9 @@ class Posts(maki.scaffold.Controller):
         return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
 
     def _get_lang(self, langcode):
-        lang = db.ses.query(db.models.Language).filter_by(code=langcode).scalar()
+        lang = (
+            db.ses.query(db.models.Language).filter_by(code=langcode).scalar()
+        )
         if lang is None:
             raise Exception("Unknown langcode %s" % langcode)
         else:
@@ -59,7 +69,9 @@ class Posts(maki.scaffold.Controller):
     def _fields_to_db_models(self, fields, lang):
         # This methods flush the sessions, because of the ".scalar" call.
         fields["tags"] = self._create_or_get_tags(fields["tags"], lang)
-        fields["category"] = self._create_or_get_category(fields["category"], lang)
+        fields["category"] = self._create_or_get_category(
+            fields["category"], lang
+        )
         fields["format"] = self._get_format(fields["format"])
         return fields
 
@@ -156,7 +168,9 @@ class Posts(maki.scaffold.Controller):
             .scalar()
         )
         if category is None and not strict:
-            return db.ses.query(db.models.Category).filter_by(slug=slug).first()
+            return (
+                db.ses.query(db.models.Category).filter_by(slug=slug).first()
+            )
         else:
             return category
 

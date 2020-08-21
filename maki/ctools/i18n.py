@@ -14,7 +14,9 @@ def choose_lang(langs, default="en"):
     langs.append(default)
     for langcode in langs:
         if langcode in maki.i18n.AVAILABLE_LANGS:
-            olang = db.ses.query(db.models.Language).filter_by(code=langcode).one()
+            olang = (
+                db.ses.query(db.models.Language).filter_by(code=langcode).one()
+            )
             return olang
 
 
@@ -59,7 +61,9 @@ class I18nTool(cherrypy.Tool):
     def _setup(self):
         c = cherrypy.request.config
         # if is an static file , do not use i18n.
-        if c.get("tools.staticdir.on", False) or c.get("tools.staticfile.on", False):
+        if c.get("tools.staticdir.on", False) or c.get(
+            "tools.staticfile.on", False
+        ):
             return
         cherrypy.Tool._setup(self)
         cherrypy.request.hooks.attach("before_finalize", set_lang)
@@ -70,4 +74,6 @@ def set_lang_in_request():
 
 
 cherrypy.tools.i18n = I18nTool()
-cherrypy.tools.i18n_request = cherrypy.Tool("before_handler", set_lang_in_request)
+cherrypy.tools.i18n_request = cherrypy.Tool(
+    "before_handler", set_lang_in_request
+)

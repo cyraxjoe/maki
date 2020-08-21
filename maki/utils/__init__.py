@@ -37,7 +37,11 @@ def redirect_if_kwargs(kwargs, original_url, *valid_kwargs):
                 qsparts.append(cp.request.params.get(kw, None))
             if any(qsparts):
                 qs = "&".join(
-                    ["{}={}".format(p, v) for p, v in zip(valid_kwargs, qsparts) if v]
+                    [
+                        "{}={}".format(p, v)
+                        for p, v in zip(valid_kwargs, qsparts)
+                        if v
+                    ]
                 )
             if qs:
                 original_url = "{}?{}".format(original_url, qs)

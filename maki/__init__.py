@@ -3,7 +3,7 @@ import cherrypy
 
 from maki import scaffold
 
-scaffold.setup()  #  Yes... that's what I mean.
+scaffold.setup()  # Yes... that's what I mean.
 import maki.controllers
 from maki import dispatcher  # used in the config file.
 

@@ -62,9 +62,9 @@ def error_500(status, message="", traceback="", version=""):
     ]
 
     def notify():
-        body = "<h3>Mensage</h3><p>%s</p><br/><h3>Traceback</h3><pre>%s</pre>" % (
-            message,
-            traceback,
+        body = (
+            "<h3>Mensage</h3><p>%s</p><br/><h3>Traceback</h3><pre>%s</pre>"
+            % (message, traceback,)
         )
         subject = "Error in Maki blog [%s]" % status
         return mail.send(sender, admin, subject, body)

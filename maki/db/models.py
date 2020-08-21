@@ -200,5 +200,7 @@ event.listen(Category.name, "set", set_slug_in_elem)
 event.listen(
     Post.revisions,
     "append",
-    lambda post, revision, init: setattr(post, "slug", slugify(revision.title)),
+    lambda post, revision, init: setattr(
+        post, "slug", slugify(revision.title)
+    ),
 )

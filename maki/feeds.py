@@ -13,7 +13,9 @@ def url_and_title(category=None, strict=False):
         url.append(category.slug)
         title.append(category.name)
 
-    if (strict and cp.request.lang) or (not strict and not cp.response.i18n.showall):
+    if (strict and cp.request.lang) or (
+        not strict and not cp.response.i18n.showall
+    ):
         lang = cp.response.i18n.lang
         url.append("?l=" + lang.code)
         title.append(lang.name)

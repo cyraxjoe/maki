@@ -58,7 +58,11 @@ class Feed(maki.scaffold.Controller):
             author=self._get_blog_owner().vname,
             self_link=self_link,
             icon=atomize.Icon(favicon_url),
-            links=[atomize.Link(html_link, rel="alternate", content_type="text/html")],
+            links=[
+                atomize.Link(
+                    html_link, rel="alternate", content_type="text/html"
+                )
+            ],
         )
         for post in posts:
             url = cp.url("/posts/{}".format(post.slug))

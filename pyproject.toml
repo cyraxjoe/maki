@@ -26,6 +26,8 @@ black = "^19.10b0"
 maki-run = "maki.scripts.run:main"
 maki-shell = "maki.scripts.shell:run"
 
+[tool.black]
+line-length = 79
 
 [build-system]
 requires = ["poetry>=0.12"]

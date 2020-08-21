@@ -28,11 +28,15 @@ class HTML(maki.scaffold.View):
         if cat is None:
             raise cherrypy.HTTPRedirect("/")
         else:
-            category = self.ctrl.get_category_by_slug(cat, cherrypy.response.i18n.lang)
+            category = self.ctrl.get_category_by_slug(
+                cat, cherrypy.response.i18n.lang
+            )
         if category is None:
             raise cherrypy.NotFound()
         else:
-            page, pages, posts = self.ctrl.public_posts(page, category=category)
+            page, pages, posts = self.ctrl.public_posts(
+                page, category=category
+            )
         feed_url, feed_title = maki.feeds.url_and_title(category)
         tplparams = {
             "title": category.name,
@@ -163,7 +167,9 @@ class JSON(maki.scaffold.View):
                 public = None
         return [
             self._model_to_dict(post)
-            for post in self.ctrl.get_posts(category, public, min_date, max_date)
+            for post in self.ctrl.get_posts(
+                category, public, min_date, max_date
+            )
         ]
 
     @cherrypy.expose

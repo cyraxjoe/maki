@@ -17,7 +17,9 @@ class Controller(object):
     def __init_branches(self):
         for ViewClass in self.__views__:
             self.__create_branch(
-                ViewClass.__mime__, (self,), ViewClass  # connect the controller.
+                ViewClass.__mime__,
+                (self,),
+                ViewClass,  # connect the controller.
             )
         # create the routes of the subcontrollers already binded to the class
         # We are using again the "isinstance" because the value could
@@ -31,7 +33,11 @@ class Controller(object):
             raise Exception('Branch "%s" already exists' % mime)
         else:
             clsname = "".join(
-                [self.__class__.__name__, mime.split("/")[-1].upper(), "Branch"]
+                [
+                    self.__class__.__name__,
+                    mime.split("/")[-1].upper(),
+                    "Branch",
+                ]
             )
             Branch = type(clsname, parents, {})
             self.__branches__[mime] = Branch(*initargs)
