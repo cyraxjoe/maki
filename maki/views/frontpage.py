@@ -22,7 +22,6 @@ class HTML(maki.scaffold.View):
     @cherrypy.expose
     def post(self, slug):
         """
-        Temporal method remove in around six months
+        Temporal method remove in around six months.
         """
         raise cherrypy.HTTPRedirect('/posts/{}'.format(slug), 301)
-

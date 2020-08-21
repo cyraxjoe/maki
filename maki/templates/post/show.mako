@@ -1,9 +1,6 @@
 <%inherit file="../_layout.mako" />
 <%!
- from functools import partial
- from textile import textile
  from docutils.core import publish_parts
- textile = partial(textile, html_type='html')
  rst  = lambda cnt: publish_parts(cnt, writer_name='html4css1', 
                                   settings_overrides={
                                      'initial_header_level': 2,
@@ -20,8 +17,6 @@
   <h1 class="orange"> ${post.title} </h1>
   % if post.format.name == 'rst':
       ${post.content | rst}
-  % elif post.format.name == 'textile':
-      ${post.content | textile}
   % else:
       ${post.content}
   % endif 

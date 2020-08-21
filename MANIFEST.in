@@ -1,2 +1,0 @@
-include *.txt *.ini *.cfg *.rst
-recursive-include maki *.ico *.png *.css *.gif *.jpg *.mako *.js *.html 

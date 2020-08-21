@@ -1,3 +1,0 @@
-{ pkgs, python }:
-
-self: super: {}

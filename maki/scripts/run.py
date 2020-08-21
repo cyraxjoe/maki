@@ -7,8 +7,7 @@ import maki
 
 def main():
     config_file = sys.argv[1]
-    cp.quickstart(maki.ROOT,
-                  config=config_file)
+    cp.quickstart(maki.ROOT, config=config_file)
 
 
 if __name__ == '__main__':

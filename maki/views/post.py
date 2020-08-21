@@ -42,25 +42,30 @@ class HTML(maki.scaffold.View):
         if cat is None:
             raise cherrypy.HTTPRedirect('/')
         else:
-            category = (self.ctrl.get_category_by_slug(
-                            cat, cherrypy.response.i18n.lang))
+            category = self.ctrl.get_category_by_slug(
+                cat, cherrypy.response.i18n.lang
+            )
         if category is None:
             raise cherrypy.NotFound()
         else:
-            page, pages, posts = self.ctrl.public_posts(page, category=category)
+            page, pages, posts = self.ctrl.public_posts(
+                page, category=category
+            )
         feed_url, feed_title = maki.feeds.url_and_title(category)
-        tplparams = {'title':category.name,
-                     'category': category,
-                     'breadcrumb': breadcrumb(category),
-                     'posts': posts,
-                     'pages': pages,
-                     'currpage': page,
-                     'feed_url': feed_url,
-                     'feed_title': feed_title}
+        tplparams = {
+            'title':category.name,
+            'category': category,
+            'breadcrumb': breadcrumb(category),
+            'posts': posts,
+            'pages': pages,
+            'currpage': page,
+            'feed_url': feed_url,
+            'feed_title': feed_title
+        }
         return tplparams
 
-        
-    
+
+
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, slug, **kwargs):
@@ -77,7 +82,7 @@ class HTML(maki.scaffold.View):
                     'DESCRIPTION': post.abstract}
 
 
-    
+
 
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
@@ -87,21 +92,23 @@ class JSON(maki.scaffold.View):
                   'tools.auth_digest.realm': maki.constants.REALM,
                   'tools.json_out.on': True,
                   'tools.json_in.on': True}
-    
+
 
     def _model_to_dict(self, post):
-        pdict ={'title': post.title,
-                'abstract': post.abstract,
-                'created': post.created_fmt,
-                'content': post.content,
-                'slug': post.slug,
-                'category': post.category.name,
-                'author': post.author.name,
-                'format': post.format.name,
-                'tags': [t.name for t in post.tags],
-                'lang': post.lang.code,
-                'id': post.id,
-                'public': post.public}
+        pdict ={
+            'title': post.title,
+            'abstract': post.abstract,
+            'created': post.created_fmt,
+            'content': post.content,
+            'slug': post.slug,
+            'category': post.category.name,
+            'author': post.author.name,
+            'format': post.format.name,
+            'tags': [t.name for t in post.tags],
+            'lang': post.lang.code,
+            'id': post.id,
+            'public': post.public
+        }
         if post.modified:
             pdict['modfied'] =  post.modified.ctime()
         return pdict
@@ -146,12 +153,12 @@ class JSON(maki.scaffold.View):
             return {actionrslt: False,
                     'message': 'Invalid fields'}
 
-            
+
     @cherrypy.expose
     @cherrypy.config(**{'tools.json_in.on': False})
     def default(self, identifier, by='id'):
         if by == 'id':
-            post = self.ctrl.get_post_by_id(identifier) 
+            post = self.ctrl.get_post_by_id(identifier)
         elif by == 'slug':
             post = self.ctrl.get_post_by_slug(identifier)
         else:
@@ -199,5 +206,3 @@ class JSON(maki.scaffold.View):
             cherrypy.response.status = 500
             response['message'] = 'Missing required field.'
         return response
-
-

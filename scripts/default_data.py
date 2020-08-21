@@ -8,11 +8,10 @@ def _simple_add(dbs, Model, elements):
     emodels = [Model(**element) for element in elements]
     dbs.add_all(emodels)
     return emodels
-        
+
 
 def default_post_formats(dbs):
-    frmts = [{'name': 'textile'},
-             {'name': 'rst'} ]
+    frmts = [{'name': 'rst'},]
     return _simple_add(dbs, db.models.PostFormat, frmts)
 
 
