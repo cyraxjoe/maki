@@ -50,4 +50,6 @@ in {
   shell = pkgs.mkShell {
     buildInputs = [ env pkgs.glibcLocales ];
   };
+
+  inherit env;
 }
