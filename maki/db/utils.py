@@ -11,14 +11,14 @@ def update_model(model, fields, dmapper=(lambda x: x)):
             for k, v in fields.items():
                 setattr(model, k, dmapper(v))
         except Exception:
-            log('Error at k=%s and v=%s' % (k, v))
-            raise 
+            log("Error at k=%s and v=%s" % (k, v))
+            raise
         return True
     else:
         return False
 
 
-def precautious_commit(dbs, errorm='Unable to commit the changes.'):
+def precautious_commit(dbs, errorm="Unable to commit the changes."):
     """Commit the db.Session handling  any unexpected error.
 
     This is meant to be used on the form handling, makes use
@@ -31,7 +31,7 @@ def precautious_commit(dbs, errorm='Unable to commit the changes.'):
         dbs.commit()
     except Exception as error:
         log(errorm, tb=True)
-        emsg = '%s: %s' % (errorm, error.args[0])
+        emsg = "%s: %s" % (errorm, error.args[0])
         log(emsg)
         return emsg
     else:
@@ -43,9 +43,11 @@ def get_categories(locale=None, only_with_public_posts=True):
     P = db.models.Post
     query = db.ses.query(C)
     if only_with_public_posts:
-        query = (query.outerjoin(P)
-                 .filter(P.public==True)
-                 .group_by(C.name, C.slug, C.id, C.endure, C.lang_id))
+        query = (
+            query.outerjoin(P)
+            .filter(P.public == True)
+            .group_by(C.name, C.slug, C.id, C.endure, C.lang_id)
+        )
     if locale is None or locale.showall:
         return query
     else:
@@ -55,7 +57,7 @@ def get_categories(locale=None, only_with_public_posts=True):
 def clean_empty_metainfo():
     for Model in (db.models.Tag, db.models.Category):
         for elem in db.ses.query(Model):
-            if not elem.endure and not elem.posts: # no post is using this.
+            if not elem.endure and not elem.posts:  # no post is using this.
                 db.ses.delete(elem)
     db.ses.commit()
 

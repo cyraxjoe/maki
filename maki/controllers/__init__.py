@@ -4,11 +4,11 @@ from maki.controllers.post import Posts
 from maki.controllers.lang import Lang
 from maki.controllers.feed import Feed
 
-__all__ = ['Posts', 'Lang', 'Feed']
+__all__ = ["Posts", "Lang", "Feed"]
 
 
 class Root(maki.scaffold.Controller):
-    __views__ = (maki.views.frontpage.HTML, )
+    __views__ = (maki.views.frontpage.HTML,)
     posts = Posts()
     lang = Lang()
     feed = Feed()

@@ -5,7 +5,7 @@ import cherrypy as cp
 import unidecode
 
 
-def log(message, cntx='DEBUG', tb=False):
+def log(message, cntx="DEBUG", tb=False):
     if isinstance(message, str):
         cp.log.error(message, context=cntx, traceback=tb)
     else:
@@ -13,12 +13,12 @@ def log(message, cntx='DEBUG', tb=False):
 
 
 def in_development():
-    return cp.config.get('environment') not in ('production', 'embedded')
+    return cp.config.get("environment") not in ("production", "embedded")
 
 
 def slugify(text):
     text = unidecode.unidecode(text).lower()
-    return re.sub(r'\W+', '-', text)
+    return re.sub(r"\W+", "-", text)
 
 
 def redirect_if_kwargs(kwargs, original_url, *valid_kwargs):
@@ -32,13 +32,13 @@ def redirect_if_kwargs(kwargs, original_url, *valid_kwargs):
     # fuck you linkedin or any other platform that modify my URLs
     if kwargs:
         if valid_kwargs:
-            qs, qsparts = '', []
+            qs, qsparts = "", []
             for kw in valid_kwargs:
                 qsparts.append(cp.request.params.get(kw, None))
             if any(qsparts):
-                qs = '&'.join(['{}={}'.format(p, v)
-                               for p, v in zip(valid_kwargs, qsparts)
-                               if v])
+                qs = "&".join(
+                    ["{}={}".format(p, v) for p, v in zip(valid_kwargs, qsparts) if v]
+                )
             if qs:
-                original_url = '{}?{}'.format(original_url, qs)
+                original_url = "{}?{}".format(original_url, qs)
         raise cp.HTTPRedirect(original_url, 301)

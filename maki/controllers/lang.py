@@ -17,8 +17,7 @@ class Lang(maki.scaffold.Controller):
             if lang in maki.i18n.AVAILABLE_LANGS:
                 response.cookie[maki.i18n.CKEY] = lang
             else:
-                log('Trying to set invalid lang %s' % lang,
-                    'ERROR')
+                log("Trying to set invalid lang %s" % lang, "ERROR")
                 return
-        response.cookie[maki.i18n.CKEY]['path'] = '/'
-        response.cookie[maki.i18n.CKEY]['expires'] = 3600
+        response.cookie[maki.i18n.CKEY]["path"] = "/"
+        response.cookie[maki.i18n.CKEY]["expires"] = 3600

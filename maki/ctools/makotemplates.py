@@ -32,14 +32,19 @@ class MakoHandler(cherrypy.dispatch.LateParamPageHandler):
         return output
 
 
-@bind_tool(name='mako', point='on_start_resource')
+@bind_tool(name="mako", point="on_start_resource")
 class MakoLoader(object):
-
     def __init__(self):
         self.lookups = {}
 
-    def __call__(self, filename, directories, module_directory=None,
-                 collection_size=-1, csstyles=()):
+    def __call__(
+        self,
+        filename,
+        directories,
+        module_directory=None,
+        collection_size=-1,
+        csstyles=(),
+    ):
 
         # Find the appropriate template lookup.
         key = (tuple(directories), module_directory)
@@ -51,8 +56,8 @@ class MakoLoader(object):
                 directories=directories,
                 module_directory=module_directory,
                 collection_size=collection_size,
-                input_encoding='utf-8',
-                output_encoding='utf-8'
+                input_encoding="utf-8",
+                output_encoding="utf-8",
             )
             self.lookups[key] = lookup
 
@@ -60,6 +65,4 @@ class MakoLoader(object):
 
         # Replace the current handler.
         cherrypy.request.template = t = lookup.get_template(filename)
-        cherrypy.request.handler = MakoHandler(
-            t, cherrypy.request.handler, csstyles
-        )
+        cherrypy.request.handler = MakoHandler(t, cherrypy.request.handler, csstyles)

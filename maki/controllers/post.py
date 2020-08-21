@@ -7,46 +7,42 @@ import maki.constants
 import maki.views
 import maki.scaffold
 from maki import db
-from maki.db.utils import (
-    update_model,
-    precautious_commit,
-    clean_empty_metainfo
-)
+from maki.db.utils import update_model, precautious_commit, clean_empty_metainfo
 
 
 class Posts(maki.scaffold.Controller):
-    __views__ = [maki.views.post.HTML,  maki.views.post.JSON]
-    CREATE_ACT = 'create'
-    EDIT_ACT = 'edit'
+    __views__ = [maki.views.post.HTML, maki.views.post.JSON]
+    CREATE_ACT = "create"
+    EDIT_ACT = "edit"
     fields_to_create = {
-        'title', 'abstract', 'content',
-        'category', 'tags', 'format', 'lang'
+        "title",
+        "abstract",
+        "content",
+        "category",
+        "tags",
+        "format",
+        "lang",
     }
-    fields_to_edit = fields_to_create - {'lang'}
+    fields_to_edit = fields_to_create - {"lang"}
     plimit = maki.constants.POSTS_PER_PAGE
 
     def _create_or_get_post_meta(self, Model, name, lang):
-        elem = (db.ses.query(Model)
-                .filter_by(name=name)
-                .filter_by(lang=lang)).scalar()
+        elem = (db.ses.query(Model).filter_by(name=name).filter_by(lang=lang)).scalar()
         if elem is None:
             if not name.strip():
-                raise Exception('Invalid name for %s' % Model.__name__)
+                raise Exception("Invalid name for %s" % Model.__name__)
             elem = Model(name=name, lang=lang)
         return elem
 
     def _create_or_get_tags(self, nametags, lang):
         tags = []
         for ntag in nametags or []:
-            tags.append(
-                self._create_or_get_post_meta(db.models.Tag, ntag, lang)
-            )
+            tags.append(self._create_or_get_post_meta(db.models.Tag, ntag, lang))
         return tags
 
     def _create_or_get_category(self, cname, lang):
         return self._create_or_get_post_meta(
-            db.models.Category,
-            cname.capitalize(), lang
+            db.models.Category, cname.capitalize(), lang
         )
 
     def _get_format(self, fname):
@@ -54,29 +50,27 @@ class Posts(maki.scaffold.Controller):
         return db.ses.query(db.models.PostFormat).filter_by(name=fname).one()
 
     def _get_lang(self, langcode):
-        lang = db.ses.query(db.models.Language)\
-               .filter_by(code=langcode).scalar()
+        lang = db.ses.query(db.models.Language).filter_by(code=langcode).scalar()
         if lang is None:
-            raise Exception('Unknown langcode %s' % langcode)
+            raise Exception("Unknown langcode %s" % langcode)
         else:
             return lang
 
     def _fields_to_db_models(self, fields, lang):
         # This methods flush the sessions, because of the ".scalar" call.
-        fields['tags'] = self._create_or_get_tags(fields['tags'], lang)
-        fields['category'] = self._create_or_get_category(
-            fields['category'], lang
-        )
-        fields['format'] = self._get_format(fields['format'])
+        fields["tags"] = self._create_or_get_tags(fields["tags"], lang)
+        fields["category"] = self._create_or_get_category(fields["category"], lang)
+        fields["format"] = self._get_format(fields["format"])
         return fields
 
     def _update_post_model(self, post, fields, isnew=False):
         if isnew:
-            lang = fields['lang'] = self._get_lang(fields['lang'])
+            lang = fields["lang"] = self._get_lang(fields["lang"])
             post.author_id = (
                 db.ses.query(db.models.User)
                 .filter_by(name=cherrypy.request.login)
-                .one().id
+                .one()
+                .id
             )
         else:
             lang = post.lang
@@ -85,19 +79,23 @@ class Posts(maki.scaffold.Controller):
         # of the .scalar call in `_fields_to_db_models`
         db.ses.add(post)
         revision = db.models.PostRevision(
-            title=fields.pop('title'),
-            abstract=fields.pop('abstract'),
-            content=fields.pop('content')
+            title=fields.pop("title"),
+            abstract=fields.pop("abstract"),
+            content=fields.pop("content"),
         )
         post.revisions.append(revision)
         if update_model(post, fields):
             message = precautious_commit(db.ses)  # None if everything went ok.
             if message is None:
                 clean_empty_metainfo()
-                return json.dumps({'id': post.id,
-                                   'slug': post.slug,
-                                   'lang': post.lang.code,
-                                   'public': post.public})
+                return json.dumps(
+                    {
+                        "id": post.id,
+                        "slug": post.slug,
+                        "lang": post.lang.code,
+                        "public": post.public,
+                    }
+                )
             else:
                 raise Exception(message)
         else:
@@ -154,20 +152,18 @@ class Posts(maki.scaffold.Controller):
         category = (
             db.ses.query(db.models.Category)
             .filter_by(slug=slug)
-            .filter_by(lang=preflang).scalar()
+            .filter_by(lang=preflang)
+            .scalar()
         )
         if category is None and not strict:
-            return (
-                db.ses.query(db.models.Category)
-                .filter_by(slug=slug).first()
-            )
+            return db.ses.query(db.models.Category).filter_by(slug=slug).first()
         else:
             return category
 
     def get_category_by_name(self, name):
         return db.ses.query(db.models.Category).filter_by(name=name).scalar()
 
-    def update_post(self, id,  **fields):
+    def update_post(self, id, **fields):
         post = self.get_post_by_id(id)
         if post is None:
             raise Exception("The post does not exist.")

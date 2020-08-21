@@ -20,6 +20,7 @@ pygments = "^2.6.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.3"
+black = "^19.10b0"
 
 [tool.poetry.scripts]
 maki-run = "maki.scripts.run:main"

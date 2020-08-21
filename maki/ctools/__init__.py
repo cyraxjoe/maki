@@ -3,4 +3,5 @@ from maki.ctools import (
     makotemplates,
     removedbs,
 )
-__all__ = ['i18n', 'makotemplates', 'removedbs']
+
+__all__ = ["i18n", "makotemplates", "removedbs"]

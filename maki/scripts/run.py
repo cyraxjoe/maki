@@ -10,5 +10,5 @@ def main():
     cp.quickstart(maki.ROOT, config=config_file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

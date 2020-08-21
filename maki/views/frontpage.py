@@ -7,15 +7,16 @@ from maki.utils import redirect_if_kwargs
 
 
 class HTML(maki.scaffold.View):
-
     @cherrypy.expose
     @tools.mako(filename="frontpage.mako")
-    def index(self,  page='1', **kwargs):
-        redirect_if_kwargs(kwargs, '/', 'page')
+    def index(self, page="1", **kwargs):
+        redirect_if_kwargs(kwargs, "/", "page")
         page, pages, posts = self.ctrl.public_posts(page)
         feed_url, feed_title = maki.feeds.url_and_title()
-        return {'posts': posts,
-                'currpage': page,
-                'pages': pages,
-                'feed_url': feed_url,
-                'feed_title': feed_title}
+        return {
+            "posts": posts,
+            "currpage": page,
+            "pages": pages,
+            "feed_url": feed_url,
+            "feed_title": feed_title,
+        }

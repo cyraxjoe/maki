@@ -4,4 +4,5 @@ from maki.views import (
     lang,
     feed,
 )
-__all__ = ['frontpage', 'post', 'lang', 'feed']
+
+__all__ = ["frontpage", "post", "lang", "feed"]
