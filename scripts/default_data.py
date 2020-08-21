@@ -32,7 +32,10 @@ def default_users(dbs):
 
 
 def default_languages(dbs):
-    langs = [{"name": "Español", "code": "es"}, {"name": "English", "code": "en"}]
+    langs = [
+        {"name": "Español", "code": "es"},
+        {"name": "English", "code": "en"}
+    ]
     return _simple_add(dbs, db.models.Language, langs)
 
 

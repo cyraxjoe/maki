@@ -43,7 +43,7 @@ def run():
     # Specific to maki
     import sys
     import code
-    from pprint import pprint
+    from pprint import pprint  # noqa
 
     import cherrypy
     from cherrypy.lib import reprconf
@@ -51,7 +51,7 @@ def run():
     config = reprconf.Config(sys.argv[1])  # first arg == config file
     cherrypy.config = config
 
-    import maki
+    import maki  # noqa
     from maki import db
 
     db.load_engine(config["sqlalchemy"])

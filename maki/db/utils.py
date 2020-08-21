@@ -45,7 +45,7 @@ def get_categories(locale=None, only_with_public_posts=True):
     if only_with_public_posts:
         query = (
             query.outerjoin(P)
-            .filter(P.public == True)
+            .filter(P.public == True)  # noqa
             .group_by(C.name, C.slug, C.id, C.endure, C.lang_id)
         )
     if locale is None or locale.showall:

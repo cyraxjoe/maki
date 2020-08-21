@@ -55,4 +55,4 @@ def setup():
     possible.
     """
     import maki.ctools
-    import maki.cplugins
+    import maki.cplugins  # noqa: F401

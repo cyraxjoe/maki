@@ -27,11 +27,14 @@ STRINGS = {
         "es": "Licencia Creative Commons Atribución 3.0 Unported",
     },
     "The visibility of the posts is filtered by the selected option": {
-        "es": "La visibilidad de los posts es filtrada por la opción seleccionada"
+        "es": (
+            "La visibilidad de los posts es filtrada "
+            "por la opción seleccionada"
+        )
     },
     "Any": {"es": "Todos"},
     "what is this?": {"es": "¿Qué es esto?"},
-    "Home": {"es": "Inicio",},
+    "Home": {"es": "Inicio"},
     "Made with cherrypy": {"es": "Hecho con cherrypy"},
 }
 

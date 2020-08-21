@@ -81,7 +81,7 @@ class Feed(maki.scaffold.Controller):
                     ),
                 ],
                 summary=atomize.Summary(post.abstract),
-                categories=[atomize.Category(post.category.name),],
+                categories=[atomize.Category(post.category.name)],
             )
             feed.entries.append(entry)
         return b"\n".join(
