@@ -17,21 +17,6 @@ def breadcrumb(cat, post=None):
         bcrumb.append(('/posts/{}'.format(post.slug), post.title))
     return bcrumb
 
-old_categories = {
-    'programacion', 'general',
-    'it', 'despotrico', 'glosa',
-    'programming'
-}
-
-def temp_redir_for_old_categories(slug, categories=old_categories):
-    """
-    Temporal fix to redirect the old categories.
-
-    Delete any call and the implementation in around... six months.
-    """
-    if slug in categories:
-        raise cherrypy.HTTPRedirect('/posts/?cat={}'.format(slug), 301)
-
 
 class HTML(maki.scaffold.View):
 
@@ -53,7 +38,7 @@ class HTML(maki.scaffold.View):
             )
         feed_url, feed_title = maki.feeds.url_and_title(category)
         tplparams = {
-            'title':category.name,
+            'title': category.name,
             'category': category,
             'breadcrumb': breadcrumb(category),
             'posts': posts,
@@ -64,13 +49,10 @@ class HTML(maki.scaffold.View):
         }
         return tplparams
 
-
-
     @cherrypy.expose
     @tools.mako(filename="post/show.mako", csstyles=('post.css',))
     def default(self, slug, **kwargs):
         redirect_if_kwargs(kwargs, '/posts/{}'.format(slug))
-        temp_redir_for_old_categories(slug)
         post = self.ctrl.get_post_by_slug(slug)
         if post is None or not post.public:
             raise cherrypy.NotFound()
@@ -82,8 +64,6 @@ class HTML(maki.scaffold.View):
                     'DESCRIPTION': post.abstract}
 
 
-
-
 class JSON(maki.scaffold.View):
     __mime__ = 'application/json'
     _cp_config = {'tools.auth_digest.on': True,
@@ -93,9 +73,8 @@ class JSON(maki.scaffold.View):
                   'tools.json_out.on': True,
                   'tools.json_in.on': True}
 
-
     def _model_to_dict(self, post):
-        pdict ={
+        pdict = {
             'title': post.title,
             'abstract': post.abstract,
             'created': post.created_fmt,
@@ -110,14 +89,12 @@ class JSON(maki.scaffold.View):
             'public': post.public
         }
         if post.modified:
-            pdict['modfied'] =  post.modified.ctime()
+            pdict['modfied'] = post.modified.ctime()
         return pdict
-
 
     def _have_valid_fields(self, reqfields):
         changes = set(cherrypy.request.json)
         return reqfields == changes
-
 
     def _identify_action(self, action):
         if action == self.ctrl.CREATE_ACT:
@@ -132,12 +109,11 @@ class JSON(maki.scaffold.View):
             raise Exception('Invalid action to modify post: %s' % action)
         return actionrstl, reqfields, update_method
 
-
     def _modify_post(self, action, *args):
         actionrslt, reqfields, update_method = self._identify_action(action)
         if self._have_valid_fields(reqfields):
             try:
-                post_id_slug= update_method(*args, **cherrypy.request.json)
+                post_id_slug = update_method(*args, **cherrypy.request.json)
             except Exception as exep:
                 log('Unable to modify post', tb=True)
                 cherrypy.response.status = 500
@@ -147,12 +123,11 @@ class JSON(maki.scaffold.View):
                 return {actionrslt: True,
                         'message': post_id_slug}
         else:
-            log('Trying to modify post, with invalid fields \n\t%s' % \
-                cherrypy.request.json)
+            log('Trying to modify post, with invalid fields \n\t{}'
+                .format(cherrypy.request.json))
             cherrypy.response.status = 500
             return {actionrslt: False,
                     'message': 'Invalid fields'}
-
 
     @cherrypy.expose
     @cherrypy.config(**{'tools.json_in.on': False})
@@ -167,7 +142,6 @@ class JSON(maki.scaffold.View):
             raise cherrypy.NotFound(message="Unable to find any post")
         return self._model_to_dict(post)
 
-
     @cherrypy.expose
     @tools.allow(methods=('POST',))
     def add(self):
@@ -178,7 +152,6 @@ class JSON(maki.scaffold.View):
     def update(self, id_):
         return self._modify_post(self.ctrl.EDIT_ACT, id_)
 
-
     @cherrypy.expose
     @tools.allow(methods=('GET',))
     def index(self, category=None, public=None, min_date=None, max_date=None):
@@ -187,8 +160,12 @@ class JSON(maki.scaffold.View):
                 public = True
             else:
                 public = None
-        return  [self._model_to_dict(post) for post in \
-                 self.ctrl.get_posts(category, public, min_date, max_date)]
+        return [
+            self._model_to_dict(post)
+            for post in self.ctrl.get_posts(
+                    category, public, min_date, max_date
+            )
+        ]
 
     @cherrypy.expose
     @tools.allow(methods=('POST',))

@@ -14,14 +14,11 @@ class HTML(maki.scaffold.View):
             referer = self._ref_without_lang(referer)
         raise cherrypy.HTTPRedirect(referer, 303)
 
-
     def _ref_without_lang(self, referer):
         newqs = []
         qs = referer.split('?', 1)[-1]
         for elem in qs.split('&'):
             if 'l=' not in elem:
                 newqs.append(elem)
-        url  = referer[:referer.index('?')]
+        url = referer[:referer.index('?')]
         return '?'.join([url, '&'.join(newqs)])
-
-    

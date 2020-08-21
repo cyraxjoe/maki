@@ -15,11 +15,11 @@ def get_smtp_config(inputconf):
     def req_keys(conf):
         try:
             for k in ('user', 'passwd', 'host'):
-                if not conf[k].strip(): #invalid empty param.
+                if not conf[k].strip():  # invalid empty param.
                     return False
         except KeyError:
             return False
-        else: #all keys, and non-empty.
+        else:  # all keys, and non-empty.
             return True
     if inputconf is not None and req_keys(inputconf):
         return inputconf
@@ -52,9 +52,9 @@ def send(from_, to, subject, content, smtpconf=None):
     """
     smtpconf = get_smtp_config(smtpconf)
     log('Sending email', 'EMAIL')
-    log("From: %s\n"\
-        "To: %s\n"\
-        "Subject: %s\n"\
+    log("From: %s\n"
+        "To: %s\n"
+        "Subject: %s\n"
         "Content: %s\n\n" % (from_, to, subject, content), 'EMAIL')
     msg = Message()
     msg['From'] = from_
@@ -64,7 +64,7 @@ def send(from_, to, subject, content, smtpconf=None):
     msg.set_payload(content)
     msg.set_charset('utf-8')
     # DEBUG
-    #log(msg.as_string())
+    # log(msg.as_string())
     if smtpconf is None:
         log('Missing required parameters [host, user, passwd]'
             ' please, make sure that you have the right configuration'
@@ -74,7 +74,7 @@ def send(from_, to, subject, content, smtpconf=None):
     else:
         if smtpconf is None:
             return False
-        else: # Finally send!
+        else:  # Finally send!
             connection = smtplib.SMTP(smtpconf['host'], smtpconf['port'])
             connection.starttls()
             connection.login(smtpconf['user'], smtpconf['passwd'])

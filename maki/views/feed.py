@@ -2,6 +2,7 @@ import cherrypy as cp
 
 import maki.scaffold
 
+
 class XML(maki.scaffold.View):
 
     @cp.expose

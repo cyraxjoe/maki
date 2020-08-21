@@ -5,7 +5,6 @@ from sqlalchemy.exc import InvalidRequestError
 
 import maki.i18n
 from maki import db
-#from maki.utils import log
 
 
 Locale = namedtuple('Locale', ('lang', 'showall'))
@@ -20,19 +19,19 @@ def choose_lang(langs, default='en'):
             return olang
 
 
-def get_lang():        
+def get_lang():
     langs = [x.value.split('-')[0].lower() for x in
              cherrypy.request.headers.elements('Accept-Language')]
     cookielang = cherrypy.request.cookie.get(maki.i18n.CKEY)
     locargs = {'showall': False}
     if cookielang is not None:
-        if cookielang.value == maki.i18n.ANY_LANG: 
+        if cookielang.value == maki.i18n.ANY_LANG:
             locargs['showall'] = True
         else:
             langs.insert(0, cookielang.value)
-     # top priority if the lang is in the request
-    if hasattr(cherrypy.request, 'lang') and \
-           cherrypy.request.lang is not None:
+    # top priority if the lang is in the request
+    if (hasattr(cherrypy.request, 'lang') and
+            cherrypy.request.lang is not None):
         langs.insert(0, cherrypy.request.lang)
     locargs['lang'] = choose_lang(langs)
     cherrypy.response.i18n = Locale(**locargs)
@@ -47,7 +46,7 @@ def set_lang():
             headers['Content-Language'] = maki.i18n.getlang_from_config()
         except AttributeError:  # in case that the request wasn't i18n'ted
             pass
-        
+
 
 class I18nTool(cherrypy.Tool):
 
@@ -57,7 +56,6 @@ class I18nTool(cherrypy.Tool):
         self.callable = get_lang
         # Make sure, session tool (priority 50) is loaded before
         self._priority = 100
-
 
     def _setup(self):
         c = cherrypy.request.config
@@ -72,6 +70,6 @@ class I18nTool(cherrypy.Tool):
 def set_lang_in_request():
     cherrypy.request.lang = cherrypy.request.params.pop('l', None)
 
+
 cherrypy.tools.i18n = I18nTool()
 cherrypy.tools.i18n_request = cherrypy.Tool('before_handler', set_lang_in_request)
-

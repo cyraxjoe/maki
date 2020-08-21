@@ -1,6 +1,7 @@
 import types
 import cherrypy
-    
+
+
 def bind_tool(name, point, priority=50):
     def set_tool(tool):
         if isinstance(tool, types.FunctionType):

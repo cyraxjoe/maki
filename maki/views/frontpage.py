@@ -5,6 +5,7 @@ import maki.scaffold
 import maki.feeds
 from maki.utils import redirect_if_kwargs
 
+
 class HTML(maki.scaffold.View):
 
     @cherrypy.expose
@@ -18,10 +19,3 @@ class HTML(maki.scaffold.View):
                 'pages': pages,
                 'feed_url': feed_url,
                 'feed_title': feed_title}
-
-    @cherrypy.expose
-    def post(self, slug):
-        """
-        Temporal method remove in around six months.
-        """
-        raise cherrypy.HTTPRedirect('/posts/{}'.format(slug), 301)
