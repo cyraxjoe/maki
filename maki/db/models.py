@@ -94,13 +94,13 @@ class PostMetainfo(Translatable):
 
 class Category(PostMetainfo, Base):
     __tablename__ = "categories"
-    posts = relationship("Post", order_by="Post.created.desc()")
+    posts = relationship("Post", order_by="Post.created.desc()", back_populates="category")
 
 
 class Tag(PostMetainfo, Base):
     __tablename__ = "tags"
     posts = relationship(
-        "Post", secondary=tag_post_table, order_by="Post.created.desc()"
+        "Post", secondary=tag_post_table, order_by="Post.created.desc()", back_populates="tags"
     )
 
 
