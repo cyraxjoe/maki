@@ -7,7 +7,7 @@ services:
       - "5454:5432"
     restart: always
     volumes:
-      - maki-pg-data:/var/lib/postgresql/data
+      - /var/lib/postgresql/data
     environment:
       POSTGRES_USER: maki
       POSTGRES_DB: makiblog
