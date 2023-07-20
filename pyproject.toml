@@ -15,7 +15,7 @@ docutils = "^0.16"
 # temporarily avoid 8.4.4, then we
 # can use just the cherrypy dependency
 #cheroot = "=8.4.3"
-pygments = "^2.6.1"
+pygments = "^2.15.0"
 psycopg2 = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
