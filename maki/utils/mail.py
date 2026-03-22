@@ -82,9 +82,8 @@ def send(from_, to, subject, content, smtpconf=None):
         if smtpconf is None:
             return False
         else:  # Finally send!
-            connection = smtplib.SMTP(smtpconf["host"], smtpconf["port"])
-            connection.starttls()
-            connection.login(smtpconf["user"], smtpconf["passwd"])
-            connection.send_message(msg)
-            connection.quit()
+            with smtplib.SMTP(smtpconf["host"], smtpconf["port"]) as conn:
+                conn.starttls()
+                conn.login(smtpconf["user"], smtpconf["passwd"])
+                conn.send_message(msg)
             return True
