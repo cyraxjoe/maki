@@ -28,7 +28,9 @@ uv run ruff format               # format
 
 ## Editing from Emacs
 
-The Emacs client lives in [`emacs/`](emacs/):
+The Emacs client lives in [`emacs/`](emacs/).
+
+Vanilla Emacs:
 
 ```elisp
 (add-to-list 'load-path "/path/to/maki/emacs")
@@ -36,6 +38,32 @@ The Emacs client lives in [`emacs/`](emacs/):
 (setq maki-host "http://127.0.0.1:8080")  ;; or the production URL
 M-x maki-mode
 ```
+
+Doom Emacs — in `packages.el`:
+
+```elisp
+(package! maki-mode
+  :recipe (:local-repo "/path/to/maki/emacs"
+           :files ("maki-mode.el" "maki-url-auth.el")))
+```
+
+and in `config.el`:
+
+```elisp
+(use-package! maki-mode
+  :commands (maki-mode maki-get-post maki-new-post)
+  :config
+  (setq maki-host "https://blog.joel.mx"))
+
+(map! :leader :desc "Maki blog" "o m" #'maki-mode)
+```
+
+then `doom sync` (also after pulling changes to the elisp — the
+`:local-repo` build is byte-compiled from this checkout).
+
+Authentication is plain url.el digest auth: Emacs asks once per session,
+or reads it from `~/.authinfo.gpg` with an entry shaped like
+`machine <host>:443 port https login <user> password <passwd>`.
 
 Key bindings: `C-c f` fetch a post (id/url/slug), `C-c n` new post,
 `C-c l` set language (new posts), `C-c v` toggle visibility. Saving the

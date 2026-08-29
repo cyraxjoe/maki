@@ -243,6 +243,7 @@ place-holders; SUCC-EXPR runs with the parsed JSON bound to
     (insert-button "[View] " 'action (maki-util-open-link url))
     (insert-button " [Edit]" 'action (lambda (_btn) (maki-get-post url)))))
 
+;;;###autoload
 (defun maki-get-post (pid)
   "Fetch the JSON post with the id, url or slug PID from the maki blog."
   (interactive "sPost id|url|slug: ")
@@ -338,6 +339,7 @@ place-holders; SUCC-EXPR runs with the parsed JSON bound to
                 (maki-post-setup buffname postc))
      :error (message "Unable to fetch post"))))
 
+;;;###autoload
 (defun maki-new-post ()
   "Set a new buffer with the default template."
   (interactive)
@@ -526,6 +528,7 @@ If POSTHASH is nil, then use `maki-post-hash'.
         (message "Language changed to %s" lang))
     (message "You can't change the laguage when the post already exists.")))
 
+;;;###autoload
 (defun maki-mode ()
   "Major mode to edit the maki blog."
   (interactive)
