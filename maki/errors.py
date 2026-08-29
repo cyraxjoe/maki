@@ -10,6 +10,7 @@ which is ok because we already try two times to recover from the error
 and notify, so if the error is in the notification then let the user notify us
 about the error.
 """
+
 import warnings
 
 import maki
@@ -64,7 +65,10 @@ def error_500(status, message="", traceback="", version=""):
     def notify():
         body = (
             "<h3>Mensage</h3><p>%s</p><br/><h3>Traceback</h3><pre>%s</pre>"
-            % (message, traceback,)
+            % (
+                message,
+                traceback,
+            )
         )
         subject = "Error in Maki blog [%s]" % status
         return mail.send(sender, admin, subject, body)

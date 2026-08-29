@@ -5,35 +5,37 @@ else:
    html_lang = 'en'
 %>
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="${html_lang}"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="${html_lang}"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="${html_lang}"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="${html_lang}" > <!--<![endif]-->
+<html lang="${html_lang}">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 % if KEYWORDS:
-    <meta name="keywords" content="${','.join(KEYWORDS)}" />
+    <meta name="keywords" content="${','.join(KEYWORDS)}">
 % endif
 % if DESCRIPTION:
-    <meta name="description" content="${DESCRIPTION}" />
-% endif  
-% if feed_url:
-    <link href="${feed_url}" type="application/atom+xml"  rel="alternate" title="${feed_title}">
+    <meta name="description" content="${DESCRIPTION}">
+    <meta property="og:description" content="${DESCRIPTION}">
 % endif
-    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+% if title:
+    <meta property="og:title" content="${title}">
+% endif
+    <meta property="og:site_name" content="${_('Introspection')}">
+% if feed_url:
+    <link href="${feed_url}" type="application/atom+xml" rel="alternate" title="${feed_title}">
+% endif
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
 % if title:
     <title>${_("Introspection")} / ${title}</title>
 % else:
     <title>${_("Introspection")}</title>
 % endif
-    <link rel="stylesheet" href="${STATIC}/css/foundation.min.css">
-    <link rel="stylesheet" href="${STATIC}/css/app.css">
+    <link rel="stylesheet" href="${STATIC}/css/maki.css">
     <%block name="pygments" />
-    <script src="${STATIC}/js/modernizr.foundation.js"></script>
+% for sheet in context.get('styles', ()):
+    <link rel="stylesheet" href="${sheet}">
+% endfor
   </head>
   <body>
     ${next.body()}
   </body>
 </html>
-

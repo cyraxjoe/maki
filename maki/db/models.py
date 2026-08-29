@@ -14,8 +14,12 @@ from sqlalchemy import (
     text,
     event,
 )
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from sqlalchemy.orm import relationship, validates
+from sqlalchemy.orm import (
+    declarative_base,
+    declared_attr,
+    relationship,
+    validates,
+)
 
 import maki.constants
 import maki.i18n
@@ -94,13 +98,18 @@ class PostMetainfo(Translatable):
 
 class Category(PostMetainfo, Base):
     __tablename__ = "categories"
-    posts = relationship("Post", order_by="Post.created.desc()", back_populates="category")
+    posts = relationship(
+        "Post", order_by="Post.created.desc()", back_populates="category"
+    )
 
 
 class Tag(PostMetainfo, Base):
     __tablename__ = "tags"
     posts = relationship(
-        "Post", secondary=tag_post_table, order_by="Post.created.desc()", back_populates="tags"
+        "Post",
+        secondary=tag_post_table,
+        order_by="Post.created.desc()",
+        back_populates="tags",
     )
 
 
@@ -131,8 +140,10 @@ class Post(Translatable, Base):
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
     format_id = Column(Integer, ForeignKey("post_formats.id"), nullable=False)
-    tags = relationship("Tag", secondary=tag_post_table)
-    category = relationship("Category")
+    tags = relationship(
+        "Tag", secondary=tag_post_table, back_populates="posts"
+    )
+    category = relationship("Category", back_populates="posts")
     format = relationship("PostFormat")
     author = relationship("User")
     revisions = relationship(

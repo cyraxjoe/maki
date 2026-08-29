@@ -125,6 +125,10 @@ class Posts(maki.scaffold.Controller):
         return self._update_post_model(db.models.Post(), fields, isnew=True)
 
     def get_post_by_id(self, id):
+        try:
+            id = int(id)
+        except (TypeError, ValueError):
+            return None
         return db.ses.query(db.models.Post).filter_by(id=id).scalar()
 
     def get_post_by_slug(self, slug):

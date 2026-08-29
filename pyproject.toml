@@ -1,34 +1,39 @@
-[tool.poetry]
+[project]
 name = "maki"
-version = "0.4.0"
+version = "0.5.0"
 description = "The Maki Blogging Engine"
-authors = ["Joel Rivera <rivera@joel.mx>"]
+authors = [{ name = "Joel Rivera", email = "rivera@joel.mx" }]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cherrypy>=18.10,<19",
+    "mako>=1.3,<2",
+    "sqlalchemy>=2.0,<3",
+    "unidecode>=1.4",
+    "docutils>=0.22",
+    "pygments>=2.19",
+    "psycopg[binary]>=3.2,<4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-cherrypy = "^18.6.0"
-Mako = "^1.1.2"
-SQLAlchemy = "^1.3.17"
-unidecode = "^1.1.1"
-atomize = "^0.2.0"
-docutils = "^0.16"
-# temporarily avoid 8.4.4, then we
-# can use just the cherrypy dependency
-#cheroot = "=8.4.3"
-pygments = "^2.6.1"
-psycopg2 = "^2.9.3"
-
-[tool.poetry.dev-dependencies]
-flake8 = "^3.8.3"
-black = "^19.10b0"
-
-[tool.poetry.scripts]
+[project.scripts]
 maki-run = "maki.scripts.run:main"
 maki-shell = "maki.scripts.shell:run"
 
-[tool.black]
+[dependency-groups]
+dev = ["ruff>=0.12"]
+
+[tool.ruff]
 line-length = 79
+target-version = "py313"
+
+[tool.ruff.lint]
+# same spirit as the old flake8 setup; the codebase predates
+# f-strings-everywhere style and we don't want the churn.
+select = ["E", "F", "W"]
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["maki"]

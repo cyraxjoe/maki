@@ -1,9 +1,8 @@
-version: "3.3"
 services:
   db:
     container_name: maki-db
-    image: postgres:11.5
-    ports: 
+    image: postgres:17
+    ports:
       - "5454:5432"
     restart: always
     volumes:
@@ -13,7 +12,3 @@ services:
       POSTGRES_DB: makiblog
       POSTGRES_PASSWORD: makidebug
       PGPORT: 5432
-      PGOPTS: "-i"
-
-volumes:
-  maki-pg-data:

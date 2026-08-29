@@ -20,11 +20,11 @@ STRINGS = {
     },
     "More about me": {"es": "Más sobre mí"},
     "This work is licensed under a": {"es": "Este obra está bajo una"},
-    "https://creativecommons.org/licenses/by/3.0/deed.en_US": {
-        "es": "https://creativecommons.org/licenses/by/3.0/deed.es"
+    "https://creativecommons.org/licenses/by/4.0/deed.en": {
+        "es": "https://creativecommons.org/licenses/by/4.0/deed.es"
     },
-    "Creative Commons Attribution 3.0 Unported License": {
-        "es": "Licencia Creative Commons Atribución 3.0 Unported",
+    "Creative Commons Attribution 4.0 International License": {
+        "es": "Licencia Creative Commons Atribución 4.0 Internacional",
     },
     "The visibility of the posts is filtered by the selected option": {
         "es": (

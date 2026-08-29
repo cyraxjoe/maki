@@ -4,8 +4,8 @@ import cherrypy
 from maki import scaffold
 
 scaffold.setup()  # Yes... that's what I mean.
-import maki.controllers
-from maki import dispatcher  # used in the config file.
+import maki.controllers  # noqa: E402
+from maki import dispatcher  # noqa: E402  # used in the config file.
 
 __all__ = ["dispatcher", "errors"]
 
@@ -16,5 +16,6 @@ ROOT = maki.controllers.Root()
 def CONFIG(section):
     return cherrypy.tree.apps[""].config[section]
 
+
 # At the bottom because the module depends on the previos variables.
-from maki import errors  # used in the config file.
+from maki import errors  # noqa: E402,F401  # used in the config file.

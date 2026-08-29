@@ -1,6 +1,12 @@
 *.egg-info
 *~
 *pyc
+__pycache__/
 backups/
 .gc-env-link
-
+.release.env
+.venv/
+.ruff_cache/
+result
+*.elc
+\#*\#
