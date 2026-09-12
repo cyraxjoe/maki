@@ -89,7 +89,10 @@ releasing. The host specifics (ssh destination, profile path, unit
 name) are deliberately not committed: they live in the untracked
 `.release.env` read by `release.sh`. Restoring a production DB backup
 into the dev db needs the production db role to exist first (create the
-role named in the dump's `OWNER TO` statements, with `LOGIN`).
+role named in the dump's `OWNER TO` statements, with `LOGIN`). The dump
+carries the production digest hash for `joe`, so afterwards reset it to
+the dev password or `scripts/smoke.sh` and the Emacs client get 401:
+`update users set ha1 = md5('joe:Maki blog:samplepasswd') where name = 'joe';`
 
 Dev credentials: `joe` / `samplepasswd`. Verify template/CSS work with a
 real browser render, and JSON API changes against `emacs/maki-mode.el`
