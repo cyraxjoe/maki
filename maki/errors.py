@@ -11,7 +11,10 @@ and notify, so if the error is in the notification then let the user notify us
 about the error.
 """
 
+import sys
 import warnings
+
+import cherrypy
 
 import maki
 from maki.utils import in_development
@@ -50,6 +53,41 @@ def error_404(status, message="", traceback="", version=""):
     # strings, this is probably a bug in cherrypy, because the 500
     # require bytes and almost any other cherrypy handler.
     return _error(template, status, message, traceback, version).decode()
+
+
+def error_400(status, message="", traceback="", version=""):
+    # Same page as the 500 but without the admin notification.
+    page = _error("errors/500.mako", status, message, traceback, version)
+    return page.decode()
+
+
+def _raised_in_body_parser(tb):
+    while tb is not None:
+        if tb.tb_frame.f_globals.get("__name__") == "cherrypy._cpreqbody":
+            return True
+        tb = tb.tb_next
+    return False
+
+
+def error_response():
+    """
+    Replacement for the default ``request.error_response``.
+
+    CherryPy turns *any* unhandled exception into a 500, including the
+    ones its own request-body parser raises on malformed client input
+    (e.g. multipart bodies with bare LF terminators, bogus charsets),
+    which then triggers the admin notification for what is really a bad
+    request. Those come from ``cherrypy._cpreqbody`` before any handler
+    runs, so answer them with a 400 and keep the 500 (and its
+    notification) for real errors.
+    """
+    exc = sys.exc_info()[1]
+    if isinstance(exc, (ValueError, LookupError, UnicodeError)) and (
+        _raised_in_body_parser(exc.__traceback__)
+    ):
+        cherrypy.HTTPError(400, "Malformed request body.").set_response()
+    else:
+        cherrypy.HTTPError(500).set_response()
 
 
 def error_500(status, message="", traceback="", version=""):
